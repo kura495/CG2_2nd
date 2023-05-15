@@ -1,10 +1,6 @@
-#include"Window.h"
+#include"WinApp.h"
 
-Window::Window(){ }
-
-Window::~Window(){ }
-
-LRESULT Window::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg) {
 	case WM_DESTROY:
@@ -16,7 +12,7 @@ LRESULT Window::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 
-void Window::Initialize(){
+void WinApp::Initialize(int kWindowWidth,int kWindowHeight){
 
 	WNDCLASS wc{};
 	wc.lpfnWndProc = WindowProc;
@@ -25,7 +21,7 @@ void Window::Initialize(){
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	RegisterClass(&wc);
 
-	RECT wrc = { 0,0,kClientWidth,kClientHeight };
+	RECT wrc = { 0,0,kWindowWidth,kWindowHeight};
 
 	AdjustWindowRect(&wrc,WS_OVERLAPPEDWINDOW,false);
 
