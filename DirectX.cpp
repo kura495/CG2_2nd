@@ -61,5 +61,14 @@ void DirectX::Initialize()
 	//コマンドリストの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
 	//スワップチェーンを作成
+	IDXGISwapChain4* swapChain = nullptr;
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	swapChainDesc.Width=
+	swapChainDesc
+	swapChainDesc
+	swapChainDesc
+	swapChainDesc
+	swapChainDesc
+	swapChainDesc
 }
 
