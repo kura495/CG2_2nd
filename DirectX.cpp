@@ -21,7 +21,7 @@ void DirectX::Initialize()
 		}
 		useAdapter = nullptr;
 	}
-	//適切なアダプターが見つからないので起動できず
+	//アダプターが見つからないので起動できない
 	assert(useAdapter != nullptr);
 
 	ID3D12Device* device = nullptr;
@@ -40,7 +40,7 @@ void DirectX::Initialize()
 			break;
 		}
 	}
-	//デバイスの生成がうまく行かなかったので起動できない
+	//デバイスの生成ができないので起動できない
 	assert(device != nullptr);
 	//初期化完了のログを出す
 	Log("Complete create D3D12Device!!!\n");
@@ -50,5 +50,16 @@ void DirectX::Initialize()
 	hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
 	//コマンドキューの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
+	//コマンドリスト
+	//コマンドアロケータを作る
+	ID3D12CommandAllocator* commandAllocator = nullptr;
+	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
+	assert(SUCCEEDED(hr));
+	//コマンドリストを作る
+	ID3D12GraphicsCommandList* commandList = nullptr;
+	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
+	//コマンドリストの生成ができないので起動できない
+	assert(SUCCEEDED(hr));
+
 }
 
