@@ -5,7 +5,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	WinApp* window = nullptr;
 	int32_t kClientWidth = 1280;
 	int32_t kClientHeight = 720;
-	window->Initialize();
+	window->Initialize(kClientWidth, kClientHeight);
 
 	MSG msg{};
 
