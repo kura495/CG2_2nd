@@ -1,12 +1,6 @@
 #include"DirectX.h"
 
-DirectX::DirectX()
-{
-}
 
-DirectX::~DirectX()
-{
-}
 
 void DirectX::Initialize()
 {

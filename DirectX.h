@@ -8,8 +8,6 @@
 class DirectX
 {
 public:
-	DirectX();
-	~DirectX();
 
 	void Initialize();
 
