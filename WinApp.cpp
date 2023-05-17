@@ -1,4 +1,4 @@
-#include"Window.h"
+#include"WinApp.h"
 
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {

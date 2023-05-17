@@ -1,4 +1,4 @@
-#include"Window.h"
+#include"WinApp.h"
 
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
