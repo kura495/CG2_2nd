@@ -12,7 +12,10 @@ public:
 	void Initialize();
 
 private:
-	
+	//コマンドアロケータ
+	//ID3D12CommandAllocator* commandAllocator = nullptr;
+	//コマンドリスト
+	//ID3D12GraphicsCommandList* commandList = nullptr;
 
 	
 

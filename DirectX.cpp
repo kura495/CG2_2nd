@@ -4,13 +4,13 @@
 
 void DirectX::Initialize()
 {
-	//DXGIファクトリー
+	//DXGIファクトリーを作成
 	IDXGIFactory7* dxgiFactory = nullptr;
 	HRESULT hr;
 	hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 	assert(SUCCEEDED(hr));
 	IDXGIAdapter4* useAdapter = nullptr;
-	//アダプター
+	//アダプターを作成
 	for (UINT i = 0; dxgiFactory->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter)) != DXGI_ERROR_NOT_FOUND; i++) {
 		DXGI_ADAPTER_DESC3 adapterDesc{};
 		hr = useAdapter->GetDesc3(&adapterDesc);
@@ -51,15 +51,15 @@ void DirectX::Initialize()
 	//コマンドキューの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
 	//コマンドリスト
-	//コマンドアロケータを作る
+	//コマンドアロケータを作成
 	ID3D12CommandAllocator* commandAllocator = nullptr;
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
 	assert(SUCCEEDED(hr));
-	//コマンドリストを作る
+	//コマンドリストを作成
 	ID3D12GraphicsCommandList* commandList = nullptr;
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
 	//コマンドリストの生成ができないので起動できない
 	assert(SUCCEEDED(hr));
-
+	//スワップチェーンを作成
 }
 
