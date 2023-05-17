@@ -1,11 +1,14 @@
 #include"WinApp.h"
-
+#include"DirectX.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
 	WinApp* window = nullptr;
 	int32_t kClientWidth = 1280;
 	int32_t kClientHeight = 720;
 	window->Initialize(kClientWidth, kClientHeight);
+	//DirectX
+	DirectX* directX = nullptr;
+	directX->Initialize();
 
 	MSG msg{};
 

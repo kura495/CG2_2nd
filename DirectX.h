@@ -12,10 +12,9 @@ public:
 	void Initialize();
 
 private:
-	IDXGIFactory7* dxgiFactory=nullptr;
-	HRESULT hr;
-	IDXGIAdapter4* useAdapter = nullptr;
-	ID3D12Device* device = nullptr;
+	
+
+	
 
 };
 

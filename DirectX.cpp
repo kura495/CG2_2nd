@@ -5,8 +5,11 @@
 void DirectX::Initialize()
 {
 	//DXGIファクトリー
+	IDXGIFactory7* dxgiFactory = nullptr;
+	HRESULT hr;
 	hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
 	assert(SUCCEEDED(hr));
+	IDXGIAdapter4* useAdapter = nullptr;
 	//アダプター
 	for (UINT i = 0; dxgiFactory->EnumAdapterByGpuPreference(i, DXGI_GPU_PREFERENCE_HIGH_PERFORMANCE, IID_PPV_ARGS(&useAdapter)) != DXGI_ERROR_NOT_FOUND; i++) {
 		DXGI_ADAPTER_DESC3 adapterDesc{};
@@ -21,6 +24,8 @@ void DirectX::Initialize()
 	//適切なアダプターが見つからないので起動できず
 	assert(useAdapter != nullptr);
 
+	ID3D12Device* device = nullptr;
+	//機能レベル
 	D3D_FEATURE_LEVEL featureLevels[]{
 		D3D_FEATURE_LEVEL_12_2,D3D_FEATURE_LEVEL_12_1,D3D_FEATURE_LEVEL_12_0
 	};
@@ -39,5 +44,11 @@ void DirectX::Initialize()
 	assert(device != nullptr);
 	//初期化完了のログを出す
 	Log("Complete create D3D12Device!!!\n");
+	//コマンドキューを生成
+	ID3D12CommandQueue* commandQueue = nullptr;
+	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
+	hr = device->CreateCommandQueue(&commandQueueDesc, IID_PPV_ARGS(&commandQueue));
+	//コマンドキューの生成ができないので起動できない
+	assert(SUCCEEDED(hr));
 }
 
