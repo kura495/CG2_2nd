@@ -1,10 +1,6 @@
 #include"Window.h"
 
-Window::Window(){ }
-
-Window::~Window(){ }
-
-LRESULT Window::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
+LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	switch (msg) {
 	case WM_DESTROY:
@@ -16,7 +12,7 @@ LRESULT Window::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 }
 
 
-void Window::Initialize(){
+void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
 
 	WNDCLASS wc{};
 	wc.lpfnWndProc = WindowProc;
