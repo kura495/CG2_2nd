@@ -2,13 +2,14 @@
 #include"DirectX.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
-	WinApp* window = nullptr;
+	WinApp* winApp = new WinApp();
 	int32_t kClientWidth = 1280;
 	int32_t kClientHeight = 720;
-	window->Initialize(kClientWidth, kClientHeight);
+
+	winApp->Initialize(kClientWidth, kClientHeight);
 	//DirectX
-	DirectX* directX = nullptr;
-	directX->Initialize();
+	DirectX* directX = new DirectX();
+	directX->Initialize(winApp, kClientWidth, kClientHeight);
 
 	MSG msg{};
 
@@ -19,7 +20,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else {
 			//ゲームループ
-
+			directX->PreView();
 
 
 		}

@@ -25,7 +25,7 @@ void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
 
 	AdjustWindowRect(&wrc,WS_OVERLAPPEDWINDOW,false);
 
-	HWND hwnd = CreateWindow(
+	hwnd_ = CreateWindow(
 		wc.lpszClassName,
 		L"GC2",
 		WS_OVERLAPPEDWINDOW,
@@ -38,7 +38,7 @@ void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
 		wc.hInstance,
 		nullptr
 	);
-	ShowWindow(hwnd, SW_SHOW);
+	ShowWindow(hwnd_, SW_SHOW);
 }
 
 
