@@ -21,9 +21,9 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		else {
 			//ゲームループ
 			directX->PreView();
-
-
+			directX->View();
+			directX->PostView();
 		}
 	}
-
+	directX->Release();
 }

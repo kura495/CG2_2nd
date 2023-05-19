@@ -16,9 +16,9 @@ void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHei
 	}
 #endif
 	
-	DXGIFactory();
+	MakeDXGIFactory();
 
-	D3D12Device();
+	MakeD3D12Device();
 #ifdef _DEBUG
 	ID3D12InfoQueue* infoQueue = nullptr;
 	if (SUCCEEDED(device->QueryInterface(IID_PPV_ARGS(&infoQueue)))) {
@@ -44,17 +44,41 @@ void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHei
 		infoQueue->PushStorageFilter(&filter);
 	}
 #endif
-	CommandQueue();
+	MakeCommandQueue();
 
-	CommandAllocator();
+	MakeCommandAllocator();
 
-	CommandList();
+	MakeCommandList();
 
-	SwapChain();
+	MakeSwapChain();
 	
-	DescriptorHeap();
+	MakeDescriptorHeap();
 
-	Fence();
+	MakeFence();
+
+	MakeDXC();
+
+	MakeRootSignature();
+
+	MakeInputLayOut();
+
+	MakeBlendState();
+
+	MakeRasterizarState();
+
+	MakeShaderCompile();
+
+	MakePipelineStateObject();
+
+	MakeVertexResource();
+
+	MakeVertexBufferView();
+
+	MakeVertexData();
+
+	MakeViewport();
+
+	MakeScissor();
 }
 
 void DirectX::PreView()
@@ -62,8 +86,6 @@ void DirectX::PreView()
 	//コマンドを積む
 	//バックバッファのインデックス取得
 	UINT backBufferIndex = swapChain->GetCurrentBackBufferIndex();
-	//TransitionBarrier
-	D3D12_RESOURCE_BARRIER barrier{};
 	//今回のバリアはTransition
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	//noneにしておく
@@ -80,6 +102,22 @@ void DirectX::PreView()
 	//指定した色で画面全体をクリア
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//いつもの青っぽいやつ
 	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
+
+}
+
+void DirectX::View()
+{
+	commandList->RSSetViewports(1, &viewport);
+	commandList->RSSetScissorRects(1, &scissorRect);
+	commandList->SetGraphicsRootSignature(rootSignature);
+	commandList->SetPipelineState(graphicsPipelineState);
+	commandList->IASetVertexBuffers(0, 1, &vertexBufferView);
+	commandList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	commandList->DrawInstanced(3, 1, 0, 0);
+}
+
+void DirectX::PostView()
+{
 	//RenderTargetからPresentにする
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
@@ -88,7 +126,6 @@ void DirectX::PreView()
 
 	hr = commandList->Close();
 	assert(SUCCEEDED(hr));
-
 	//コマンドをキック
 	ID3D12CommandList* commandLists[] = { commandList };
 	commandQueue->ExecuteCommandLists(1, commandLists);
@@ -125,11 +162,20 @@ void DirectX::Release()
 	debugController->Release();
 #endif
 	CloseWindow(winApp_->GetHWND());
+	vertexResource->Release();
+	graphicsPipelineState->Release();
+	signatureBlob->Release();
+	if (errorBlob) {
+		errorBlob->Release();
+	}
+	rootSignature->Release();
+	pixelShaderBlob->Release();
+	vertexShaderBlob->Release();
 }
 
 
 //プライベート関数
-void DirectX::DXGIFactory()
+void DirectX::MakeDXGIFactory()
 {
 	//DXGIファクトリーを作成
 	hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
@@ -149,7 +195,7 @@ void DirectX::DXGIFactory()
 	assert(useAdapter != nullptr);
 }
 
-void DirectX::D3D12Device()
+void DirectX::MakeD3D12Device()
 {
 	//機能レベル
 	D3D_FEATURE_LEVEL featureLevels[]{
@@ -172,7 +218,7 @@ void DirectX::D3D12Device()
 	Log("Complete create D3D12Device!!!\n");
 }
 
-void DirectX::CommandQueue()
+void DirectX::MakeCommandQueue()
 {
 	//コマンドキューを生成
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
@@ -182,7 +228,7 @@ void DirectX::CommandQueue()
 
 }
 
-void DirectX::CommandAllocator()
+void DirectX::MakeCommandAllocator()
 {
 	//コマンドアロケータを作成
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
@@ -190,7 +236,7 @@ void DirectX::CommandAllocator()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::CommandList()
+void DirectX::MakeCommandList()
 {
 	//コマンドリストを作成
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
@@ -198,7 +244,7 @@ void DirectX::CommandList()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::SwapChain()
+void DirectX::MakeSwapChain()
 {
 	//スワップチェーンを作成
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
@@ -215,7 +261,7 @@ void DirectX::SwapChain()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::DescriptorHeap()
+void DirectX::MakeDescriptorHeap()
 {
 	//ディスクリプタヒープの作成
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
@@ -245,7 +291,7 @@ void DirectX::DescriptorHeap()
 	device->CreateRenderTargetView(swapChainResources[1], &rtvDesc, rtvHandles[1]);
 }
 
-void DirectX::Fence()
+void DirectX::MakeFence()
 {
 	//Fenceを作る
 	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
@@ -254,7 +300,7 @@ void DirectX::Fence()
 	assert(fenceEvent != nullptr);
 }
 
-void DirectX::DXC()
+void DirectX::MakeDXC()
 {
 	//dxCompiler初期化
 	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
@@ -270,7 +316,7 @@ void DirectX::DXC()
 IDxcBlob* DirectX::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//ログにメッセージ
-	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n,filePath,profile")));
+	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n",filePath,profile)));
 	//hlslファイルを読む
 	IDxcBlobEncoding* shaderSource = nullptr;
 	hr = dxcUtils->LoadFile(filePath.c_str(), nullptr, &shaderSource);
@@ -314,12 +360,10 @@ IDxcBlob* DirectX::CompileShader(const std::wstring& filePath, const wchar_t* pr
 	return shaderBlob;
 }
 
-void DirectX::RootSignature()
+void DirectX::MakeRootSignature()
 {
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-	ID3DBlob* signatureBlob = nullptr;
-	ID3DBlob* errorBlob = nullptr;
 	hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &signatureBlob, &errorBlob);
 	if (FAILED(hr)) {
 		Log(reinterpret_cast<char*>(errorBlob->GetBufferPointer()));
@@ -330,39 +374,37 @@ void DirectX::RootSignature()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::InputLayOut()
+void DirectX::MakeInputLayOut()
 {
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
 	inputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
 	inputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
-	
 	inputLayoutDesc.pInputElementDescs = inputElementDescs;
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 }
 
-void DirectX::BlendState()
+void DirectX::MakeBlendState()
 {
 	
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 }
 
-void DirectX::RasterizarState()
+void DirectX::MakeRasterizarState()
 {
 	
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void DirectX::ShaderCompile()
+void DirectX::MakeShaderCompile()
 {
 	vertexShaderBlob = CompileShader(L"Object3D.VS.hlsl", L"vs_6_0", dxcUtils, dxcCompiler, includeHandler);
 	assert(vertexShaderBlob != nullptr);
 	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
 }
 
-void DirectX::PipelineStateObject()
+void DirectX::MakePipelineStateObject()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature;
@@ -383,7 +425,7 @@ void DirectX::PipelineStateObject()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::VertexResource()
+void DirectX::MakeVertexResource()
 {
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -402,12 +444,41 @@ void DirectX::VertexResource()
 	
 }
 
-void DirectX::VertexBufferView()
+void DirectX::MakeVertexBufferView()
 {
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
 	vertexBufferView.StrideInBytes = sizeof(Vector4);
+}
+
+void DirectX::MakeVertexData()
+{
+	Vector4* vertexData = nullptr;
+	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	//左下
+	vertexData[0] = { -0.5f,-0.5f,0.0f,1.0f };
+	//上
+	vertexData[1] = { 0.0f,0.5f,0.0f,1.0f };
+	//右下
+	vertexData[2] = { 0.5f,-0.5f,0.0f,1.0f };
+}
+
+void DirectX::MakeViewport()
+{
+	viewport.Width = (float)kClientWidth_;
+	viewport.Height = (float)kClientHeight_;
+	viewport.TopLeftX = 0;
+	viewport.TopLeftY = 0;
+	viewport.MinDepth = 0.0f;
+	viewport.MaxDepth = 1.0f;
+}
+
+void DirectX::MakeScissor()
+{
+	scissorRect.left = 0;
+	scissorRect.right = kClientWidth_;
+	scissorRect.top = 0;
+	scissorRect.bottom = kClientHeight_;
 }
 
 

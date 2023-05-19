@@ -18,6 +18,10 @@ public:
 
 	void PreView();
 
+	void View();
+
+	void PostView();
+
 	void Release();
 
 private:
@@ -26,6 +30,8 @@ private:
 	int32_t kClientHeight_;
 
 	HRESULT hr;
+	//TransitionBarrier
+	D3D12_RESOURCE_BARRIER barrier{};
 	//DXGIファクトリー
 	IDXGIFactory7* dxgiFactory = nullptr;
 	//アダプターを作成
@@ -57,7 +63,10 @@ private:
 	IDxcIncludeHandler* includeHandler = nullptr;
 	//ルートシグネチャ―
 	ID3D12RootSignature* rootSignature = nullptr;
+	ID3DBlob* signatureBlob = nullptr;
+	ID3DBlob* errorBlob = nullptr;
 	//インプットレイアウト
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[1] = {};
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	//ブレンドステート
 	D3D12_BLEND_DESC blendDesc{};
@@ -70,30 +79,39 @@ private:
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
 	//バーテックスリソース
 	ID3D12Resource* vertexResource = nullptr;
+	//バーテックスバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	//ビューポート
+	D3D12_VIEWPORT viewport{};
+	//シザー
+	D3D12_RECT scissorRect{};
 #ifdef _DEBUG
 	ID3D12Debug1* debugController = nullptr;
 #endif
 
 //プライベート関数
-	void DXGIFactory();
-	void D3D12Device();
-	void CommandQueue();
-	void CommandAllocator();
-	void CommandList();
-	void SwapChain();
-	void DescriptorHeap();
-	void Fence();
-	void DXC();
+	void MakeDXGIFactory();
+	void MakeD3D12Device();
+	void MakeCommandQueue();
+	void MakeCommandAllocator();
+	void MakeCommandList();
+	void MakeSwapChain();
+	void MakeDescriptorHeap();
+	void MakeFence();
+	void MakeDXC();
 	IDxcBlob* CompileShader(const std::wstring& filePath,const wchar_t* profile,IDxcUtils*dxcUtils,IDxcCompiler3*dxcCompiler,IDxcIncludeHandler*includeHandler);
 	//PSO
-	void RootSignature();
-	void InputLayOut();
-	void BlendState();
-	void RasterizarState();
-	void ShaderCompile();
-	void PipelineStateObject();
-	void VertexResource();
-	void VertexBufferView();
+	void MakeRootSignature();
+	void MakeInputLayOut();
+	void MakeBlendState();
+	void MakeRasterizarState();
+	void MakeShaderCompile();
+	void MakePipelineStateObject();
+	void MakeVertexResource();
+	void MakeVertexBufferView();
+	void MakeVertexData();
+	void MakeViewport();
+	void MakeScissor();
 };
 
 
