@@ -9,7 +9,6 @@ public:
 
 private:
 	HRESULT hr;
-	DirectX* directX_;
 	ID3D12GraphicsCommandList* commandList_=nullptr;
 	ID3D12Device* device_ = nullptr;
 	//バーテックスリソース

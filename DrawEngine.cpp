@@ -2,9 +2,8 @@
 
 void DrawEngine::Initialize(DirectX* directX)
 {
-	directX_ = directX;
-	commandList_ = directX_->GetcommandList();
-	device_ = directX_->GetDevice();
+	commandList_ = directX->GetcommandList();
+	device_ = directX->GetDevice();
 	MakeVertexResource();
 	MakeVertexBufferView();
 }
