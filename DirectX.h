@@ -18,11 +18,13 @@ public:
 
 	void PreView();
 
-	void View();
-
 	void PostView();
 
 	void Release();
+
+	ID3D12GraphicsCommandList* GetcommandList()const { return commandList; }
+
+	ID3D12Device* GetDevice()const { return device; }
 
 private:
 	WinApp* winApp_;
@@ -77,10 +79,8 @@ private:
 	IDxcBlob* pixelShaderBlob = nullptr;
 	//PSO
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
-	//バーテックスリソース
-	ID3D12Resource* vertexResource = nullptr;
-	//バーテックスバッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	
+	
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//シザー
@@ -107,9 +107,7 @@ private:
 	void MakeRasterizarState();
 	void MakeShaderCompile();
 	void MakePipelineStateObject();
-	void MakeVertexResource();
-	void MakeVertexBufferView();
-	void MakeVertexData();
+
 	void MakeViewport();
 	void MakeScissor();
 };

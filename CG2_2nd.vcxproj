@@ -91,12 +91,14 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DirectX.cpp" />
+    <ClCompile Include="DrawEngine.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DirectX.h" />
+    <ClInclude Include="DrawEngine.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Vector4.h" />
     <ClInclude Include="WinApp.h" />
