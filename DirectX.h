@@ -69,7 +69,7 @@ private:
 	//PSO
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
 	//バーテックスリソース
-
+	ID3D12Resource* vertexResource = nullptr;
 #ifdef _DEBUG
 	ID3D12Debug1* debugController = nullptr;
 #endif
@@ -93,6 +93,7 @@ private:
 	void ShaderCompile();
 	void PipelineStateObject();
 	void VertexResource();
+	void VertexBufferView();
 };
 
 

@@ -396,10 +396,18 @@ void DirectX::VertexResource()
 	vertexResourceDesc.SampleDesc.Count = 1;
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//頂点リソースを作る
-	ID3D12Resource* vertexResource = nullptr;
+	
 	hr = device->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
 	assert(SUCCEEDED(hr));
 	
+}
+
+void DirectX::VertexBufferView()
+{
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
+	vertexBufferView.StrideInBytes = sizeof(Vector4);
 }
 
 
