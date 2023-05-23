@@ -6,6 +6,8 @@
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #include"WinApp.h"
+#include<dxgidebug.h>
+#pragma comment(lib,"dxguid.lib")
 class DirectX
 {
 public:
