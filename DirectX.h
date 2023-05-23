@@ -9,6 +9,8 @@
 #include"Vector4.h"
 #include<dxcapi.h>
 #pragma comment(lib,"dxcompiler.lib")
+#include<dxgidebug.h>
+#pragma comment(lib,"dxguid.lib")
 
 class DirectX
 {
