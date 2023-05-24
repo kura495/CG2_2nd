@@ -10,8 +10,6 @@ void DrawEngine::Initialize(DirectX* directX)
 
 void DrawEngine::Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom)
 {
-	MakeVertexResource();
-	MakeVertexBufferView();
 	Vector4* vertexData = nullptr;
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
@@ -23,6 +21,11 @@ void DrawEngine::Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom)
 	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
 	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	commandList_->DrawInstanced(3, 1, 0, 0);
+}
+
+void DrawEngine::Release()
+{
+	vertexResource->Release();
 }
 
 void DrawEngine::MakeVertexResource()

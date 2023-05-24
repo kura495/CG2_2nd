@@ -160,6 +160,8 @@ void DirectX::Release()
 	signatureBlob->Release();
 	rootSignature->Release();
 	includeHandler->Release();
+	shaderError->Release();
+	shaderBlob->Release();
 	dxcCompiler->Release();
 	dxcUtils->Release();
 	IDXGIDebug1* debug;
@@ -343,13 +345,13 @@ IDxcBlob* DirectX::CompileShader(const std::wstring& filePath, const wchar_t* pr
 	//dxcが起動できない
 	assert(SUCCEEDED(hr));
 
-	IDxcBlobUtf8* shaderError = nullptr;
+	
 	shaderResult->GetOutput(DXC_OUT_ERRORS, IID_PPV_ARGS(&shaderError), nullptr);
 	if (shaderError != nullptr && shaderError->GetStringLength() != 0) {
 		Log(shaderError->GetStringPointer());
 		assert(false);
 	}
-	IDxcBlob* shaderBlob = nullptr;
+	
 	hr = shaderResult->GetOutput(DXC_OUT_OBJECT, IID_PPV_ARGS(&shaderBlob), nullptr);
 	assert(SUCCEEDED(hr));
 	Log(ConvertString(std::format(L"Compile Succeeded, path:{}, profile:{}\n", filePath, profile)));

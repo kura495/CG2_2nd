@@ -65,6 +65,9 @@ private:
 	IDxcUtils* dxcUtils = nullptr;
 	IDxcCompiler3* dxcCompiler = nullptr;
 	IDxcIncludeHandler* includeHandler = nullptr;
+	//コンパイルシェーダー
+	IDxcBlobUtf8* shaderError = nullptr;
+	IDxcBlob* shaderBlob = nullptr;
 	//ルートシグネチャ―
 	ID3D12RootSignature* rootSignature = nullptr;
 	ID3DBlob* signatureBlob = nullptr;

@@ -7,6 +7,8 @@ public:
 
 	void Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom);
 
+	void Release();
+
 private:
 	HRESULT hr;
 	ID3D12GraphicsCommandList* commandList_=nullptr;
