@@ -11,8 +11,7 @@ public:
 
 private:
 	HRESULT hr;
-	ID3D12GraphicsCommandList* commandList_=nullptr;
-	ID3D12Device* device_ = nullptr;
+	DirectX* directX_=nullptr;
 	//バーテックスリソース
 	ID3D12Resource* vertexResource = nullptr;
 	//バーテックスバッファビュー

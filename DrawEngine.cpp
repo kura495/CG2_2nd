@@ -2,14 +2,13 @@
 
 void DrawEngine::Initialize(DirectX* directX)
 {
-	commandList_ = directX->GetcommandList();
-	device_ = directX->GetDevice();
-	MakeVertexResource();
-	MakeVertexBufferView();
+	directX_ = directX;
 }
 
 void DrawEngine::Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom)
-{
+{	
+	MakeVertexResource();
+	MakeVertexBufferView();
 	Vector4* vertexData = nullptr;
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
@@ -18,9 +17,9 @@ void DrawEngine::Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom)
 	vertexData[1] = top;
 	//右下
 	vertexData[2] = Leftbottom;
-	commandList_->IASetVertexBuffers(0, 1, &vertexBufferView);
-	commandList_->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	commandList_->DrawInstanced(3, 1, 0, 0);
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
 void DrawEngine::Release()
@@ -41,7 +40,7 @@ void DrawEngine::MakeVertexResource()
 	vertexResourceDesc.SampleDesc.Count = 1;
 	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//頂点リソースを作る
-	hr = device_->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
+	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
 	assert(SUCCEEDED(hr));
 }
 
