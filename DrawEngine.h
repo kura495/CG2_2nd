@@ -5,7 +5,7 @@ class DrawEngine
 public:
 	void Initialize(DirectX* directX);
 
-	void Draw(Vector4 Rightbottom, Vector4 top, Vector4 Leftbottom);
+	void Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom);
 
 	void Release();
 
@@ -16,6 +16,8 @@ private:
 	ID3D12Resource* vertexResource = nullptr;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+
+	Vector4* vertexData=nullptr;
 	void MakeVertexResource();
 	void MakeVertexBufferView();
 };

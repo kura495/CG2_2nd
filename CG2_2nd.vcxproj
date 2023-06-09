@@ -100,7 +100,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="DirectX.h" />
     <ClInclude Include="DrawEngine.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Vector4.h" />
+    <ClInclude Include="Vector.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>
