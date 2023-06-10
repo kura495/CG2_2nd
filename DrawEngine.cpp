@@ -3,8 +3,10 @@
 void DrawEngine::Initialize(DirectX* directX)
 {
 	directX_ = directX;
-	MakeVertexResource();
+	vertexResource = CreateBufferResource(sizeof(Vector4)*3);
+	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
 	MakeVertexBufferView();
+	
 }
 
 void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
@@ -15,14 +17,21 @@ void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
 	vertexData[1] = top;
 	//右下
 	vertexData[2] = Rightbottom;
+	//色を書き込むアドレスを取得
+	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	//試しに赤
+	*materialData = {1.0f,0.0f,0.0f,1.0f};
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//色
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
 	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
 void DrawEngine::Release()
 {
 	vertexResource->Release();
+	materialResource->Release();
 }
 
 void DrawEngine::MakeVertexResource()
@@ -48,4 +57,23 @@ void DrawEngine::MakeVertexBufferView()
 	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
 	vertexBufferView.StrideInBytes = sizeof(Vector4);
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+}
+
+ID3D12Resource* DrawEngine::CreateBufferResource(size_t sizeInBytes)
+{
+	ID3D12Resource* Resource = nullptr;
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_RESOURCE_DESC vertexResourceDesc{};
+	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	vertexResourceDesc.Width = sizeInBytes;
+	vertexResourceDesc.Height = 1;
+	vertexResourceDesc.DepthOrArraySize = 1;
+	vertexResourceDesc.MipLevels = 1;
+	vertexResourceDesc.SampleDesc.Count = 1;
+	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//頂点リソースを作る
+	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
+	assert(SUCCEEDED(hr));
+	return Resource;
 }

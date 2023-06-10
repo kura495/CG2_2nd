@@ -17,7 +17,12 @@ private:
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 
+	ID3D12Resource* materialResource = nullptr;
+	//色データ
+	Vector4* materialData = nullptr;
+	//頂点データ
 	Vector4* vertexData=nullptr;
 	void MakeVertexResource();
 	void MakeVertexBufferView();
+	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 };
