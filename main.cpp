@@ -1,11 +1,16 @@
 #include"WinApp.h"
 #include"DirectX.h"
 #include"DrawEngine.h"
+#define RED Vector4{ 1.0f,0.0f,0.0f,1.0f };
+#define GREEN Vector4{ 0.0f,1.0f,0.0f,1.0f };
+#define BLUE Vector4{ 0.0f,0.0f,1.0f,1.0f };
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
 	WinApp* winApp = new WinApp();
 	int32_t kClientWidth = 1280;
 	int32_t kClientHeight = 720;
+
+	
 
 	winApp->Initialize(kClientWidth, kClientHeight);
 	//DirectX
@@ -17,7 +22,8 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawEngine[i]->Initialize(directX);
 	}
 	MSG msg{};
-	Vector4 Left[10] = {
+	const int kTriangleMax = 10;
+	Vector4 Left[kTriangleMax] = {
 		{-0.1f,0.9f,0.0f,1.0f},
 		{-0.1f,0.8f,0.0f,1.0f},
 		{-0.1f,0.7f,0.0f,1.0f},
@@ -29,7 +35,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{-0.1f,0.1f,0.0f,1.0f},
 		{-0.1f,0.0f,0.0f,1.0f}
 	};
-	Vector4 Top[10] = {
+	Vector4 Top[kTriangleMax] = {
 		{0.0f,1.0f,0.0f,1.0f},
 		{0.0f,0.9f,0.0f,1.0f},
 		{0.0f,0.8f,0.0f,1.0f},
@@ -41,7 +47,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0.0f,0.2f,0.0f,1.0f},
 		{0.0f,0.1f,0.0f,1.0f}
 	};
-	Vector4 Right[10] = {
+	Vector4 Right[kTriangleMax] = {
 		{0.1f,0.9f,0.0f,1.0f},
 		{0.1f,0.8f,0.0f,1.0f},
 		{0.1f,0.7f,0.0f,1.0f},
@@ -53,6 +59,18 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{0.1f,0.1f,0.0f,1.0f},
 		{0.1f,0.0f,0.0f,1.0f},
 	};
+	Vector4 Color[kTriangleMax] = {
+		{ 1.0f,0.0f,0.0f,1.0f },//RED
+		{ 0.0f,1.0f,0.0f,1.0f },//GREEN
+		{ 0.0f,0.0f,1.0f,1.0f },//BLUE
+		{ 1.0f,0.0f,0.0f,1.0f },
+		{ 0.0f,1.0f,0.0f,1.0f },
+		{ 0.0f,0.0f,1.0f,1.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+		{ 0.0f,1.0f,0.0f,1.0f },
+		{ 0.0f,0.0f,1.0f,1.0f },
+		{ 1.0f,0.0f,0.0f,1.0f },
+	};
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -62,13 +80,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		else {
 			//ゲームループ
 			directX->PreView();
-			for (int i = 0; i < 10; i++) {
-				drawEngine[i]->Draw(Left[i], Top[i], Right[i]);
+			for (int i = 0; i < kTriangleMax; i++) {
+				drawEngine[i]->Draw(Left[i], Top[i], Right[i], Color[i]);
 			}
 			directX->PostView();
 		}
 	}
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < kTriangleMax; i++) {
 		drawEngine[i]->Release();
 	}
 	

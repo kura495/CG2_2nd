@@ -9,7 +9,7 @@ void DrawEngine::Initialize(DirectX* directX)
 	
 }
 
-void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
+void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4 color)
 {	
 	//左下
 	vertexData[0] = Leftbottom;
@@ -19,8 +19,8 @@ void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
 	vertexData[2] = Rightbottom;
 	//色を書き込むアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	//試しに赤
-	*materialData = {1.0f,0.0f,0.0f,1.0f};
+	//色情報を書き込む
+	*materialData = color;
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//色

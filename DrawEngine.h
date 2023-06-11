@@ -5,7 +5,7 @@ class DrawEngine
 public:
 	void Initialize(DirectX* directX);
 
-	void Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom);
+	void Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom, Vector4 color);
 
 	void Release();
 
