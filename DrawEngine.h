@@ -1,13 +1,14 @@
 #pragma once
 #include"DirectX.h"
 #include"MatrixCalc.h"
-#include"Matrix.h"
+#include"Matrix4x4.h"
+#include"Transform.h"
 class DrawEngine
 {
 public:
 	void Initialize(DirectX* directX);
 
-	void Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom, Vector4 color);
+	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform);
 
 	void Release();
 

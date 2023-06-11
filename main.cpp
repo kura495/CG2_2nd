@@ -71,6 +71,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		{ 0.0f,0.0f,1.0f,1.0f },
 		{ 1.0f,0.0f,0.0f,1.0f },
 	};
+	Transform transform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
@@ -78,10 +83,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			DispatchMessage(&msg);
 		}
 		else {
+			transform.rotate.y += 0.03f;
 			//ゲームループ
 			directX->PreView();
 			for (int i = 0; i < kTriangleMax; i++) {
-				drawEngine[i]->Draw(Left[i], Top[i], Right[i], Color[i]);
+				drawEngine[i]->Draw(Left[i], Top[i], Right[i], Color[i], transform);
 			}
 			directX->PostView();
 		}

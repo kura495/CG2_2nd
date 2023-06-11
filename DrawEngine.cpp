@@ -10,7 +10,7 @@ void DrawEngine::Initialize(DirectX* directX)
 	
 }
 
-void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4 color)
+void DrawEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform)
 {	
 	//左下
 	vertexData[0] = Leftbottom;
@@ -22,10 +22,12 @@ void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
 	*materialData = color;
+	//行列を作る
+	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	//WVPを書き込むアドレスを取得
 	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 	//単位行列を書き込む
-	*wvpData = MakeIdentity4x4();
+	*wvpData = worldMatrix;
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//色用のCBufferの場所を特定
