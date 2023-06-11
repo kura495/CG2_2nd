@@ -1,5 +1,7 @@
 #pragma once
 #include"DirectX.h"
+#include"MatrixCalc.h"
+#include"Matrix.h"
 class DrawEngine
 {
 public:
@@ -14,14 +16,19 @@ private:
 	DirectX* directX_=nullptr;
 	//バーテックスリソース
 	ID3D12Resource* vertexResource = nullptr;
+	//頂点データ
+	Vector4* vertexData=nullptr;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-
+	//マテリアルリソース
 	ID3D12Resource* materialResource = nullptr;
 	//色データ
 	Vector4* materialData = nullptr;
-	//頂点データ
-	Vector4* vertexData=nullptr;
+	//WVPリソース
+	ID3D12Resource* wvpResource = nullptr;
+	//WVPデータ
+	Matrix4x4* wvpData = nullptr;
+	
 	void MakeVertexResource();
 	void MakeVertexBufferView();
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
