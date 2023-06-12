@@ -11,7 +11,7 @@ void MyEngine::Initialize(DirectXCommon* directX)
 }
 
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform)
-{	
+{
 	//左下
 	vertexData[0] = Leftbottom;
 	//上

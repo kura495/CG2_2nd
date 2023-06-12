@@ -18,7 +18,7 @@ private:
 	//バーテックスリソース
 	ID3D12Resource* vertexResource = nullptr;
 	//頂点データ
-	Vector4* vertexData=nullptr;
+	Vector4* vertexData;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	//マテリアルリソース
