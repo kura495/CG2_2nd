@@ -29,6 +29,10 @@ public:
 
 	ID3D12Device* GetDevice()const { return device; }
 
+	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc; }
+	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
+	ID3D12DescriptorHeap* GetsrvDescriptorHeap()const { return srvDescriptorHeap; }
+	
 private:
 	WinApp* winApp_;
 	int32_t kClientWidth_;
@@ -50,11 +54,16 @@ private:
 	//コマンドリストを作成
 	ID3D12GraphicsCommandList* commandList = nullptr;
 	//スワップチェーンを作成
+	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
 	IDXGISwapChain4* swapChain = nullptr;
+	//RTVDescriptorHeap
+	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	//SRVDescriptorHeap
+	ID3D12DescriptorHeap* srvDescriptorHeap = nullptr;
+	//RTVの設定
+	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	//SwapChainからResourceを持ってくる
 	ID3D12Resource* swapChainResources[2] = { nullptr };
-	//ディスクリプタヒープの作成
-	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
 	//RTVを2つつくるので2つ用意
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
 	//Fenceを作る
@@ -96,6 +105,7 @@ private:
 #endif
 
 //プライベート関数
+	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 	void MakeDXGIFactory();
 	void MakeD3D12Device();
 	void MakeCommandQueue();

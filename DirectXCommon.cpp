@@ -94,7 +94,9 @@ void DirectXCommon::PreView()
 	//指定した色で画面全体をクリア
 	float clearColor[] = { 0.1f,0.25f,0.5f,1.0f };//いつもの青っぽいやつ
 	commandList->ClearRenderTargetView(rtvHandles[backBufferIndex], clearColor, 0, nullptr);
-	
+	//描画用のDescriptorHeapの設定
+	ID3D12DescriptorHeap* descriptorHeaps[] = { srvDescriptorHeap };
+	commandList->SetDescriptorHeaps(1, descriptorHeaps);
 	commandList->RSSetViewports(1, &viewport);
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->SetGraphicsRootSignature(rootSignature);
@@ -103,6 +105,8 @@ void DirectXCommon::PreView()
 
 void DirectXCommon::PostView()
 {
+	//実際のCommandListのImGuiの描画コマンドを進む
+	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(),commandList);
 	//RenderTargetからPresentにする
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_PRESENT;
@@ -134,6 +138,7 @@ void DirectXCommon::Release()
 	CloseHandle(fenceEvent);
 	fence->Release();
 	rtvDescriptorHeap->Release();
+	srvDescriptorHeap->Release();
 	swapChainResources[0]->Release();
 	swapChainResources[1]->Release();
 	swapChain->Release();
@@ -164,6 +169,19 @@ void DirectXCommon::Release()
 	}
 }
 
+ID3D12DescriptorHeap* DirectXCommon::CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
+{
+	ID3D12DescriptorHeap* descriptorHeap = nullptr;
+	//ディスクリプタヒープの作成
+	D3D12_DESCRIPTOR_HEAP_DESC DescriptorHeapDesc{};
+	DescriptorHeapDesc.Type = heapType;
+	DescriptorHeapDesc.NumDescriptors = numDescriptors;
+	DescriptorHeapDesc.Flags = shaderVisible ? D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE : D3D12_DESCRIPTOR_HEAP_FLAG_NONE;
+	hr = device->CreateDescriptorHeap(&DescriptorHeapDesc, IID_PPV_ARGS(&descriptorHeap));
+	//ディスクリプタヒープの生成ができないので起動できない
+	assert(SUCCEEDED(hr));
+	return descriptorHeap;
+}
 //プライベート関数
 void DirectXCommon::MakeDXGIFactory()
 {
@@ -237,7 +255,7 @@ void DirectXCommon::MakeCommandList()
 void DirectXCommon::MakeSwapChain()
 {
 	//スワップチェーンを作成
-	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
+	
 	swapChainDesc.Width = kClientWidth_;
 	swapChainDesc.Height = kClientHeight_;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -253,13 +271,11 @@ void DirectXCommon::MakeSwapChain()
 
 void DirectXCommon::MakeDescriptorHeap()
 {
-	//ディスクリプタヒープの作成
-	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
-	rtvDescriptorHeapDesc.Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV;
-	rtvDescriptorHeapDesc.NumDescriptors = 2;
-	hr = device->CreateDescriptorHeap(&rtvDescriptorHeapDesc, IID_PPV_ARGS(&rtvDescriptorHeap));
-	//ディスクリプタヒープの生成ができないので起動できない
-	assert(SUCCEEDED(hr));
+	//rtvディスクリプタヒープの作成
+	rtvDescriptorHeap = CreateDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	//srvディスクリプタ―ヒープの作成
+//srv用のディスクリプタ数は128。srvはshader内で触るものなので、ShaderVisibleはtrue
+	srvDescriptorHeap = CreateDescriptorHeap(device, D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 	//SwapChainからResourceを持ってくる
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
 	//リソースの取得ができないので起動できない
@@ -268,7 +284,6 @@ void DirectXCommon::MakeDescriptorHeap()
 	//リソースの取得ができないので起動できない
 	assert(SUCCEEDED(hr));
 	//RTVの設定
-	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	rtvDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
 	rtvDesc.ViewDimension = D3D12_RTV_DIMENSION_TEXTURE2D;
 	//ディスクリプタの先頭を取得

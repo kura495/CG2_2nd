@@ -2,6 +2,9 @@
 
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
+	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
+		return true;
+	}
 	switch (msg) {
 	case WM_DESTROY:
 		PostQuitMessage(0);
@@ -10,7 +13,6 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
-
 
 void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
 
@@ -40,6 +42,8 @@ void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
 	);
 	ShowWindow(hwnd_, SW_SHOW);
 }
+
+
 
 
 
