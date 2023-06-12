@@ -10,7 +10,7 @@ void MyEngine::Initialize(DirectXCommon* directX)
 	
 }
 
-void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform)
+void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform,const Matrix4x4& ViewMatrix)
 {
 	//左下
 	vertexData[0] = Leftbottom;
@@ -27,7 +27,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//WVPを書き込むアドレスを取得
 	wvpResource->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 	//単位行列を書き込む
-	*wvpData = worldMatrix;
+	*wvpData =Multiply(worldMatrix,ViewMatrix);
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//色用のCBufferの場所を特定

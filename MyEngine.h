@@ -8,7 +8,7 @@ class MyEngine
 public:
 	void Initialize(DirectXCommon* directX);
 
-	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform);
+	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform,const Matrix4x4& ViewMatrix);
 
 	void Release();
 

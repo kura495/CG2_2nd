@@ -1,5 +1,6 @@
 #pragma once
 #include"MyEngine.h"
+#include"Camera.h"
 class GameScene
 {
 public:
@@ -16,9 +17,10 @@ private:
 	int32_t kClientHeight_=0;
 	DirectXCommon* directX_ = nullptr;
 	MyEngine* myEngine_ = nullptr;
-	Vector4 Left = {-0.5f,0.0f,0.0f,1.0f};
+	Camera* camera_ = nullptr;
+	Vector4 Left = {-0.5f,-0.5f,0.0f,1.0f};
 	Vector4 Top = { 0.0f,0.5f,0.0f,1.0f };
-	Vector4 Right = { 0.5f,0.0f,0.0f,1.0f };
+	Vector4 Right = { 0.5f,-0.5f,0.0f,1.0f };
 	Vector4 Color = { 1.0f,0.0f,0.0f,1.0f };
 	
 	Transform transform{
