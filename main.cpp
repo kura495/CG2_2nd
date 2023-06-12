@@ -1,6 +1,6 @@
 #include"WinApp.h"
-#include"DirectX.h"
-#include"DrawEngine.h"
+#include"DirectXCommon.h"
+#include"MyEngine.h"
 #define RED Vector4{ 1.0f,0.0f,0.0f,1.0f };
 #define GREEN Vector4{ 0.0f,1.0f,0.0f,1.0f };
 #define BLUE Vector4{ 0.0f,0.0f,1.0f,1.0f };
@@ -14,11 +14,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 
 	winApp->Initialize(kClientWidth, kClientHeight);
 	//DirectX
-	DirectX* directX = new DirectX();
+	DirectXCommon* directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
-	DrawEngine* drawEngine[10];
+	MyEngine* drawEngine[10];
 	for (int i = 0; i < 10; i++) {
-		drawEngine[i] = new DrawEngine();
+		drawEngine[i] = new MyEngine();
 		drawEngine[i]->Initialize(directX);
 	}
 	MSG msg{};

@@ -1,12 +1,12 @@
 #pragma once
-#include"DirectX.h"
+#include"DirectXCommon.h"
 #include"MatrixCalc.h"
 #include"Matrix4x4.h"
 #include"Transform.h"
-class DrawEngine
+class MyEngine
 {
 public:
-	void Initialize(DirectX* directX);
+	void Initialize(DirectXCommon* directX);
 
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Transform& transform);
 
@@ -14,7 +14,7 @@ public:
 
 private:
 	HRESULT hr;
-	DirectX* directX_=nullptr;
+	DirectXCommon* directX_=nullptr;
 	//バーテックスリソース
 	ID3D12Resource* vertexResource = nullptr;
 	//頂点データ

@@ -90,16 +90,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DirectX.cpp" />
-    <ClCompile Include="DrawEngine.cpp" />
+    <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MatrixCalc.cpp" />
     <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectX.h" />
-    <ClInclude Include="DrawEngine.h" />
+    <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="MatrixCalc.h" />

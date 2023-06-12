@@ -13,7 +13,7 @@
 #include<dxgidebug.h>
 #pragma comment(lib,"dxguid.lib")
 
-class DirectX
+class DirectXCommon
 {
 public:
 
