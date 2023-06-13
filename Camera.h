@@ -1,12 +1,15 @@
 #pragma once
 #include"MatrixCalc.h"
 #include"Transform.h"
+#include"Vector3.h"
+#include"ImGuiManager.h"
 class Camera
 {
 public:
 	void Initialize(int32_t kClientWidth, int32_t kClientHeight);
 	void Update();
 	Matrix4x4 transformationMatrixData;
+	void ImGui();
 private:
 	Transform cameraTransform{
 		{1.0f,1.0f,1.0f},

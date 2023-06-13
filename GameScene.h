@@ -20,16 +20,11 @@ private:
 	MyEngine* myEngine_ = nullptr;
 	Camera* camera_ = nullptr;
 	ImGuiManager* ImGuiManager_ = nullptr;
-	Vector4 Left = {-0.5f,-0.5f,0.0f,1.0f};
-	Vector4 Top = { 0.0f,0.5f,0.0f,1.0f };
-	Vector4 Right = { 0.5f,-0.5f,0.0f,1.0f };
-	Vector4 Color = { 1.0f,0.0f,0.0f,1.0f };
+	Vector4 Left[2] ={ -0.5f,-0.5f,0.0f,1.0f };
+	Vector4 Top[2] = {0.0f,0.5f,0.0f,1.0f};
+	Vector4 Right[2] = {0.5f,-0.5f,0.0f,1.0f};
+	Vector4 Color[2] = {1.0f,1.0f,1.0f,1.0f};
 	
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-
+	
 };
 
