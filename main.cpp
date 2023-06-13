@@ -3,6 +3,8 @@
 #include"MyEngine.h"
 #include"GameScene.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
+	//COMの初期化
+	CoInitializeEx(0, COINIT_MULTITHREADED);
 	//ウィンドウクラス
 	WinApp* winApp = new WinApp();
 	int32_t kClientWidth = 1280;
@@ -84,11 +86,11 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		}
 		else {
 			//ゲームループ
-			//directX->PreView();
-			/*for (int i = 0; i < kTriangleMax; i++) {
+			/*directX->PreView();
+			for (int i = 0; i < kTriangleMax; i++) {
 				drawEngine[i]->Draw(Left[i], Top[i], Right[i], Color[i], transform);
-			}*/
-			//directX->PostView();
+			}
+			directX->PostView();*/
 			gameScene->UpDate();
 			gameScene->Draw();
 		}
@@ -97,4 +99,5 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 		drawEngine[i]->Release();
 	}*/
 	gameScene->Release();
+	CoUninitialize();
 }

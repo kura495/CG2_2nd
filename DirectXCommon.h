@@ -12,7 +12,7 @@
 #pragma comment(lib,"dxcompiler.lib")
 #include<dxgidebug.h>
 #pragma comment(lib,"dxguid.lib")
-
+#include"externals/DirectXTex/d3dx12.h"
 class DirectXCommon
 {
 public:

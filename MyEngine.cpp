@@ -45,6 +45,69 @@ void MyEngine::Release()
 	wvpResource->Release();
 }
 
+DirectX::ScratchImage MyEngine::LoadTexture(const std::string& filePath)
+{
+	//テクスチャファイルを読み込みプログラムで扱えるようにする
+	DirectX::ScratchImage image{};
+	std::wstring filePathW=ConvertString(filePath);
+	hr = DirectX::LoadFromWICFile(filePathW.c_str(),DirectX::WIC_FLAGS_FORCE_SRGB,nullptr,image);
+	assert(SUCCEEDED(hr));
+	//ミップマップの作成
+	DirectX::ScratchImage mipImage{};
+	hr = DirectX::GenerateMipMaps(image.GetImages(),image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImage);
+
+	return mipImage;
+}
+
+ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
+{
+	//metadataを基にResourceの設定
+	D3D12_RESOURCE_DESC resourceDesc{};
+	resourceDesc.Width = UINT(metadata.width);
+	resourceDesc.Height = UINT(metadata.height);
+	resourceDesc.MipLevels = UINT16(metadata.mipLevels);
+	resourceDesc.DepthOrArraySize = UINT16(metadata.arraySize);
+	resourceDesc.Format = metadata.format;
+	resourceDesc.SampleDesc.Count = 1;
+	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);
+	//利用するheapの設定
+	D3D12_HEAP_PROPERTIES heapProperties{};
+	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;//細かい設定を行う
+	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
+	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
+	//Resourceの生成
+	ID3D12Resource* resource = nullptr;
+	hr = device->CreateCommittedResource(
+		&heapProperties,//Heapの設定
+		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定
+		&resourceDesc,//Resourceの設定
+		D3D12_RESOURCE_STATE_GENERIC_READ,//初回のResourceState　Textureは基本読むだけ
+		nullptr,//Clear最適値　使わないためnullptr
+		IID_PPV_ARGS(&resource)//作成するResourceポインタへのポインタ
+	);
+	return resource;
+}
+
+void MyEngine::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+{
+	 //meta情報を取得
+	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
+	//全MipMapについて
+	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
+		//MipMapLevelを指定して各Imageを取得
+		const DirectX::Image* img = mipImages.GetImage(mipLevel,0,0);
+		//Textureに転送
+		hr = texture->WriteToSubresource(
+			UINT(mipLevel),
+			nullptr,//全領域へコピー
+			img->pixels,//元データアドレス
+			UINT(img->rowPitch),//1ラインサイズ
+			UINT(img->slicePitch)//1枚サイズ
+		);
+		assert(SUCCEEDED(hr));
+	}
+}
+
 void MyEngine::MakeVertexResource()
 {
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};

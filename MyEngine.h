@@ -3,6 +3,7 @@
 #include"MatrixCalc.h"
 #include"Matrix4x4.h"
 #include"Transform.h"
+#include"externals/DirectXTex/DirectXTex.h"
 class MyEngine
 {
 public:
@@ -12,6 +13,9 @@ public:
 
 	void Release();
 
+	DirectX::ScratchImage LoadTexture(const std::string& filePath);
+	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
+	void UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
 private:
 	HRESULT hr;
 	DirectXCommon* directX_=nullptr;
@@ -32,5 +36,6 @@ private:
 	
 	void MakeVertexResource();
 	void MakeVertexBufferView();
+
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 };
