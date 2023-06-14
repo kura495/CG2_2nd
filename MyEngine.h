@@ -44,10 +44,12 @@ private:
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
+
 	void MakeVertexBufferView();
 
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
 	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
 	void UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
+	
 };

@@ -17,7 +17,6 @@ void GameScene::Initialize(DirectXCommon* directX, MyEngine* myEngine,WinApp*win
 void GameScene::UpDate()
 {
 	camera_->Update();
-	
 }
 
 void GameScene::Draw()

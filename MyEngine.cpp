@@ -3,7 +3,7 @@
 void MyEngine::Initialize(DirectXCommon* directX)
 {
 	directX_ = directX;
-	vertexResource = CreateBufferResource(sizeof(VertexData)*3);
+	vertexResource = CreateBufferResource(sizeof(VertexData)*6);
 	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
 	wvpResource = CreateBufferResource(sizeof(Matrix4x4));
 	MakeVertexBufferView();
@@ -20,6 +20,15 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//右下
 	vertexData[2].position = Rightbottom;
 	vertexData[2].texcoord = {1.0f,1.0f};
+	//2枚目左下
+	vertexData[3].position = { -0.7f,-0.5f,0.5f,1.0f };
+	vertexData[3].texcoord = { 0.0f,1.0f };
+	//2枚目上
+	vertexData[4].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexData[4].texcoord = { 0.5f,0.0f };
+	//2枚目右下
+	vertexData[5].position = { 0.7f,-0.5f,-0.5f,1.0f };
+	vertexData[5].texcoord = { 1.0f,1.0f };
 	//色を書き込むアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
@@ -38,7 +47,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
-	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
+	directX_->GetcommandList()->DrawInstanced(6, 1, 0, 0);
 }
 
 void MyEngine::ImGui()
@@ -89,6 +98,14 @@ void MyEngine::LoadTexture(const std::string& filePath)
 	textureSrvHandleGPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの作成
 	directX_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU);
+}
+
+void MyEngine::MakeVertexBufferView()
+{
+	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
+	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 }
 
 DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
@@ -154,29 +171,22 @@ void MyEngine::UploadTextureData(ID3D12Resource* texture, const DirectX::Scratch
 	}
 }
 
-void MyEngine::MakeVertexBufferView()
-{
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * 3;
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-}
-
 ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 {
 	ID3D12Resource* Resource = nullptr;
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC vertexResourceDesc{};
-	vertexResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	vertexResourceDesc.Width = sizeInBytes;
-	vertexResourceDesc.Height = 1;
-	vertexResourceDesc.DepthOrArraySize = 1;
-	vertexResourceDesc.MipLevels = 1;
-	vertexResourceDesc.SampleDesc.Count = 1;
-	vertexResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	D3D12_RESOURCE_DESC ResourceDesc{};
+	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	ResourceDesc.Width = sizeInBytes;
+	ResourceDesc.Height = 1;
+	ResourceDesc.DepthOrArraySize = 1;
+	ResourceDesc.MipLevels = 1;
+	ResourceDesc.SampleDesc.Count = 1;
+	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
 	//頂点リソースを作る
-	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
+	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
 	assert(SUCCEEDED(hr));
 	return Resource;
 }
+

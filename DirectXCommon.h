@@ -24,7 +24,7 @@ public:
 	void PostView();
 
 	void Release();
-
+	
 	ID3D12GraphicsCommandList* GetcommandList()const { return commandList; }
 
 	ID3D12Device* GetDevice()const { return device; }
@@ -60,6 +60,10 @@ private:
 	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
 	//SRVDescriptorHeap
 	ID3D12DescriptorHeap* srvDescriptorHeap = nullptr;
+	//DSVDescriptorHeap
+	ID3D12DescriptorHeap* dsvDescriptorHeap = nullptr;
+	//深度
+	ID3D12Resource* depthStencilResource = nullptr;
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	//SwapChainからResourceを持ってくる
@@ -104,6 +108,7 @@ private:
 
 //プライベート関数
 	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
 	void MakeDXGIFactory();
 	void MakeD3D12Device();
 	void MakeCommandQueue();
