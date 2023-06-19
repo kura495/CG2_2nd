@@ -5,6 +5,8 @@
 #include"Transform.h"
 #include"VertexData.h"
 #include"externals/DirectXTex/DirectXTex.h"
+#include"externals/DirectXTex/d3dx12.h"
+#include<vector>
 class MyEngine
 {
 public:
@@ -41,6 +43,8 @@ private:
 	Matrix4x4* wvpData = nullptr;
 	//テクスチャデータ
 	ID3D12Resource* textureResource=nullptr;
+	//中間リソース
+	ID3D12Resource* intermediateResource = nullptr;
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
@@ -49,5 +53,6 @@ private:
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
 	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
-	void UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
+	[[nodiscard]]
+	ID3D12Resource* UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
 };
