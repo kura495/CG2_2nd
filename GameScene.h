@@ -25,16 +25,11 @@ private:
 	Vector4 Right[2] = {0.5f,-0.5f,0.0f,1.0f};
 	Vector4 Color[2] = {1.0f,1.0f,1.0f,1.0f};
 	//Sprite
-	/*Vector4 LeftTop = { 0.0f,0.0f,0.0f,1.0f };
+
+	Vector4 LeftTop = { 0.0f,0.0f,0.0f,1.0f };
 	Vector4 LeftBottom = { 0.0f,360.0f,0.0f,1.0f };
 	Vector4 RightTop = { 640.0f,0.0f,0.0f,1.0f };
-	Vector4 RightBottom = { 640.0f,360.0f,0.0f,1.0f };*/
-	
-	Vector4 LeftTop = { -0.2f,-0.2f,0.0f,1.0f };
-	Vector4 LeftBottom = { -0.2f,0.2f,0.0f,1.0f };
-	Vector4 RightTop = { 0.4f,-0.2f,0.0f,1.0f };
-	Vector4 RightBottom = { 0.4f,0.2f,0.0f,1.0f };
-	
+	Vector4 RightBottom = { 640.0f,360.0f,0.0f,1.0f };
 	
 };
 

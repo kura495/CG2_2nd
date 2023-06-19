@@ -243,9 +243,9 @@ Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float botto
 	float dy = top - bottom;
 	float dz = farCcip - nearClip;
 	result = {
-		2.0f / dx,0.0f,0.0f,-((right + left) / dx),
-		0.0f,2.0f / dy,0.0f,-((top + bottom) / dy),
-		0.0f,0.0f,-2 / dz,0.0f - ((farCcip + nearClip) / dz),
+		2.0f / dx,0.0f,0.0f,0.0f,
+		0.0f,2.0f / dy,0.0f,0.0f,
+		0.0f,0.0f,-2.0f / dz,0.0f,
 		-((right + left)/dx),-((top + bottom)/dy),-((farCcip + nearClip)/dz),1.0f
 	};
 	return result;

@@ -14,13 +14,12 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
 	MakeVertexBufferViewSprite();
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
-	//書き込むためのアドレス取得
-	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-	*transformationMatrixDataSprite = MakeIdentity4x4();
+	
 }
 
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix)
 {
+	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
 	vertexData[0].position = Leftbottom;
 	vertexData[0].texcoord = {0.0f,1.0f};
@@ -110,6 +109,10 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	ImGui::InputFloat3("Vertex5", ImGuivertexDataSprite5, "%.3f");
 	vertexDataSprite[5].position = { ImGuivertexDataSprite5[x], ImGuivertexDataSprite5[y], ImGuivertexDataSprite5[z],1.0f };
 	ImGui::End();
+
+	//書き込むためのアドレス取得
+	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
+
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
@@ -165,8 +168,15 @@ void MyEngine::Release()
 	materialResource->Release();
 	wvpResource->Release();
 	textureResource->Release();
+	intermediateResource->Release();
 	vertexResourceSprite->Release();
 	transformationMatrixResourceSprite->Release();
+}
+void MyEngine::MakeVertexBufferView()
+{
+	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
 
 void MyEngine::LoadTexture(const std::string& filePath)
@@ -175,7 +185,7 @@ void MyEngine::LoadTexture(const std::string& filePath)
 	DirectX::ScratchImage mipImages = ImageFileOpen(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	textureResource = CreateTextureResource(directX_->GetDevice(), metadata);
-	UploadTextureData(textureResource, mipImages);
+	intermediateResource = UploadTextureData(textureResource, mipImages);
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -192,34 +202,16 @@ void MyEngine::LoadTexture(const std::string& filePath)
 	directX_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU);
 }
 
-void MyEngine::MakeVertexBufferView()
-{
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
-	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-}
-
-void MyEngine::MakeVertexBufferViewSprite()
-{
-	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
-	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
-	//1頂点あたりのアドレス
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-}
-
 DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
 {
 	//テクスチャファイルを読み込みプログラムで扱えるようにする
 	DirectX::ScratchImage image{};
-	std::wstring filePathW=ConvertString(filePath);
-	hr = DirectX::LoadFromWICFile(filePathW.c_str(),DirectX::WIC_FLAGS_FORCE_SRGB,nullptr,image);
+	std::wstring filePathW = ConvertString(filePath);
+	hr = DirectX::LoadFromWICFile(filePathW.c_str(), DirectX::WIC_FLAGS_FORCE_SRGB, nullptr, image);
 	assert(SUCCEEDED(hr));
 	//ミップマップの作成
 	DirectX::ScratchImage mipImage{};
-	hr = DirectX::GenerateMipMaps(image.GetImages(),image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImage);
+	hr = DirectX::GenerateMipMaps(image.GetImages(), image.GetImageCount(), image.GetMetadata(), DirectX::TEX_FILTER_SRGB, 0, mipImage);
 
 	return mipImage;
 }
@@ -237,40 +229,49 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 	resourceDesc.Dimension = D3D12_RESOURCE_DIMENSION(metadata.dimension);
 	//利用するheapの設定
 	D3D12_HEAP_PROPERTIES heapProperties{};
-	heapProperties.Type = D3D12_HEAP_TYPE_CUSTOM;//細かい設定を行う
-	heapProperties.CPUPageProperty = D3D12_CPU_PAGE_PROPERTY_WRITE_BACK;//WriteBackポリシーでCPUアクセス可能
-	heapProperties.MemoryPoolPreference = D3D12_MEMORY_POOL_L0;//プロセッサの近くに配置
+	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//細かい設定を行う
+
 	//Resourceの生成
 	ID3D12Resource* resource = nullptr;
 	hr = device->CreateCommittedResource(
 		&heapProperties,//Heapの設定
 		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定
 		&resourceDesc,//Resourceの設定
-		D3D12_RESOURCE_STATE_GENERIC_READ,//初回のResourceState　Textureは基本読むだけ
+		D3D12_RESOURCE_STATE_COPY_DEST,//初回のResourceState　Textureは基本読むだけ
 		nullptr,//Clear最適値　使わないためnullptr
 		IID_PPV_ARGS(&resource)//作成するResourceポインタへのポインタ
 	);
 	return resource;
 }
 
-void MyEngine::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+[[nodiscard]]
+ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
 {
-	 //meta情報を取得
-	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	//全MipMapについて
-	for (size_t mipLevel = 0; mipLevel < metadata.mipLevels; ++mipLevel) {
-		//MipMapLevelを指定して各Imageを取得
-		const DirectX::Image* img = mipImages.GetImage(mipLevel,0,0);
-		//Textureに転送
-		hr = texture->WriteToSubresource(
-			UINT(mipLevel),
-			nullptr,//全領域へコピー
-			img->pixels,//元データアドレス
-			UINT(img->rowPitch),//1ラインサイズ
-			UINT(img->slicePitch)//1枚サイズ
-		);
-		assert(SUCCEEDED(hr));
-	}
+	std::vector<D3D12_SUBRESOURCE_DATA>subresources;
+	DirectX::PrepareUpload(directX_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
+	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
+	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
+	UpdateSubresources(directX_->GetcommandList(), texture, intermediateResource, 0, 0, UINT(subresources.size()), subresources.data());
+	//Tetureへの転送後は利用できるようにD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更する
+	D3D12_RESOURCE_BARRIER barrier{};
+	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
+	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
+	barrier.Transition.pResource = texture;
+	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
+	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
+	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
+	directX_->GetcommandList()->ResourceBarrier(1, &barrier);
+	return intermediateResource;
+}
+
+void MyEngine::MakeVertexBufferViewSprite()
+{
+	//リソースの先頭のアドレス
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
+	//使用する頂点サイズ
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
+	//1頂点あたりのアドレス
+	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
 
 ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
