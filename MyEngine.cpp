@@ -1,12 +1,22 @@
 #include "MyEngine.h"
 
-void MyEngine::Initialize(DirectXCommon* directX)
+void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight)
 {
+	kClientWidth_ = kClientWidth;
+	kClientHeight_ = kClientHeight;
 	directX_ = directX;
 	vertexResource = CreateBufferResource(sizeof(VertexData)*6);
 	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
 	wvpResource = CreateBufferResource(sizeof(Matrix4x4));
+	
 	MakeVertexBufferView();
+
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
+	MakeVertexBufferViewSprite();
+	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
+	//書き込むためのアドレス取得
+	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
+	*transformationMatrixDataSprite = MakeIdentity4x4();
 }
 
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix)
@@ -29,6 +39,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//2枚目右下
 	vertexData[5].position = { 0.7f,-0.5f,-0.5f,1.0f };
 	vertexData[5].texcoord = { 1.0f,1.0f };
+	
 	//色を書き込むアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
@@ -50,9 +61,74 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList()->DrawInstanced(6, 1, 0, 0);
 }
 
+void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom)
+{
+	vertexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
+	//三角形1枚目
+	//左下
+	vertexDataSprite[0].position = LeftBottom;
+	vertexDataSprite[0].texcoord={0.0f,1.0f};
+	//左上
+	vertexDataSprite[1].position = LeftTop;
+	vertexDataSprite[1].texcoord={0.0f,0.0f};
+	//右下
+	vertexDataSprite[2].position = RightBottom;
+	vertexDataSprite[2].texcoord={1.0f,1.0f};
+	//三角形2枚目
+	//左上
+	vertexDataSprite[3].position = LeftTop;
+	vertexDataSprite[3].texcoord = { 0.0f,0.0f };
+	//右上
+	vertexDataSprite[4].position = RightTop;
+	vertexDataSprite[4].texcoord = { 1.0f,0.0f };
+	//右下
+	vertexDataSprite[5].position = RightBottom;
+	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
+
+	ImGui::Begin("TriAngleData");
+	float ImGuivertexDataSprite0[Vector3D] = { vertexDataSprite[0].position.x,vertexDataSprite[0].position.y, vertexDataSprite[0].position.z };
+	ImGui::InputFloat3("Vertex0", ImGuivertexDataSprite0, "%.3f");
+	vertexDataSprite[0].position = { ImGuivertexDataSprite0[x], ImGuivertexDataSprite0[y], ImGuivertexDataSprite0[z],1.0f };
+
+	float ImGuivertexDataSprite1[Vector3D] = { vertexDataSprite[1].position.x,vertexDataSprite[1].position.y, vertexDataSprite[1].position.z };
+	ImGui::InputFloat3("Vertex1", ImGuivertexDataSprite1, "%.3f");
+	vertexDataSprite[1].position = { ImGuivertexDataSprite1[x], ImGuivertexDataSprite1[y], ImGuivertexDataSprite1[z],1.0f };
+
+	float ImGuivertexDataSprite2[Vector3D] = { vertexDataSprite[2].position.x,vertexDataSprite[2].position.y, vertexDataSprite[2].position.z };
+	ImGui::InputFloat3("Vertex2", ImGuivertexDataSprite2, "%.3f");
+	vertexDataSprite[2].position = { ImGuivertexDataSprite2[x], ImGuivertexDataSprite2[y], ImGuivertexDataSprite2[z],1.0f };
+
+	float ImGuivertexDataSprite3[Vector3D] = { vertexDataSprite[3].position.x,vertexDataSprite[3].position.y, vertexDataSprite[3].position.z };
+	ImGui::InputFloat3("Vertex3", ImGuivertexDataSprite3, "%.3f");
+	vertexDataSprite[3].position = { ImGuivertexDataSprite3[x], ImGuivertexDataSprite3[y], ImGuivertexDataSprite3[z],1.0f };
+
+	float ImGuivertexDataSprite4[Vector3D] = { vertexDataSprite[4].position.x,vertexDataSprite[4].position.y, vertexDataSprite[4].position.z };
+	ImGui::InputFloat3("Vertex4", ImGuivertexDataSprite4, "%.3f");
+	vertexDataSprite[4].position = { ImGuivertexDataSprite4[x], ImGuivertexDataSprite4[y], ImGuivertexDataSprite4[z],1.0f };
+
+	float ImGuivertexDataSprite5[Vector3D] = { vertexDataSprite[5].position.x,vertexDataSprite[5].position.y, vertexDataSprite[5].position.z };
+	ImGui::InputFloat3("Vertex5", ImGuivertexDataSprite5, "%.3f");
+	vertexDataSprite[5].position = { ImGuivertexDataSprite5[x], ImGuivertexDataSprite5[y], ImGuivertexDataSprite5[z],1.0f };
+	ImGui::End();
+	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
+	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
+	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
+	*transformationMatrixDataSprite = worldViewProjectionMatrixSprite;
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	//頂点
+	directX_->GetcommandList()->IASetVertexBuffers(0,1,&vertexBufferViewSprite);
+	//WVP
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
+}
+
 void MyEngine::ImGui()
 {
-#pragma region ImGui
+#pragma region TriAngleImGui
 	ImGui::ShowDemoWindow();
 	
 	ImGui::Begin("TriAngle");
@@ -67,6 +143,20 @@ void MyEngine::ImGui()
 	transform.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
 	ImGui::End();
 #pragma endregion
+#pragma region SpriteImGui
+	
+	ImGui::Begin("Sprite");
+	float ImGuiScaleSprite[Vector3D] = { transformSprite.scale.x,transformSprite.scale.y ,transformSprite.scale.z };
+	ImGui::SliderFloat3("ScaleSprite", ImGuiScaleSprite, 1, 30, "%.3f");
+	transformSprite.scale = { ImGuiScaleSprite[x],ImGuiScaleSprite[y],ImGuiScaleSprite[z] };
+	float ImGuiRotateSprite[Vector3D] = { transformSprite.rotate.x,transformSprite.rotate.y ,transformSprite.rotate.z };
+	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, 0, 7, "%.3f");
+	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
+	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
+	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -2, 2, "%.3f");
+	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
+	ImGui::End();
+#pragma endregion
 }
 
 void MyEngine::Release()
@@ -75,6 +165,8 @@ void MyEngine::Release()
 	materialResource->Release();
 	wvpResource->Release();
 	textureResource->Release();
+	vertexResourceSprite->Release();
+	transformationMatrixResourceSprite->Release();
 }
 
 void MyEngine::LoadTexture(const std::string& filePath)
@@ -106,6 +198,16 @@ void MyEngine::MakeVertexBufferView()
 	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+}
+
+void MyEngine::MakeVertexBufferViewSprite()
+{
+	//リソースの先頭のアドレス
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
+	//使用する頂点サイズ
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
+	//1頂点あたりのアドレス
+	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
 
 DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)

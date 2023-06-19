@@ -8,8 +8,9 @@
 class MyEngine
 {
 public:
-	void Initialize(DirectXCommon* directX);
+	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix);
+	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
 	void ImGui();
 	void Release();
 	void LoadTexture(const std::string& filePath);
@@ -17,7 +18,14 @@ public:
 
 	
 private:
+	int32_t kClientWidth_;
+	int32_t kClientHeight_;
 	Transform transform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+	Transform transformSprite{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
@@ -44,12 +52,22 @@ private:
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU;
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
+	//Sprite用頂点データ
+	ID3D12Resource* vertexResourceSprite = nullptr;
+	//Sprite用頂点データ
+	VertexData* vertexDataSprite;
+	//Sprite用バーテックスバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
+	//Sprite用WVPリソース
+	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
+	//Sprite用WVPデータ
+	Matrix4x4* transformationMatrixDataSprite = nullptr;
 
 	void MakeVertexBufferView();
+	void MakeVertexBufferViewSprite();
 
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
 	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
 	void UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
-	
 };

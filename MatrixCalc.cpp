@@ -235,3 +235,20 @@ float cot(float top)
 	float result = 1 / tan(top);
 	return result;
 }
+
+Matrix4x4 MakeOrthographicMatrix(float left, float top, float right, float bottom, float nearClip, float farCcip)
+{
+	Matrix4x4 result;
+	float dx = right - left;
+	float dy = top - bottom;
+	float dz = farCcip - nearClip;
+	result = {
+		2.0f / dx,0.0f,0.0f,-((right + left) / dx),
+		0.0f,2.0f / dy,0.0f,-((top + bottom) / dy),
+		0.0f,0.0f,-2 / dz,0.0f - ((farCcip + nearClip) / dz),
+		-((right + left)/dx),-((top + bottom)/dy),-((farCcip + nearClip)/dz),1.0f
+	};
+	return result;
+}
+
+

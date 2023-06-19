@@ -15,7 +15,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	DirectXCommon* directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
 	MyEngine* myEngine = new MyEngine();
-	myEngine->Initialize(directX);
+	myEngine->Initialize(directX, kClientWidth, kClientHeight);
 	//MyEngine* drawEngine[10];
 	//for (int i = 0; i < 10; i++) {
 	//	drawEngine[i] = new MyEngine();
