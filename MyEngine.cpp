@@ -66,6 +66,7 @@ void MyEngine::Release()
 	materialResource->Release();
 	wvpResource->Release();
 	textureResource->Release();
+	intermediateResource->Release();
 }
 
 void MyEngine::LoadTexture(const std::string& filePath)
