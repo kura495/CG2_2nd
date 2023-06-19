@@ -84,32 +84,6 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	vertexDataSprite[5].position = RightBottom;
 	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 
-	ImGui::Begin("TriAngleData");
-	float ImGuivertexDataSprite0[Vector3D] = { vertexDataSprite[0].position.x,vertexDataSprite[0].position.y, vertexDataSprite[0].position.z };
-	ImGui::InputFloat3("Vertex0", ImGuivertexDataSprite0, "%.3f");
-	vertexDataSprite[0].position = { ImGuivertexDataSprite0[x], ImGuivertexDataSprite0[y], ImGuivertexDataSprite0[z],1.0f };
-
-	float ImGuivertexDataSprite1[Vector3D] = { vertexDataSprite[1].position.x,vertexDataSprite[1].position.y, vertexDataSprite[1].position.z };
-	ImGui::InputFloat3("Vertex1", ImGuivertexDataSprite1, "%.3f");
-	vertexDataSprite[1].position = { ImGuivertexDataSprite1[x], ImGuivertexDataSprite1[y], ImGuivertexDataSprite1[z],1.0f };
-
-	float ImGuivertexDataSprite2[Vector3D] = { vertexDataSprite[2].position.x,vertexDataSprite[2].position.y, vertexDataSprite[2].position.z };
-	ImGui::InputFloat3("Vertex2", ImGuivertexDataSprite2, "%.3f");
-	vertexDataSprite[2].position = { ImGuivertexDataSprite2[x], ImGuivertexDataSprite2[y], ImGuivertexDataSprite2[z],1.0f };
-
-	float ImGuivertexDataSprite3[Vector3D] = { vertexDataSprite[3].position.x,vertexDataSprite[3].position.y, vertexDataSprite[3].position.z };
-	ImGui::InputFloat3("Vertex3", ImGuivertexDataSprite3, "%.3f");
-	vertexDataSprite[3].position = { ImGuivertexDataSprite3[x], ImGuivertexDataSprite3[y], ImGuivertexDataSprite3[z],1.0f };
-
-	float ImGuivertexDataSprite4[Vector3D] = { vertexDataSprite[4].position.x,vertexDataSprite[4].position.y, vertexDataSprite[4].position.z };
-	ImGui::InputFloat3("Vertex4", ImGuivertexDataSprite4, "%.3f");
-	vertexDataSprite[4].position = { ImGuivertexDataSprite4[x], ImGuivertexDataSprite4[y], ImGuivertexDataSprite4[z],1.0f };
-
-	float ImGuivertexDataSprite5[Vector3D] = { vertexDataSprite[5].position.x,vertexDataSprite[5].position.y, vertexDataSprite[5].position.z };
-	ImGui::InputFloat3("Vertex5", ImGuivertexDataSprite5, "%.3f");
-	vertexDataSprite[5].position = { ImGuivertexDataSprite5[x], ImGuivertexDataSprite5[y], ImGuivertexDataSprite5[z],1.0f };
-	ImGui::End();
-
 	//書き込むためのアドレス取得
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 
@@ -156,7 +130,7 @@ void MyEngine::ImGui()
 	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, 0, 7, "%.3f");
 	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
 	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
-	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -2, 2, "%.3f");
+	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
 	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
 	ImGui::End();
 #pragma endregion
