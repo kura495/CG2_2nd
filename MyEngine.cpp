@@ -14,6 +14,9 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
 	MakeVertexBufferViewSprite();
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6*kSubdivision);
+	MakeVertexBufferViewSprite();
+	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
 	
 }
 
@@ -101,6 +104,11 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
 	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
+}
+
+void MyEngine::DrawSphere()
+{
+
 }
 
 void MyEngine::ImGui()

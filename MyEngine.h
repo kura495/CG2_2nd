@@ -11,6 +11,7 @@ public:
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix);
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
+	void DrawSphere();
 	void ImGui();
 	void Release();
 	void LoadTexture(const std::string& filePath);
@@ -18,6 +19,7 @@ public:
 
 	
 private:
+	const int kSubdivision = 16;
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 	Transform transform{
@@ -26,6 +28,11 @@ private:
 		{0.0f,0.0f,0.0f},
 	};
 	Transform transformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+	Transform transformSphere{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
@@ -64,6 +71,16 @@ private:
 	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
 	Matrix4x4* transformationMatrixDataSprite = nullptr;
+	//Sphere用頂点データ
+	ID3D12Resource* vertexResourceSphere = nullptr;
+	//Sphere用頂点データ
+	VertexData* vertexDataSphere;
+	//Sphere用バーテックスバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere{};
+	//Sphere用WVPリソース
+	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
+	//Sphere用WVPデータ
+	Matrix4x4* transformationMatrixDataSphere = nullptr;
 
 	void MakeVertexBufferView();
 	void MakeVertexBufferViewSprite();
