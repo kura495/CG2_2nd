@@ -26,7 +26,7 @@ void GameScene::Draw()
 	
 	ImGuiManager_->BeginFrame();
 	directX_->PreView();
-	//ここから
+	//描画ここから
 #pragma region ImGui
 	ImGui::Begin("TriAngleColor");
 	float ImGuiColor[Vector3D] = { Color[0].x,Color[0].y ,Color[0].z };
@@ -39,8 +39,9 @@ void GameScene::Draw()
 #pragma endregion
 	
 	myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData);
-	myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom);
-	//ここまで
+	//myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom);
+	myEngine_->DrawSphere(sphere, camera_->transformationMatrixData);
+	//描画ここまで
 	ImGuiManager_->EndFrame();
 	directX_->PostView();
 }

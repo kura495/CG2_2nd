@@ -16,6 +16,9 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{d7caa169-3c67-4e07-897f-0d9115a5eac6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\includeStruct">
+      <UniqueIdentifier>{2678d0b7-2414-4687-b484-05a9d8ca8473}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -83,18 +86,6 @@
     <ClInclude Include="MatrixCalc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector4.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -128,14 +119,26 @@
     <ClInclude Include="ImGuiManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Matrix4x4.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="VertexData.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Vector2.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector3.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector4.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
     <ClInclude Include="Sphere.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="VertexData.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

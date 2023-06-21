@@ -5,21 +5,85 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	kClientWidth_ = kClientWidth;
 	kClientHeight_ = kClientHeight;
 	directX_ = directX;
+	#pragma region TriAngle
 	vertexResource = CreateBufferResource(sizeof(VertexData)*6);
 	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
 	wvpResource = CreateBufferResource(sizeof(Matrix4x4));
-	
 	MakeVertexBufferView();
+	#pragma endregion 三角形
 
+	#pragma region Sprite
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
-	MakeVertexBufferViewSprite();
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6*kSubdivision);
 	MakeVertexBufferViewSprite();
-	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
+	#pragma endregion スプライト
+
+	#pragma region Sphere
+	vertexResourceSphere = CreateBufferResource(sizeof(VertexData)*6*kSubdivision* kSubdivision);
+	transformationMatrixResourceSphere = CreateBufferResource(sizeof(Matrix4x4));
+	MakeVertexBufferViewSphere();
+	#pragma endregion 弾
+}
+void MyEngine::ImGui()
+{
+#pragma region TriAngleImGui
+	ImGui::ShowDemoWindow();
 	
+	ImGui::Begin("TriAngle");
+	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
+	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
+	transform.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };
+	float ImGuiRotate[Vector3D] = { transform.rotate.x,transform.rotate.y ,transform.rotate.z };
+	ImGui::SliderFloat3("Rotate", ImGuiRotate, -7, 7, "%.3f");
+	transform.rotate = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
+	float ImGuiTranslate[Vector3D] = { transform.translate.x,transform.translate.y ,transform.translate.z };
+	ImGui::SliderFloat3("Translate", ImGuiTranslate, -2, 2, "%.3f");
+	transform.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
+	ImGui::End();
+#pragma endregion
+#pragma region SpriteImGui
+	
+	ImGui::Begin("Sprite");
+	float ImGuiScaleSprite[Vector3D] = { transformSprite.scale.x,transformSprite.scale.y ,transformSprite.scale.z };
+	ImGui::SliderFloat3("ScaleSprite", ImGuiScaleSprite, 1, 30, "%.3f");
+	transformSprite.scale = { ImGuiScaleSprite[x],ImGuiScaleSprite[y],ImGuiScaleSprite[z] };
+	float ImGuiRotateSprite[Vector3D] = { transformSprite.rotate.x,transformSprite.rotate.y ,transformSprite.rotate.z };
+	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, -7, 7, "%.3f");
+	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
+	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
+	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
+	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
+	ImGui::End();
+#pragma endregion
+#pragma region SphereImGui
+	
+	ImGui::Begin("Sphere");
+	float ImGuiScaleSphere[Vector3D] = { transformSphere.scale.x,transformSphere.scale.y ,transformSphere.scale.z };
+	ImGui::SliderFloat3("ScaleSphere", ImGuiScaleSphere, 1, 30, "%.3f");
+	transformSphere.scale = { ImGuiScaleSphere[x],ImGuiScaleSphere[y],ImGuiScaleSphere[z] };
+	float ImGuiRotateSphere[Vector3D] = { transformSphere.rotate.x,transformSphere.rotate.y ,transformSphere.rotate.z };
+	ImGui::SliderFloat3("RotateSphere", ImGuiRotateSphere, -7, 7, "%.3f");
+	transformSphere.rotate = { ImGuiRotateSphere[x],ImGuiRotateSphere[y],ImGuiRotateSphere[z] };
+	float ImGuiTranslateSphere[Vector3D] = { transformSphere.translate.x,transformSphere.translate.y ,transformSphere.translate.z };
+	ImGui::SliderFloat3("TranslateSphere", ImGuiTranslateSphere, -10, 10, "%.3f");
+	transformSphere.translate = { ImGuiTranslateSphere[x],ImGuiTranslateSphere[y],ImGuiTranslateSphere[z] };
+	ImGui::End();
+#pragma endregion
+}
+void MyEngine::Release()
+{
+	vertexResource->Release();
+	materialResource->Release();
+	wvpResource->Release();
+	textureResource->Release();
+	intermediateResource->Release();
+	vertexResourceSprite->Release();
+	transformationMatrixResourceSprite->Release();
+	vertexResourceSphere->Release();
+	transformationMatrixResourceSphere->Release();
 }
 
+#pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix)
 {
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
@@ -62,7 +126,14 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
 	directX_->GetcommandList()->DrawInstanced(6, 1, 0, 0);
 }
-
+void MyEngine::MakeVertexBufferView()
+{
+	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
+}
+#pragma endregion 三角形
+#pragma region Sprite
 void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom)
 {
 	vertexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
@@ -105,62 +176,99 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
 	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
 }
-
-void MyEngine::DrawSphere()
+void MyEngine::MakeVertexBufferViewSprite()
 {
-
+	//リソースの先頭のアドレス
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
+	//使用する頂点サイズ
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
+	//1頂点あたりのアドレス
+	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
-
-void MyEngine::ImGui()
+#pragma endregion スプライト
+#pragma region Sphere
+void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
 {
-#pragma region TriAngleImGui
-	ImGui::ShowDemoWindow();
-	
-	ImGui::Begin("TriAngle");
-	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
-	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
-	transform.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };
-	float ImGuiRotate[Vector3D] = { transform.rotate.x,transform.rotate.y ,transform.rotate.z };
-	ImGui::SliderFloat3("Rotate", ImGuiRotate, 0, 7, "%.3f");
-	transform.rotate = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
-	float ImGuiTranslate[Vector3D] = { transform.translate.x,transform.translate.y ,transform.translate.z };
-	ImGui::SliderFloat3("Translate", ImGuiTranslate, -2, 2, "%.3f");
-	transform.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
-	ImGui::End();
-#pragma endregion
-#pragma region SpriteImGui
-	
-	ImGui::Begin("Sprite");
-	float ImGuiScaleSprite[Vector3D] = { transformSprite.scale.x,transformSprite.scale.y ,transformSprite.scale.z };
-	ImGui::SliderFloat3("ScaleSprite", ImGuiScaleSprite, 1, 30, "%.3f");
-	transformSprite.scale = { ImGuiScaleSprite[x],ImGuiScaleSprite[y],ImGuiScaleSprite[z] };
-	float ImGuiRotateSprite[Vector3D] = { transformSprite.rotate.x,transformSprite.rotate.y ,transformSprite.rotate.z };
-	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, 0, 7, "%.3f");
-	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
-	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
-	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
-	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
-	ImGui::End();
-#pragma endregion
+	vertexResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
+	//経度分割の1つ分の角度　φ
+	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
+	//緯度分割の1つ分の角度　θ
+	const float kLatEvery = float(std::numbers::pi) / float(kSubdivision);
+	for (int latIndex = 0; latIndex < kSubdivision;++latIndex) {
+		float lat = -float(std::numbers::pi) / 2.0f + kLatEvery * latIndex;
+		for (int lonIndex = 0; lonIndex < kSubdivision;++lonIndex) {
+			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
+			float lon = lonIndex * kLonEvery;
+			float u = float(lonIndex) / float(kSubdivision);
+			float v = 1.0f - float(latIndex) / float(kSubdivision);
+#pragma region TriAngle 1
+			//点A(左下)
+			vertexDataSphere[start].position.x = cos(lat) * cos(lon) + sphere.center.x;
+			vertexDataSphere[start].position.y = sin(lat) + sphere.center.y;
+			vertexDataSphere[start].position.z = cos(lat) * sin(lon) + sphere.center.z;
+			vertexDataSphere[start].position.w = 1.0f;
+			vertexDataSphere[start].texcoord = { u,v };
+			//点B(左上)
+			vertexDataSphere[start + 1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
+			vertexDataSphere[start + 1].position.y = sin(lat + kLatEvery) + sphere.center.y;
+			vertexDataSphere[start + 1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
+			vertexDataSphere[start + 1].position.w = 1.0f;
+			vertexDataSphere[start + 1].texcoord = { u,v };
+			//点C(右下)
+			vertexDataSphere[start + 2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
+			vertexDataSphere[start + 2].position.y = sin(lat) + sphere.center.y;
+			vertexDataSphere[start + 2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
+			vertexDataSphere[start + 2].position.w = 1.0f;
+			vertexDataSphere[start + 2].texcoord = { u,v };
+#pragma endregion 1枚目
+#pragma region TriAngle 2
+			//点D(右上)
+			vertexDataSphere[start + 3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery) + sphere.center.x;
+			vertexDataSphere[start + 3].position.y = sin(lat + kLatEvery) + sphere.center.y;
+			vertexDataSphere[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
+			vertexDataSphere[start + 3].position.w = 1.0f;
+			vertexDataSphere[start + 3].texcoord = { u,v };
+			//点C(右下)
+			vertexDataSphere[start + 4].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;
+			vertexDataSphere[start + 4].position.y = sin(lat) + sphere.center.y;
+			vertexDataSphere[start + 4].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
+			vertexDataSphere[start + 4].position.w = 1.0f;
+			vertexDataSphere[start + 4].texcoord = { u,v };
+			//点B(左上)
+			vertexDataSphere[start + 5].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
+			vertexDataSphere[start + 5].position.y = sin(lat + kLatEvery) + sphere.center.y;
+			vertexDataSphere[start + 5].position.z = cos(lat + kLatEvery)*sin(lon)+sphere.center.z;
+			vertexDataSphere[start + 5].position.w = 1.0f;
+			vertexDataSphere[start + 5].texcoord = { u,v };
+			
+#pragma endregion 2枚目
+		}
+	}
+	transformationMatrixResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
+	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
+	*transformationMatrixDataSphere = Multiply(worldMatrixSphere, ViewMatrix);
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	//頂点
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
+	//WVP
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	directX_->GetcommandList()->DrawInstanced(kSubdivision*kSubdivision*6, 1, 0, 0);
 }
-
-void MyEngine::Release()
+void MyEngine::MakeVertexBufferViewSphere()
 {
-	vertexResource->Release();
-	materialResource->Release();
-	wvpResource->Release();
-	textureResource->Release();
-	intermediateResource->Release();
-	vertexResourceSprite->Release();
-	transformationMatrixResourceSprite->Release();
+	//リソースの先頭のアドレス
+	vertexBufferViewSphere.BufferLocation = vertexResourceSphere->GetGPUVirtualAddress();
+	//使用する頂点サイズ
+	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 6 * kSubdivision * kSubdivision;
+	//1頂点あたりのアドレス
+	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
 }
-void MyEngine::MakeVertexBufferView()
-{
-	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
-	vertexBufferView.StrideInBytes = sizeof(VertexData);
-}
+#pragma endregion 球
 
+#pragma region Texture
 void MyEngine::LoadTexture(const std::string& filePath)
 {
 	//Textureを読んで転送する
@@ -246,15 +354,7 @@ ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const Direc
 	return intermediateResource;
 }
 
-void MyEngine::MakeVertexBufferViewSprite()
-{
-	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
-	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
-	//1頂点あたりのアドレス
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-}
+
 
 ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 {
@@ -274,4 +374,4 @@ ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 	assert(SUCCEEDED(hr));
 	return Resource;
 }
-
+#pragma endregion テクスチャ
