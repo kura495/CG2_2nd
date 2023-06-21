@@ -190,24 +190,25 @@ void MyEngine::MakeVertexBufferViewSprite()
 void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
 {
 	vertexResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
-	//経度分割の1つ分の角度　φ
+	//経度分割の1つ分の角度　φ 横
 	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
-	//緯度分割の1つ分の角度　θ
+	//緯度分割の1つ分の角度　θ 縦
 	const float kLatEvery = float(std::numbers::pi) / float(kSubdivision);
 	for (int latIndex = 0; latIndex < kSubdivision;++latIndex) {
 		float lat = -float(std::numbers::pi) / 2.0f + kLatEvery * latIndex;
+		float uvLength = 1.0f / kSubdivision;
 		for (int lonIndex = 0; lonIndex < kSubdivision;++lonIndex) {
 			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
 			float lon = lonIndex * kLonEvery;
 			float u = float(lonIndex) / float(kSubdivision);
-			float v = 1.0f - float(latIndex) / float(kSubdivision);
+			float v = 1.0f-float(latIndex) / float(kSubdivision);
 #pragma region TriAngle 1
 			//点A(左下)
 			vertexDataSphere[start].position.x = cos(lat) * cos(lon) + sphere.center.x;
 			vertexDataSphere[start].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start].position.z = cos(lat) * sin(lon) + sphere.center.z;
 			vertexDataSphere[start].position.w = 1.0f;
-			vertexDataSphere[start].texcoord = { u,v };
+			vertexDataSphere[start].texcoord = { u ,v + uvLength};
 			//点B(左上)
 			vertexDataSphere[start + 1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
 			vertexDataSphere[start + 1].position.y = sin(lat + kLatEvery) + sphere.center.y;
@@ -219,7 +220,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
 			vertexDataSphere[start + 2].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 2].position.w = 1.0f;
-			vertexDataSphere[start + 2].texcoord = { u,v };
+			vertexDataSphere[start + 2].texcoord = { u + uvLength,v + uvLength };
 #pragma endregion 1枚目
 #pragma region TriAngle 2
 			//点D(右上)
@@ -227,13 +228,13 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
 			vertexDataSphere[start + 3].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 3].position.w = 1.0f;
-			vertexDataSphere[start + 3].texcoord = { u,v };
+			vertexDataSphere[start + 3].texcoord = { u + uvLength,v };
 			//点C(右下)
 			vertexDataSphere[start + 4].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;
 			vertexDataSphere[start + 4].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 4].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 4].position.w = 1.0f;
-			vertexDataSphere[start + 4].texcoord = { u,v };
+			vertexDataSphere[start + 4].texcoord = { u + uvLength,v + uvLength };
 			//点B(左上)
 			vertexDataSphere[start + 5].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
 			vertexDataSphere[start + 5].position.y = sin(lat + kLatEvery) + sphere.center.y;

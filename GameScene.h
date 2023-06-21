@@ -32,7 +32,7 @@ private:
 	Vector4 RightBottom = { 640.0f,360.0f,0.0f,1.0f };
 	Sphere sphere{
 		{0.0f,0.0f,0.0f},
-		32
+		16
 	};
 	
 };

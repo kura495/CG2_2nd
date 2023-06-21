@@ -39,7 +39,7 @@ void GameScene::Draw()
 #pragma endregion
 	
 	myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData);
-	//myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom);
+	myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom);
 	myEngine_->DrawSphere(sphere, camera_->transformationMatrixData);
 	//描画ここまで
 	ImGuiManager_->EndFrame();
