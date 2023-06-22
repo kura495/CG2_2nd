@@ -13,16 +13,18 @@ public:
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
 	void Release();
-	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix);
-	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
-	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix);
+	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
+	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom, const int Index);
+	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const int Index);
 	
-	void LoadTexture(const std::string& filePath);
+	int LoadTexture(const std::string& filePath);
 
 
 	
 private:
 	const int kSubdivision = 16;
+	static const int kMaxTexture=2;
+	bool CheckSpriteIndex[kMaxTexture];
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 	Transform transform{
@@ -60,7 +62,7 @@ private:
 	//WVPデータ
 	Matrix4x4* wvpData = nullptr;
 	//テクスチャデータ
-	ID3D12Resource* textureResource=nullptr;
+	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
 	#pragma endregion 三角形
 	
 	#pragma region sprite
@@ -90,10 +92,10 @@ private:
 	#pragma endregion 球
 	
 	//中間リソース
-	ID3D12Resource* intermediateResource = nullptr;
+	ID3D12Resource* intermediateResource[kMaxTexture];
 	//descriptorHandle
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU;
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
 
 	void MakeVertexBufferView();
 	void MakeVertexBufferViewSprite();
@@ -105,4 +107,10 @@ private:
 	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
 	ID3D12Resource* UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
 #pragma endregion 画像読み込み
+
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	uint32_t descriptorSizeSRV;
+	uint32_t descriptorSizeRTV;
+	uint32_t descriptorSizeDSV;
 };

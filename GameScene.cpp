@@ -11,8 +11,8 @@ void GameScene::Initialize(DirectXCommon* directX, MyEngine* myEngine,WinApp*win
 	ImGuiManager_ = new ImGuiManager();
 	ImGuiManager_->Initialize(winApp,directX_);
 	//リソースを作る
-	myEngine_->LoadTexture("resources/uvChecker.png");
-	
+	UV=myEngine_->LoadTexture("resources/uvChecker.png");
+	Ball=myEngine_->LoadTexture("resources/monsterBall.png");
 }
 
 void GameScene::UpDate()
@@ -28,19 +28,27 @@ void GameScene::Draw()
 	directX_->PreView();
 	//描画ここから
 #pragma region ImGui
-	ImGui::Begin("TriAngleColor");
+	ImGui::Begin("Color");
 	float ImGuiColor[Vector3D] = { Color[0].x,Color[0].y ,Color[0].z };
 	ImGui::SliderFloat3("RGB", ImGuiColor, 0, 1, "%.3f");
 	Color[0] = { ImGuiColor[x],ImGuiColor[y],ImGuiColor[z] };
 	ImGui::End();
 	camera_->ImGui();
 	myEngine_->ImGui();
-	
+	ImGui::Begin("Sphere");
+	ImGui::Checkbox("Texture",&useMonsterBall);
+	ImGui::End();
+	if (useMonsterBall == true) {
+		SphereTexture = Ball;
+	}
+	else {
+		SphereTexture = UV;
+	}
 #pragma endregion
 	
-	myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData);
-	myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom);
-	myEngine_->DrawSphere(sphere, camera_->transformationMatrixData);
+	myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData, UV);
+	myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom, UV);
+	myEngine_->DrawSphere(sphere, camera_->transformationMatrixData, SphereTexture);
 	//描画ここまで
 	ImGuiManager_->EndFrame();
 	directX_->PostView();

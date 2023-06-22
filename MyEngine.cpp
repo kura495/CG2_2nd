@@ -23,6 +23,16 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	transformationMatrixResourceSphere = CreateBufferResource(sizeof(Matrix4x4));
 	MakeVertexBufferViewSphere();
 	#pragma endregion 弾
+
+	descriptorSizeSRV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+	descriptorSizeDSV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
+	for (int i = 0; i < kMaxTexture; i++) {
+		CheckSpriteIndex[i] = false;
+		textureResource[i]=nullptr;
+		intermediateResource[i] = nullptr;
+	}
+
 }
 void MyEngine::ImGui()
 {
@@ -56,7 +66,6 @@ void MyEngine::ImGui()
 	ImGui::End();
 #pragma endregion
 #pragma region SphereImGui
-	
 	ImGui::Begin("Sphere");
 	float ImGuiScaleSphere[Vector3D] = { transformSphere.scale.x,transformSphere.scale.y ,transformSphere.scale.z };
 	ImGui::SliderFloat3("ScaleSphere", ImGuiScaleSphere, 1, 30, "%.3f");
@@ -67,6 +76,8 @@ void MyEngine::ImGui()
 	float ImGuiTranslateSphere[Vector3D] = { transformSphere.translate.x,transformSphere.translate.y ,transformSphere.translate.z };
 	ImGui::SliderFloat3("TranslateSphere", ImGuiTranslateSphere, -10, 10, "%.3f");
 	transformSphere.translate = { ImGuiTranslateSphere[x],ImGuiTranslateSphere[y],ImGuiTranslateSphere[z] };
+	
+	
 	ImGui::End();
 #pragma endregion
 }
@@ -75,8 +86,14 @@ void MyEngine::Release()
 	vertexResource->Release();
 	materialResource->Release();
 	wvpResource->Release();
-	textureResource->Release();
-	intermediateResource->Release();
+
+	for (int i = 0; i < kMaxTexture; ++i) {
+		if (CheckSpriteIndex[i]==true) {
+			textureResource[i]->Release();
+			intermediateResource[i]->Release();
+		}
+	}
+	
 	vertexResourceSprite->Release();
 	transformationMatrixResourceSprite->Release();
 	vertexResourceSphere->Release();
@@ -84,7 +101,7 @@ void MyEngine::Release()
 }
 
 #pragma region Draw
-void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix)
+void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
@@ -123,7 +140,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList()->DrawInstanced(6, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferView()
@@ -134,7 +151,7 @@ void MyEngine::MakeVertexBufferView()
 }
 #pragma endregion 三角形
 #pragma region Sprite
-void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom)
+void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom, const int Index)
 {
 	vertexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
 	//三角形1枚目
@@ -173,7 +190,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	directX_->GetcommandList()->IASetVertexBuffers(0,1,&vertexBufferViewSprite);
 	//WVP
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
 }
 void MyEngine::MakeVertexBufferViewSprite()
@@ -187,7 +204,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 }
 #pragma endregion スプライト
 #pragma region Sphere
-void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
+void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix,const int Index)
 {
 	vertexResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
 	//経度分割の1つ分の角度　φ 横
@@ -255,7 +272,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix)
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
 	//WVP
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere->GetGPUVirtualAddress());
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU);
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList()->DrawInstanced(kSubdivision*kSubdivision*6, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferViewSphere()
@@ -270,27 +287,45 @@ void MyEngine::MakeVertexBufferViewSphere()
 #pragma endregion 球
 
 #pragma region Texture
-void MyEngine::LoadTexture(const std::string& filePath)
+int MyEngine::LoadTexture(const std::string& filePath)
 {
+	int SpriteIndex=-1;
+	for (int i = 0; i < kMaxTexture;++i) {
+		if (CheckSpriteIndex[i] == false) {
+			SpriteIndex = i;
+			CheckSpriteIndex[i] = true;
+			break;
+		}
+	}
+	if (SpriteIndex<0) {
+		//0より少ない
+		assert(false);
+	}
+	if (kMaxTexture<SpriteIndex) {
+		//MaxSpriteより多い
+		assert(false);
+	}
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = ImageFileOpen(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textureResource = CreateTextureResource(directX_->GetDevice(), metadata);
-	intermediateResource = UploadTextureData(textureResource, mipImages);
+	textureResource[SpriteIndex] = CreateTextureResource(directX_->GetDevice(), metadata);
+	intermediateResource[SpriteIndex] = UploadTextureData(textureResource[SpriteIndex], mipImages);
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
+	
 	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU = directX_->GetsrvDescriptorHeap()->GetCPUDescriptorHandleForHeapStart();
-	textureSrvHandleGPU = directX_->GetsrvDescriptorHeap()->GetGPUDescriptorHandleForHeapStart();
+	textureSrvHandleCPU[SpriteIndex] = GetCPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
+	textureSrvHandleGPU[SpriteIndex] = GetGPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
 	//先頭はImGuiが使っているので次のを使う
-	textureSrvHandleCPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleCPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textureSrvHandleGPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの作成
-	directX_->GetDevice()->CreateShaderResourceView(textureResource, &srvDesc, textureSrvHandleCPU);
+	directX_->GetDevice()->CreateShaderResourceView(textureResource[SpriteIndex], &srvDesc, textureSrvHandleCPU[SpriteIndex]);
+	return SpriteIndex;
 }
 
 DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
@@ -376,3 +411,17 @@ ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 	return Resource;
 }
 #pragma endregion テクスチャ
+
+D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
+	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
+	handleCPU.ptr += (descriptorSize*index);
+	return handleCPU;
+}
+
+D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+{
+	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
+	handleGPU.ptr += (descriptorSize * index);
+	return handleGPU;
+}

@@ -34,6 +34,9 @@ private:
 		{0.0f,0.0f,0.0f},
 		16
 	};
-	
+	int UV;
+	int Ball;
+	bool useMonsterBall = true;
+	int SphereTexture = 0;
 };
 
