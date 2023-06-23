@@ -289,7 +289,7 @@ void MyEngine::MakeVertexBufferViewSphere()
 #pragma region Texture
 int MyEngine::LoadTexture(const std::string& filePath)
 {
-	int SpriteIndex=-1;
+	int SpriteIndex= kMaxTexture+1;
 	for (int i = 0; i < kMaxTexture;++i) {
 		if (CheckSpriteIndex[i] == false) {
 			SpriteIndex = i;

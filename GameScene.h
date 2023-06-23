@@ -36,6 +36,7 @@ private:
 	};
 	int UV;
 	int Ball;
+	int Max;
 	bool useMonsterBall = true;
 	int SphereTexture = 0;
 };
