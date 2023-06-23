@@ -5,6 +5,9 @@
 #include"Transform.h"
 #include"VertexData.h"
 #include"Sphere.h"
+#include"Material.h"
+#include"TransformationMatrix.h"
+#include"StructLight.h"
 #include<numbers>
 #include"externals/DirectXTex/DirectXTex.h"
 class MyEngine
@@ -64,7 +67,6 @@ private:
 	//テクスチャデータ
 	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
 	#pragma endregion 三角形
-	
 	#pragma region sprite
 	//Sprite用頂点データ
 	ID3D12Resource* vertexResourceSprite = nullptr;
@@ -75,13 +77,13 @@ private:
 	//マテリアルリソース
 	ID3D12Resource* materialResourceSprite = nullptr;
 	//色データ
-	Vector4* materialDataSprite = nullptr;
+	Material* materialDataSprite = nullptr;
 	//Sprite用WVPリソース
 	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
-	Matrix4x4* transformationMatrixDataSprite = nullptr;
-	#pragma endregion スプライト
+	TransformationMatrix* transformationMatrixDataSprite = nullptr;
 
+	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ
 	ID3D12Resource* vertexResourceSphere = nullptr;
@@ -92,12 +94,16 @@ private:
 	//マテリアルリソース
 	ID3D12Resource* materialResourceSphere = nullptr;
 	//色データ
-	Vector4* materialDataSphere = nullptr;
+	Material* materialDataSphere = nullptr;
 	//Sphere用WVPリソース
 	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ
-	Matrix4x4* transformationMatrixDataSphere = nullptr;
+	TransformationMatrix* transformationMatrixDataSphere = nullptr;
 	#pragma endregion 球
+	#pragma region Light
+	ID3D12Resource* directionalLightResource = nullptr;
+	DirectionalLight* directionalLightData = nullptr;
+	#pragma endregion ライト
 	
 	//中間リソース
 	ID3D12Resource* intermediateResource[kMaxTexture];
@@ -116,9 +122,11 @@ private:
 	ID3D12Resource* UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
 #pragma endregion 画像読み込み
 
+#pragma region descriptorHeap
 	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;
 	uint32_t descriptorSizeDSV;
+#pragma endregion デスクリプタ
 };

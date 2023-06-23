@@ -140,6 +140,15 @@
     <ClInclude Include="VertexData.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
+    <ClInclude Include="Material.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformationMatrix.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="StructLight.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

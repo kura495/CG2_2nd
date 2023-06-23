@@ -11,20 +11,25 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	wvpResource = CreateBufferResource(sizeof(Matrix4x4));
 	MakeVertexBufferView();
 	#pragma endregion 三角形
-
 	#pragma region Sprite
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
-	materialResourceSprite = CreateBufferResource(sizeof(Vector4) * 3);
-	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
+	materialResourceSprite = CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceSprite = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
 	#pragma endregion スプライト
-
 	#pragma region Sphere
-	vertexResourceSphere = CreateBufferResource(sizeof(VertexData)*6*kSubdivision* kSubdivision);
-	materialResourceSphere = CreateBufferResource(sizeof(Vector4) * 3);
-	transformationMatrixResourceSphere = CreateBufferResource(sizeof(Matrix4x4));
+	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 6 * kSubdivision * kSubdivision);
+	materialResourceSphere = CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
 	#pragma endregion 球
+	#pragma region Light
+	directionalLightResource = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
+	directionalLightData->color={ 1.0f,1.0f,1.0f,1.0f };
+	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
+	directionalLightData->intensity = 1.0f;
+	#pragma endregion ライト
 
 	descriptorSizeSRV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -82,6 +87,20 @@ void MyEngine::ImGui()
 	
 	ImGui::End();
 #pragma endregion
+#pragma region Light
+	ImGui::Begin("Light");
+	float ImGuidirectionalLightColor[Vector3D] = { directionalLightData->color.x,directionalLightData->color.y ,directionalLightData->color.z };
+	ImGui::SliderFloat3("LightColor", ImGuidirectionalLightColor,0,1,"%.3f");
+	directionalLightData->color.x = ImGuidirectionalLightColor[x];
+	directionalLightData->color.y = ImGuidirectionalLightColor[y];
+	directionalLightData->color.z = ImGuidirectionalLightColor[z];
+	float ImGuidirectionalLightdirection[Vector3D] = { directionalLightData->direction.x,directionalLightData->direction.y,directionalLightData->direction.z };
+	ImGui::SliderFloat3("Lightpotision", ImGuidirectionalLightdirection, -10, 10, "%.3f");
+	directionalLightData->direction.x = ImGuidirectionalLightdirection[x];
+	directionalLightData->direction.y = ImGuidirectionalLightdirection[y];
+	directionalLightData->direction.z = ImGuidirectionalLightdirection[z];
+	ImGui::End();
+#pragma endregion ライト
 }
 void MyEngine::Release()
 {
@@ -103,6 +122,9 @@ void MyEngine::Release()
 	vertexResourceSphere->Release();
 	transformationMatrixResourceSphere->Release();
 	materialResourceSphere->Release();
+
+	directionalLightResource->Release();
+
 }
 
 #pragma region Draw
@@ -181,14 +203,16 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
 	//色の書き込み
 	materialResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-	*materialDataSprite = color;
+	materialDataSprite->color = color;
+	//ライティングをしない
+	materialDataSprite->enableLighting = false;
 	//WVPを書き込むためのアドレス取得
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
-	*transformationMatrixDataSprite = worldViewProjectionMatrixSprite;
+	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	//頂点
@@ -197,7 +221,11 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
+	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	//Light
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
+
 	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
 }
 void MyEngine::MakeVertexBufferViewSprite()
@@ -290,10 +318,14 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 	vertexDataSphere[0].normal = {0.0f,0.0f,-1.0f};
 	
 	materialResourceSphere->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
-	*materialDataSphere = color;
+	
+	//ライティングをする
+	materialDataSphere->enableLighting = true;
+	materialDataSphere->color = color;
+
 	transformationMatrixResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
 	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
-	*transformationMatrixDataSphere = Multiply(worldMatrixSphere, ViewMatrix);
+	transformationMatrixDataSphere->WVP = Multiply(worldMatrixSphere, ViewMatrix);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	//頂点
@@ -302,7 +334,11 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere->GetGPUVirtualAddress());
 	//WVP
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere->GetGPUVirtualAddress());
+	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	//Light
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
+
 	directX_->GetcommandList()->DrawInstanced(kSubdivision*kSubdivision*6, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferViewSphere()
