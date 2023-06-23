@@ -14,8 +14,8 @@ public:
 	void ImGui();
 	void Release();
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
-	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom, const int Index);
-	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const int Index);
+	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
+	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
 	
 	int LoadTexture(const std::string& filePath);
 
@@ -72,6 +72,10 @@ private:
 	VertexData* vertexDataSprite = nullptr;
 	//Sprite用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
+	//マテリアルリソース
+	ID3D12Resource* materialResourceSprite = nullptr;
+	//色データ
+	Vector4* materialDataSprite = nullptr;
 	//Sprite用WVPリソース
 	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
@@ -85,6 +89,10 @@ private:
 	VertexData* vertexDataSphere=nullptr;
 	//Sphere用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere{};
+	//マテリアルリソース
+	ID3D12Resource* materialResourceSphere = nullptr;
+	//色データ
+	Vector4* materialDataSphere = nullptr;
 	//Sphere用WVPリソース
 	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ

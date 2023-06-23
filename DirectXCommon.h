@@ -87,7 +87,7 @@ private:
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 	//インプットレイアウト
-	D3D12_INPUT_ELEMENT_DESC inputElementDescs[2] = {};
+	D3D12_INPUT_ELEMENT_DESC inputElementDescs[3] = {};
 	D3D12_INPUT_LAYOUT_DESC inputLayoutDesc{};
 	//ブレンドステート
 	D3D12_BLEND_DESC blendDesc{};

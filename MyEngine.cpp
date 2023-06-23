@@ -14,15 +14,17 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 
 	#pragma region Sprite
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
+	materialResourceSprite = CreateBufferResource(sizeof(Vector4) * 3);
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(Matrix4x4));
 	MakeVertexBufferViewSprite();
 	#pragma endregion スプライト
 
 	#pragma region Sphere
 	vertexResourceSphere = CreateBufferResource(sizeof(VertexData)*6*kSubdivision* kSubdivision);
+	materialResourceSphere = CreateBufferResource(sizeof(Vector4) * 3);
 	transformationMatrixResourceSphere = CreateBufferResource(sizeof(Matrix4x4));
 	MakeVertexBufferViewSphere();
-	#pragma endregion 弾
+	#pragma endregion 球
 
 	descriptorSizeSRV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -96,8 +98,11 @@ void MyEngine::Release()
 	
 	vertexResourceSprite->Release();
 	transformationMatrixResourceSprite->Release();
+	materialResourceSprite->Release();
+
 	vertexResourceSphere->Release();
 	transformationMatrixResourceSphere->Release();
+	materialResourceSphere->Release();
 }
 
 #pragma region Draw
@@ -151,7 +156,7 @@ void MyEngine::MakeVertexBufferView()
 }
 #pragma endregion 三角形
 #pragma region Sprite
-void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom, const int Index)
+void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
 {
 	vertexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
 	//三角形1枚目
@@ -174,21 +179,23 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	//右下
 	vertexDataSprite[5].position = RightBottom;
 	vertexDataSprite[5].texcoord = { 1.0f,1.0f };
-
-	//書き込むためのアドレス取得
+	//色の書き込み
+	materialResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
+	*materialDataSprite = color;
+	//WVPを書き込むためのアドレス取得
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
 	*transformationMatrixDataSprite = worldViewProjectionMatrixSprite;
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	
 	//頂点
 	directX_->GetcommandList()->IASetVertexBuffers(0,1,&vertexBufferViewSprite);
-	//WVP
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
+	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->GetGPUVirtualAddress());
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList()->DrawInstanced(6,1,0,0);
@@ -204,7 +211,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 }
 #pragma endregion スプライト
 #pragma region Sphere
-void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix,const int Index)
+void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
 {
 	vertexResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
 	//経度分割の1つ分の角度　φ 横
@@ -226,18 +233,27 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix,cons
 			vertexDataSphere[start].position.z = cos(lat) * sin(lon) + sphere.center.z;
 			vertexDataSphere[start].position.w = 1.0f;
 			vertexDataSphere[start].texcoord = { u ,v + uvLength};
+			vertexDataSphere[start].normal.x = vertexDataSphere[start].position.x;
+			vertexDataSphere[start].normal.y = vertexDataSphere[start].position.y;
+			vertexDataSphere[start].normal.z = vertexDataSphere[start].position.z;
 			//点B(左上)
 			vertexDataSphere[start + 1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
 			vertexDataSphere[start + 1].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
 			vertexDataSphere[start + 1].position.w = 1.0f;
 			vertexDataSphere[start + 1].texcoord = { u,v };
+			vertexDataSphere[start + 1].normal.x = vertexDataSphere[start + 1].position.x;
+			vertexDataSphere[start + 1].normal.y = vertexDataSphere[start + 1].position.y;
+			vertexDataSphere[start + 1].normal.z = vertexDataSphere[start + 1].position.z;
 			//点C(右下)
 			vertexDataSphere[start + 2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
 			vertexDataSphere[start + 2].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 2].position.w = 1.0f;
 			vertexDataSphere[start + 2].texcoord = { u + uvLength,v + uvLength };
+			vertexDataSphere[start + 2].normal.x = vertexDataSphere[start + 2].position.x;
+			vertexDataSphere[start + 2].normal.y = vertexDataSphere[start + 2].position.y;
+			vertexDataSphere[start + 2].normal.z = vertexDataSphere[start + 2].position.z;
 #pragma endregion 1枚目
 #pragma region TriAngle 2
 			//点D(右上)
@@ -246,30 +262,44 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix,cons
 			vertexDataSphere[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 3].position.w = 1.0f;
 			vertexDataSphere[start + 3].texcoord = { u + uvLength,v };
+			vertexDataSphere[start + 3].normal.x = vertexDataSphere[start + 3].position.x;
+			vertexDataSphere[start + 3].normal.y = vertexDataSphere[start + 3].position.y;
+			vertexDataSphere[start + 3].normal.z = vertexDataSphere[start + 3].position.z;
 			//点C(右下)
 			vertexDataSphere[start + 4].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;
 			vertexDataSphere[start + 4].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 4].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 4].position.w = 1.0f;
 			vertexDataSphere[start + 4].texcoord = { u + uvLength,v + uvLength };
+			vertexDataSphere[start + 4].normal.x = vertexDataSphere[start + 4].position.x;
+			vertexDataSphere[start + 4].normal.y = vertexDataSphere[start + 4].position.y;
+			vertexDataSphere[start + 4].normal.z = vertexDataSphere[start + 4].position.z;
 			//点B(左上)
 			vertexDataSphere[start + 5].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
 			vertexDataSphere[start + 5].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 5].position.z = cos(lat + kLatEvery)*sin(lon)+sphere.center.z;
 			vertexDataSphere[start + 5].position.w = 1.0f;
 			vertexDataSphere[start + 5].texcoord = { u,v };
+			vertexDataSphere[start + 5].normal.x = vertexDataSphere[start + 5].position.x;
+			vertexDataSphere[start + 5].normal.y = vertexDataSphere[start + 5].position.y;
+			vertexDataSphere[start + 5].normal.z = vertexDataSphere[start + 5].position.z;
 			
 #pragma endregion 2枚目
 		}
 	}
+	vertexDataSphere[0].normal = {0.0f,0.0f,-1.0f};
+	
+	materialResourceSphere->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
+	*materialDataSphere = color;
 	transformationMatrixResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
 	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
 	*transformationMatrixDataSphere = Multiply(worldMatrixSphere, ViewMatrix);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	
 	//頂点
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere->GetGPUVirtualAddress());
 	//WVP
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere->GetGPUVirtualAddress());
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
