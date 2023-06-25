@@ -7,8 +7,8 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	directX_ = directX;
 	#pragma region TriAngle
 	vertexResource = CreateBufferResource(sizeof(VertexData)*6);
-	materialResource = CreateBufferResource(sizeof(Vector4) * 3);
-	wvpResource = CreateBufferResource(sizeof(Matrix4x4));
+	materialResource = CreateBufferResource(sizeof(Material) * 3);
+	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region Sprite
