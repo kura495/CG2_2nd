@@ -263,7 +263,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start].position.z = cos(lat) * sin(lon) + sphere.center.z;
 			vertexDataSphere[start].position.w = 1.0f;
-			vertexDataSphere[start].texcoord = { u ,v + uvLength};
+			vertexDataSphere[start].texcoord = { u ,v };
 			vertexDataSphere[start].normal.x = vertexDataSphere[start].position.x;
 			vertexDataSphere[start].normal.y = vertexDataSphere[start].position.y;
 			vertexDataSphere[start].normal.z = vertexDataSphere[start].position.z;
@@ -272,7 +272,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start + 1].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
 			vertexDataSphere[start + 1].position.w = 1.0f;
-			vertexDataSphere[start + 1].texcoord = { u,v };
+			vertexDataSphere[start + 1].texcoord = { u,v - uvLength };
 			vertexDataSphere[start + 1].normal.x = vertexDataSphere[start + 1].position.x;
 			vertexDataSphere[start + 1].normal.y = vertexDataSphere[start + 1].position.y;
 			vertexDataSphere[start + 1].normal.z = vertexDataSphere[start + 1].position.z;
@@ -281,7 +281,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start + 2].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 2].position.w = 1.0f;
-			vertexDataSphere[start + 2].texcoord = { u + uvLength,v + uvLength };
+			vertexDataSphere[start + 2].texcoord = { u + uvLength,v};
 			vertexDataSphere[start + 2].normal.x = vertexDataSphere[start + 2].position.x;
 			vertexDataSphere[start + 2].normal.y = vertexDataSphere[start + 2].position.y;
 			vertexDataSphere[start + 2].normal.z = vertexDataSphere[start + 2].position.z;
@@ -292,7 +292,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start + 3].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 3].position.w = 1.0f;
-			vertexDataSphere[start + 3].texcoord = { u + uvLength,v };
+			vertexDataSphere[start + 3].texcoord = { u + uvLength,v - uvLength };
 			vertexDataSphere[start + 3].normal.x = vertexDataSphere[start + 3].position.x;
 			vertexDataSphere[start + 3].normal.y = vertexDataSphere[start + 3].position.y;
 			vertexDataSphere[start + 3].normal.z = vertexDataSphere[start + 3].position.z;
@@ -301,7 +301,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start + 4].position.y = sin(lat) + sphere.center.y;
 			vertexDataSphere[start + 4].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
 			vertexDataSphere[start + 4].position.w = 1.0f;
-			vertexDataSphere[start + 4].texcoord = { u + uvLength,v + uvLength };
+			vertexDataSphere[start + 4].texcoord = { u + uvLength,v};
 			vertexDataSphere[start + 4].normal.x = vertexDataSphere[start + 4].position.x;
 			vertexDataSphere[start + 4].normal.y = vertexDataSphere[start + 4].position.y;
 			vertexDataSphere[start + 4].normal.z = vertexDataSphere[start + 4].position.z;
@@ -310,7 +310,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 			vertexDataSphere[start + 5].position.y = sin(lat + kLatEvery) + sphere.center.y;
 			vertexDataSphere[start + 5].position.z = cos(lat + kLatEvery)*sin(lon)+sphere.center.z;
 			vertexDataSphere[start + 5].position.w = 1.0f;
-			vertexDataSphere[start + 5].texcoord = { u,v };
+			vertexDataSphere[start + 5].texcoord = { u,v - uvLength };
 			vertexDataSphere[start + 5].normal.x = vertexDataSphere[start + 5].position.x;
 			vertexDataSphere[start + 5].normal.y = vertexDataSphere[start + 5].position.y;
 			vertexDataSphere[start + 5].normal.z = vertexDataSphere[start + 5].position.z;
