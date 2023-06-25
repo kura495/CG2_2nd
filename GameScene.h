@@ -20,9 +20,18 @@ private:
 	MyEngine* myEngine_ = nullptr;
 	Camera* camera_ = nullptr;
 	ImGuiManager* ImGuiManager_ = nullptr;
-	Vector4 Left[2] ={ -0.5f,-0.5f,0.0f,1.0f };
-	Vector4 Top[2] = {0.0f,0.5f,0.0f,1.0f};
-	Vector4 Right[2] = {0.5f,-0.5f,0.0f,1.0f};
+	Vector4 Left[3] = { 
+	 {-0.5f,-0.5f,0.0f,1.0f} 
+	,{-0.5f,-1.5f,0.0f,1.0f}
+	,{1.0f,-0.5f,0.0f,1.0f} };
+	Vector4 Top[3] = { 
+	 {0.0f,0.5f,0.0f,1.0f}
+	,{0.0f,-0.5f,0.0f,1.0f}
+	,{1.5f,0.5f,0.0f,1.0f} };
+	Vector4 Right[3] ={ 
+	 {0.5f,-0.5f,0.0f,1.0f}
+	,{0.5f,-1.5f,0.0f,1.0f}
+	,{2.0f,-0.5f,0.0f,1.0f} };
 	Vector4 Color[2] = {1.0f,1.0f,1.0f,1.0f};
 	//Sprite
 
@@ -39,5 +48,6 @@ private:
 	int Max;
 	bool useMonsterBall = true;
 	int SphereTexture = 0;
+	
 };
 

@@ -6,14 +6,14 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	kClientHeight_ = kClientHeight;
 	directX_ = directX;
 	#pragma region TriAngle
-	vertexResource = CreateBufferResource(sizeof(VertexData)*6);
-	materialResource = CreateBufferResource(sizeof(Material) * 3);
+	vertexResource = CreateBufferResource(sizeof(VertexData)* kMaxVertex);
+	materialResource = CreateBufferResource(sizeof(Material) * kMaxVertex);
 	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region Sprite
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)*6);
-	materialResourceSprite = CreateBufferResource(sizeof(Material));
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* kMaxVertex);
+	materialResourceSprite = CreateBufferResource(sizeof(Material)* kMaxVertex);
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
 	#pragma endregion スプライト
@@ -102,6 +102,15 @@ void MyEngine::ImGui()
 	ImGui::End();
 #pragma endregion ライト
 }
+void MyEngine::VertexReset()
+{
+	
+	for (int i = 0; i < kMaxVertex; ++i) {
+		if (CheckVertexIndex[i] == true) {
+			CheckVertexIndex[i] = false;
+		}
+	}
+}
 void MyEngine::Release()
 {
 	vertexResource->Release();
@@ -130,25 +139,35 @@ void MyEngine::Release()
 #pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
+	VertexIndex = kMaxVertex + 1;
+	for (int i = 0; i < kMaxVertex; ++i) {
+		if (CheckVertexIndex[i] == false) {
+			VertexIndex = i;
+			break;
+		}
+	}
+	if (VertexIndex < 0) {
+		//0より少ない
+		assert(false);
+	}
+	if (kMaxVertex < VertexIndex) {
+		//MaxSpriteより多い
+		assert(false);
+	}
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
-	vertexData[0].position = Leftbottom;
-	vertexData[0].texcoord = {0.0f,1.0f};
+	vertexData[VertexIndex].position = Leftbottom;
+	vertexData[VertexIndex].texcoord = {0.0f,1.0f};
+	CheckVertexIndex[VertexIndex] = true;
 	//上
-	vertexData[1].position = top;
-	vertexData[1].texcoord = {0.5f,0.0f};
+	vertexData[VertexIndex+1].position = top;
+	vertexData[VertexIndex+1].texcoord = {0.5f,0.0f};
+	CheckVertexIndex[VertexIndex+1] = true;
 	//右下
-	vertexData[2].position = Rightbottom;
-	vertexData[2].texcoord = {1.0f,1.0f};
-	//2枚目左下
-	vertexData[3].position = { -0.7f,-0.5f,0.5f,1.0f };
-	vertexData[3].texcoord = { 0.0f,1.0f };
-	//2枚目上
-	vertexData[4].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexData[4].texcoord = { 0.5f,0.0f };
-	//2枚目右下
-	vertexData[5].position = { 0.7f,-0.5f,-0.5f,1.0f };
-	vertexData[5].texcoord = { 1.0f,1.0f };
+	vertexData[VertexIndex+2].position = Rightbottom;
+	vertexData[VertexIndex+2].texcoord = {1.0f,1.0f};
+	CheckVertexIndex[VertexIndex+2] = true;
+	
 	
 	//色を書き込むアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
@@ -168,12 +187,12 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	directX_->GetcommandList()->DrawInstanced(6, 1, 0, 0);
+	directX_->GetcommandList()->DrawInstanced(VertexIndex+3, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * 6;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * kMaxVertex;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
 #pragma endregion 三角形
@@ -236,7 +255,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 	//リソースの先頭のアドレス
 	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)*6;
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* kMaxVertex;
 	//1頂点あたりのアドレス
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
@@ -461,6 +480,7 @@ ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const Direc
 }
 
 
+#pragma endregion テクスチャ
 
 ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 {
@@ -480,8 +500,6 @@ ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 	assert(SUCCEEDED(hr));
 	return Resource;
 }
-#pragma endregion テクスチャ
-
 D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
