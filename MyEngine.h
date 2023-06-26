@@ -28,9 +28,9 @@ public:
 private:
 	const int kSubdivision = 16;
 	static const int kMaxTexture=2;
-	bool CheckSpriteIndex[kMaxTexture];
+	bool IsusedSpriteIndex[kMaxTexture];
 	static const int kMaxVertex=3000;
-	bool CheckVertexIndex[kMaxVertex];
+	bool IsusedVertexIndex[kMaxVertex];
 	int VertexIndex = 0;
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;

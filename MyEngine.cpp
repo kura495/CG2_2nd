@@ -35,7 +35,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	descriptorSizeDSV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
 	for (int i = 0; i < kMaxTexture; i++) {
-		CheckSpriteIndex[i] = false;
+		IsusedSpriteIndex[i] = false;
 		textureResource[i]=nullptr;
 		intermediateResource[i] = nullptr;
 	}
@@ -104,10 +104,9 @@ void MyEngine::ImGui()
 }
 void MyEngine::VertexReset()
 {
-	
 	for (int i = 0; i < kMaxVertex; ++i) {
-		if (CheckVertexIndex[i] == true) {
-			CheckVertexIndex[i] = false;
+		if (IsusedVertexIndex[i] == true) {
+			IsusedVertexIndex[i] = false;
 		}
 	}
 }
@@ -118,7 +117,7 @@ void MyEngine::Release()
 	wvpResource->Release();
 
 	for (int i = 0; i < kMaxTexture; ++i) {
-		if (CheckSpriteIndex[i]==true) {
+		if (IsusedSpriteIndex[i]==true) {
 			textureResource[i]->Release();
 			intermediateResource[i]->Release();
 		}
@@ -141,7 +140,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 {
 	VertexIndex = kMaxVertex + 1;
 	for (int i = 0; i < kMaxVertex; ++i) {
-		if (CheckVertexIndex[i] == false) {
+		if (IsusedVertexIndex[i] == false) {
 			VertexIndex = i;
 			break;
 		}
@@ -158,15 +157,15 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//左下
 	vertexData[VertexIndex].position = Leftbottom;
 	vertexData[VertexIndex].texcoord = {0.0f,1.0f};
-	CheckVertexIndex[VertexIndex] = true;
+	IsusedVertexIndex[VertexIndex] = true;
 	//上
 	vertexData[VertexIndex+1].position = top;
 	vertexData[VertexIndex+1].texcoord = {0.5f,0.0f};
-	CheckVertexIndex[VertexIndex+1] = true;
+	IsusedVertexIndex[VertexIndex+1] = true;
 	//右下
 	vertexData[VertexIndex+2].position = Rightbottom;
 	vertexData[VertexIndex+2].texcoord = {1.0f,1.0f};
-	CheckVertexIndex[VertexIndex+2] = true;
+	IsusedVertexIndex[VertexIndex+2] = true;
 	
 	
 	//色を書き込むアドレスを取得
@@ -380,9 +379,9 @@ int MyEngine::LoadTexture(const std::string& filePath)
 {
 	int SpriteIndex= kMaxTexture+1;
 	for (int i = 0; i < kMaxTexture;++i) {
-		if (CheckSpriteIndex[i] == false) {
+		if (IsusedSpriteIndex[i] == false) {
 			SpriteIndex = i;
-			CheckSpriteIndex[i] = true;
+			IsusedSpriteIndex[i] = true;
 			break;
 		}
 	}
