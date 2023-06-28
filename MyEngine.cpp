@@ -7,7 +7,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	directX_ = directX;
 	#pragma region TriAngle
 	vertexResource = CreateBufferResource(sizeof(VertexData)* kMaxVertex);
-	materialResource = CreateBufferResource(sizeof(Material) * kMaxVertex);
+	materialResource = CreateBufferResource(sizeof(Material) * kMaxTriAngle);
 	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 	#pragma endregion 三角形
@@ -104,9 +104,9 @@ void MyEngine::ImGui()
 }
 void MyEngine::VertexReset()
 {
-	for (int i = 0; i < kMaxVertex; ++i) {
-		if (IsusedVertexIndex[i] == true) {
-			IsusedVertexIndex[i] = false;
+	for (int i = 0; i < kMaxTriAngle; ++i) {
+		if (IsusedTriAngleIndex[i] == true) {
+			IsusedTriAngleIndex[i] = false;
 		}
 	}
 }
@@ -138,34 +138,33 @@ void MyEngine::Release()
 #pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
-	VertexIndex = kMaxVertex + 1;
-	for (int i = 0; i < kMaxVertex; ++i) {
-		if (IsusedVertexIndex[i] == false) {
-			VertexIndex = i;
+	TriAngleIndex = kMaxTriAngle + 1;
+	for (int i = 0; i < kMaxTriAngle; ++i) {
+		if (IsusedTriAngleIndex[i] == false) {
+			TriAngleIndex = i*3;
+			IsusedTriAngleIndex[i] = true;
 			break;
 		}
 	}
-	if (VertexIndex < 0) {
+	if (TriAngleIndex < 0) {
 		//0より少ない
 		assert(false);
 	}
-	if (kMaxVertex < VertexIndex) {
+	if (kMaxTriAngle*3 < TriAngleIndex) {
 		//MaxSpriteより多い
 		assert(false);
 	}
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
-	vertexData[VertexIndex].position = Leftbottom;
-	vertexData[VertexIndex].texcoord = {0.0f,1.0f};
-	IsusedVertexIndex[VertexIndex] = true;
+	vertexData[TriAngleIndex].position = Leftbottom;
+	vertexData[TriAngleIndex].texcoord = {0.0f,1.0f};
+	
 	//上
-	vertexData[VertexIndex+1].position = top;
-	vertexData[VertexIndex+1].texcoord = {0.5f,0.0f};
-	IsusedVertexIndex[VertexIndex+1] = true;
+	vertexData[TriAngleIndex+1].position = top;
+	vertexData[TriAngleIndex+1].texcoord = {0.5f,0.0f};
 	//右下
-	vertexData[VertexIndex+2].position = Rightbottom;
-	vertexData[VertexIndex+2].texcoord = {1.0f,1.0f};
-	IsusedVertexIndex[VertexIndex+2] = true;
+	vertexData[TriAngleIndex+2].position = Rightbottom;
+	vertexData[TriAngleIndex+2].texcoord = {1.0f,1.0f};
 	
 	
 	//色を書き込むアドレスを取得
@@ -186,7 +185,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	directX_->GetcommandList()->DrawInstanced(VertexIndex+3, 1, 0, 0);
+	directX_->GetcommandList()->DrawInstanced(TriAngleIndex+3, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferView()
 {
