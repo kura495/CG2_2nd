@@ -12,7 +12,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region Sprite
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4);
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4* kMaxSprite);
 	materialResourceSprite = CreateBufferResource(sizeof(Material)* kMaxSprite);
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
@@ -301,7 +301,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 	//リソースの先頭のアドレス
 	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4* kMaxSprite;
 	//1頂点あたりのアドレス
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }

@@ -34,9 +34,7 @@ private:
 	static const int kMaxVertex= kMaxTriAngle*3;
 	bool IsusedTriAngleIndex[kMaxTriAngle];
 
-	static const int kMaxSprite=3;
-	static const int kMaxSpriteVertex= kMaxSprite *6;
-	bool IsusedSpriteIndex[kMaxSprite];
+	
 	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
@@ -77,6 +75,9 @@ private:
 	void MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region sprite
+	static const int kMaxSprite=3;
+	static const int kMaxSpriteVertex= kMaxSprite *6;
+	bool IsusedSpriteIndex[kMaxSprite];
 	//Sprite用頂点データ
 	ID3D12Resource* vertexResourceSprite = nullptr;
 	//Sprite用頂点データ
