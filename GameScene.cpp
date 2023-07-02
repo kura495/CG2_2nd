@@ -44,13 +44,27 @@ void GameScene::Draw()
 	else {
 		SphereTexture = UV;
 	}
+	ImGui::Begin("Box");
+	float ImGuiScale[Vector3D] = { Box.scale.x,Box.scale.y ,Box.scale.z };
+	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
+	Box.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };
+	float ImGuiRotate[Vector3D] = { Box.rotate.x,Box.rotate.y ,Box.rotate.z };
+	ImGui::SliderFloat3("Rotate", ImGuiRotate, -5, 5, "%.3f");
+	Box.rotate = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
+	float ImGuiTranslate[Vector3D] = { Box.translate.x,Box.translate.y ,Box.translate.z };
+	ImGui::SliderFloat3("Translate", ImGuiTranslate, -10, 10, "%.3f");
+	Box.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
+	ImGui::End();
 #pragma endregion
 	
 	//myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData, UV);
 	//myEngine_->Draw(Left[1], Top[1], Right[1], Color[0], camera_->transformationMatrixData, UV);
 	//myEngine_->Draw(Left[2], Top[2], Right[2], Color[0], camera_->transformationMatrixData, UV);
-	myEngine_->DrawSprite(LeftTop, LeftBottom, RightTop, RightBottom, Color[0],UV);
+	myEngine_->DrawSprite(LeftTop[0], LeftBottom[0], RightTop[0], RightBottom[0], Color[0], UV);
+	myEngine_->DrawSprite(LeftTop[1], LeftBottom[1], RightTop[1], RightBottom[1], Color[0], UV);
 	//myEngine_->DrawSphere(sphere, camera_->transformationMatrixData,Color[0], SphereTexture);
+	//myEngine_->DrawBox(1.0f,1.0f,1.0f, Box, camera_->transformationMatrixData,Color[0],UV);
+	//myEngine_->DrawBox(1.0f,1.0f,1.0f, Box2, camera_->transformationMatrixData,Color[0],Ball);
 	//描画ここまで
 	myEngine_->VertexReset();
 	ImGuiManager_->EndFrame();

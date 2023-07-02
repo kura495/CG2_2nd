@@ -20,7 +20,8 @@ public:
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
-	
+	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
+
 	int LoadTexture(const std::string& filePath);
 
 private:
@@ -73,8 +74,7 @@ private:
 	ID3D12Resource* wvpResource = nullptr;
 	//WVPデータ
 	Matrix4x4* wvpData = nullptr;
-	//テクスチャデータ
-	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
+	void MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region sprite
 	//Sprite用頂点データ
@@ -97,7 +97,8 @@ private:
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-
+void MakeVertexBufferViewSprite();
+	void MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ
@@ -114,22 +115,50 @@ private:
 	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ
 	TransformationMatrix* transformationMatrixDataSphere = nullptr;
+void MakeVertexBufferViewSphere();
 	#pragma endregion 球
 	#pragma region Light
 	ID3D12Resource* directionalLightResource = nullptr;
 	DirectionalLight* directionalLightData = nullptr;
 	#pragma endregion ライト
-	
+	#pragma region Box
+	static const int kMaxBox = 3;
+	static const int kMaxBoxVertex = kMaxBox * 36;
+	bool IsusedBoxIndex[kMaxBox];
+	//Box用頂点データ
+	ID3D12Resource* vertexResourceBox = nullptr;
+	//Box用頂点データ
+	VertexData* vertexDataBox = nullptr;
+	//Box用バーテックスバッファビュー
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewBox{};
+	//マテリアルリソース
+	ID3D12Resource* materialResourceBox = nullptr;
+	//色データ
+	Material* materialDataBox = nullptr;
+	//Box用WVPリソース
+	ID3D12Resource* transformationMatrixResourceBox = nullptr;
+	//Box用WVPデータ
+	TransformationMatrix* transformationMatrixDataBox = nullptr;
+	//Index用
+	ID3D12Resource* indexResourceBox = nullptr;
+	//Index用頂点データ
+	uint32_t* indexDataBox = nullptr;
+	//Index用バッファビュー
+	D3D12_INDEX_BUFFER_VIEW indexBufferViewBox{};
+	void MakeVertexBufferViewBox();
+	void MakeIndexBufferViewBox();
+#pragma endregion ボックス
+	//テクスチャデータ
+	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
 	//中間リソース
 	ID3D12Resource* intermediateResource[kMaxTexture];
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
 
-	void MakeVertexBufferView();
-	void MakeVertexBufferViewSprite();
-	void MakeIndexBufferView();
-	void MakeVertexBufferViewSphere();
+	
+	
+	
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
 #pragma region ImageLoad

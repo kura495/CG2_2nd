@@ -12,11 +12,12 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region Sprite
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* kMaxSpriteVertex);
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4);
 	materialResourceSprite = CreateBufferResource(sizeof(Material)* kMaxSprite);
 	transformationMatrixResourceSprite = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
 	indexResourceSprite = CreateBufferResource(sizeof(uint32_t)* kMaxSpriteVertex);
+	MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
 	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 6 * kSubdivision * kSubdivision);
@@ -24,6 +25,14 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
 	#pragma endregion 球
+	#pragma region Box
+	vertexResourceBox = CreateBufferResource(sizeof(VertexData) * 24);
+	materialResourceBox = CreateBufferResource(sizeof(Material) * kMaxBox);
+	transformationMatrixResourceBox = CreateBufferResource(sizeof(TransformationMatrix));
+	MakeVertexBufferViewBox();
+	indexResourceBox = CreateBufferResource(sizeof(uint32_t) * kMaxBoxVertex);
+	MakeIndexBufferViewBox();
+#pragma endregion ボックス
 	#pragma region Light
 	directionalLightResource = CreateBufferResource(sizeof(DirectionalLight));
 	directionalLightResource->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
@@ -112,6 +121,9 @@ void MyEngine::VertexReset()
 		if (IsusedSpriteIndex[i] == true) {
 			IsusedSpriteIndex[i] = false;
 		}
+		if (IsusedBoxIndex[i] == true) {
+			IsusedBoxIndex[i] = false;
+		}
 	}
 }
 void MyEngine::Release()
@@ -130,10 +142,16 @@ void MyEngine::Release()
 	vertexResourceSprite->Release();
 	transformationMatrixResourceSprite->Release();
 	materialResourceSprite->Release();
+	indexResourceSprite->Release();
 
 	vertexResourceSphere->Release();
 	transformationMatrixResourceSphere->Release();
 	materialResourceSphere->Release();
+
+	vertexResourceBox->Release();
+	materialResourceBox->Release();
+	transformationMatrixResourceBox->Release();
+	indexResourceBox->Release();
 
 	directionalLightResource->Release();
 
@@ -221,26 +239,32 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 #pragma endregion 位置決め
 
 	vertexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
-	//三角形1枚目
+	
 	//左下
-	vertexDataSprite[SpriteIndex].position = LeftBottom;
-	vertexDataSprite[SpriteIndex].texcoord={0.0f,1.0f};
+	vertexDataSprite[0].position = LeftBottom;
+	vertexDataSprite[0].texcoord={0.0f,1.0f};
 	//左上
-	vertexDataSprite[SpriteIndex +1].position = LeftTop;
-	vertexDataSprite[SpriteIndex +1].texcoord={0.0f,0.0f};
+	vertexDataSprite[1].position = LeftTop;
+	vertexDataSprite[1].texcoord={0.0f,0.0f};
 	//右下
-	vertexDataSprite[SpriteIndex+2].position = RightBottom;
-	vertexDataSprite[SpriteIndex+2].texcoord={1.0f,1.0f};
-	//三角形2枚目
-	//左上
-	vertexDataSprite[SpriteIndex+3].position = LeftTop;
-	vertexDataSprite[SpriteIndex+3].texcoord = { 0.0f,0.0f };
+	vertexDataSprite[2].position = RightBottom;
+	vertexDataSprite[2].texcoord={1.0f,1.0f};
 	//右上
-	vertexDataSprite[SpriteIndex+4].position = RightTop;
-	vertexDataSprite[SpriteIndex+4].texcoord = { 1.0f,0.0f };
-	//右下
-	vertexDataSprite[SpriteIndex+5].position = RightBottom;
-	vertexDataSprite[SpriteIndex+5].texcoord = { 1.0f,1.0f };
+	vertexDataSprite[3].position = RightTop;
+	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
+	//インデックスリソースにデータを書き込む
+	indexResourceSprite->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
+
+	//三角形1枚目
+	indexDataSprite[SpriteIndex] = 0;
+	indexDataSprite[SpriteIndex+1] = 1;
+	indexDataSprite[SpriteIndex+2] = 2;
+	//三角形2枚目
+	indexDataSprite[SpriteIndex+3] = 1;
+	indexDataSprite[SpriteIndex+4] = 3;
+	indexDataSprite[SpriteIndex+5] = 2;
+	
+	
 	//色の書き込み
 	materialResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
 	materialDataSprite->color = color;
@@ -259,7 +283,8 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0,1,&vertexBufferViewSprite);
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSprite);
 	//色用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
@@ -269,18 +294,18 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	//Light
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
 
-	directX_->GetcommandList()->DrawInstanced(SpriteIndex+6,1,0,0);
+	directX_->GetcommandList()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
 }
 void MyEngine::MakeVertexBufferViewSprite()
 {
 	//リソースの先頭のアドレス
 	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* kMaxSpriteVertex;
+	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
 	//1頂点あたりのアドレス
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
-void MyEngine::MakeIndexBufferView()
+void MyEngine::MakeIndexBufferViewSprite()
 {
 	//リソース先頭アドレス
 	indexBufferViewSprite.BufferLocation = indexResourceSprite->GetGPUVirtualAddress();
@@ -404,6 +429,202 @@ void MyEngine::MakeVertexBufferViewSphere()
 	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
 }
 #pragma endregion 球
+#pragma region Box
+void MyEngine::DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index)
+{
+#pragma region 
+	int BoxIndex = kMaxBoxVertex + 1;
+	for (int i = 0; i < kMaxBox; ++i) {
+		if (IsusedBoxIndex[i] == false) {
+			BoxIndex = (i * 36);
+			IsusedBoxIndex[i] = true;
+			break;
+		}
+	}
+	if (BoxIndex < 0) {
+		//0より少ない
+		assert(false);
+	}
+	if (kMaxBoxVertex < BoxIndex) {
+		//MaxSpriteより多い
+		assert(false);
+	}
+#pragma endregion 位置決め
+
+	vertexResourceBox->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataBox));
+
+#pragma region flont
+	//左下
+	vertexDataBox[0].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexDataBox[0].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[1].position = {0.0f,hight,0.0f,1.0f};
+	vertexDataBox[1].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[2].position = { width ,0.0f,0.0f,1.0f};
+	vertexDataBox[2].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[3].position = { width ,hight,0.0f,1.0f};
+	vertexDataBox[3].texcoord = { 1.0f,0.0f };
+#pragma endregion 正面
+#pragma region Left
+	//左下
+	vertexDataBox[4].position = { width,0.0f,0.0f,1.0f };
+	vertexDataBox[4].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[5].position = { width,hight,0.0f,1.0f };
+	vertexDataBox[5].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[6].position = { width ,0.0f,depth,1.0f};
+	vertexDataBox[6].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[7].position = { width ,hight,depth,1.0f};
+	vertexDataBox[7].texcoord = { 1.0f,0.0f };
+#pragma endregion 右面
+#pragma region back
+	//左下
+	vertexDataBox[8].position = { width,0.0f,depth,1.0f };
+	vertexDataBox[8].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[9].position = { width,hight,depth,1.0f };
+	vertexDataBox[9].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[10].position = { 0.0f ,0.0f,depth,1.0f};
+	vertexDataBox[10].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[11].position = { 0.0f ,hight,depth,1.0f};
+	vertexDataBox[11].texcoord = { 1.0f,0.0f };
+#pragma endregion 裏面
+#pragma region right
+	//左下
+	vertexDataBox[12].position = { 0.0f,0.0f,depth,1.0f };
+	vertexDataBox[12].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[13].position = { 0.0f,hight,depth,1.0f };
+	vertexDataBox[13].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[14].position = { 0.0f ,0.0f,0.0f,1.0f};
+	vertexDataBox[14].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[15].position = { 0.0f ,hight,0.0f,1.0f};
+	vertexDataBox[15].texcoord = { 1.0f,0.0f };
+#pragma endregion 左面
+#pragma region bottom
+	//左下
+	vertexDataBox[16].position = { 0.0f,0.0f,depth,1.0f };
+	vertexDataBox[16].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[17].position = { 0.0f,0.0f,0.0f,1.0f };
+	vertexDataBox[17].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[18].position = { width ,0.0f,depth,1.0f};
+	vertexDataBox[18].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[19].position = { width ,0.0f,0.0f,1.0f};
+	vertexDataBox[19].texcoord = { 1.0f,0.0f };
+#pragma endregion 底面
+#pragma region top
+	//左下
+	vertexDataBox[20].position = { 0.0f,hight,0.0f,1.0f };
+	vertexDataBox[20].texcoord = { 0.0f,1.0f };
+	//左上
+	vertexDataBox[21].position = { 0.0f,hight,depth,1.0f };
+	vertexDataBox[21].texcoord = { 0.0f,0.0f };
+	//右下
+	vertexDataBox[22].position = { width ,hight,0.0f,1.0f};
+	vertexDataBox[22].texcoord = { 1.0f,1.0f };
+	//右上
+	vertexDataBox[23].position = { width ,hight,depth,1.0f};
+	vertexDataBox[23].texcoord = { 1.0f,0.0f };
+#pragma endregion 上
+
+	//インデックスリソースにデータを書き込む
+	indexResourceBox->Map(0, nullptr, reinterpret_cast<void**>(&indexDataBox));
+#pragma region flont
+	//三角形1枚目
+	indexDataBox[BoxIndex] = 0;indexDataBox[BoxIndex + 1] = 1;indexDataBox[BoxIndex + 2] = 2;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 3] = 1;indexDataBox[BoxIndex + 4] = 3;indexDataBox[BoxIndex + 5] = 2;
+#pragma endregion 正面
+#pragma region Left
+	//三角形1枚目
+	indexDataBox[BoxIndex + 6] = 4;indexDataBox[BoxIndex + 7] = 5;indexDataBox[BoxIndex + 8] = 6;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 9] = 5;indexDataBox[BoxIndex + 10] = 7;indexDataBox[BoxIndex + 11] = 6;
+#pragma endregion 右面
+#pragma region back
+	//三角形1枚目
+	indexDataBox[BoxIndex + 12] = 8;indexDataBox[BoxIndex + 13] = 9;indexDataBox[BoxIndex + 14] = 10;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 15] = 9;indexDataBox[BoxIndex + 16] = 11;indexDataBox[BoxIndex + 17] = 10;
+#pragma endregion 裏面
+#pragma region right
+	//三角形1枚目
+	indexDataBox[BoxIndex + 18] = 12;indexDataBox[BoxIndex + 19] = 13;indexDataBox[BoxIndex + 20] = 14;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 21] = 13;indexDataBox[BoxIndex + 22] = 15;indexDataBox[BoxIndex + 23] = 14;
+#pragma endregion 左面
+#pragma region bottom
+	//三角形1枚目
+	indexDataBox[BoxIndex + 24] = 16;indexDataBox[BoxIndex + 25] = 17;indexDataBox[BoxIndex + 26] = 18;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 27] = 17;indexDataBox[BoxIndex + 28] = 19;indexDataBox[BoxIndex + 29] = 18;
+#pragma endregion 底
+#pragma region top
+	//三角形1枚目
+	indexDataBox[BoxIndex + 30] = 20;indexDataBox[BoxIndex + 31] = 21;indexDataBox[BoxIndex + 32] = 22;
+	//三角形2枚目
+	indexDataBox[BoxIndex + 33] = 21;indexDataBox[BoxIndex + 34] = 23;indexDataBox[BoxIndex + 35] = 22;
+#pragma endregion 上
+
+	//色の書き込み
+	materialResourceBox->Map(0, nullptr, reinterpret_cast<void**>(&materialDataBox));
+	materialDataBox->color = color;
+	//ライティングをしない
+	materialDataBox->enableLighting = false;
+	//WVPを書き込むためのアドレス取得
+	transformationMatrixResourceBox->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataBox));
+	Matrix4x4 worldMatrixBox = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	Matrix4x4 worldViewMatrixBox = Multiply(worldMatrixBox, ViewportMatrix);
+	//
+	transformationMatrixDataBox->WVP = worldViewMatrixBox;
+	transformationMatrixDataBox->World = MakeIdentity4x4();
+
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewBox);
+	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewBox);
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceBox->GetGPUVirtualAddress());
+	//WVP用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceBox->GetGPUVirtualAddress());
+	//テクスチャ
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	//Light
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
+
+	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
+}
+void MyEngine::MakeVertexBufferViewBox()
+{
+	//リソースの先頭のアドレス
+	vertexBufferViewBox.BufferLocation = vertexResourceBox->GetGPUVirtualAddress();
+	//使用する頂点サイズ
+	vertexBufferViewBox.SizeInBytes = sizeof(VertexData) * 24;
+	//1頂点あたりのアドレス
+	vertexBufferViewBox.StrideInBytes = sizeof(VertexData);
+}
+void MyEngine::MakeIndexBufferViewBox()
+{
+	//リソース先頭アドレス
+	indexBufferViewBox.BufferLocation = indexResourceBox->GetGPUVirtualAddress();
+	//使用するインデックスサイズ
+	indexBufferViewBox.SizeInBytes = sizeof(uint32_t) * kMaxBoxVertex;
+	//インデックスはuint32_t
+	indexBufferViewBox.Format = DXGI_FORMAT_R32_UINT;
+}
+#pragma endregion ボックス
 
 #pragma region Texture
 int MyEngine::LoadTexture(const std::string& filePath)
