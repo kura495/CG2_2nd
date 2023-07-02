@@ -25,12 +25,18 @@ public:
 
 private:
 	const int kSubdivision = 16;
+
 	static const int kMaxTexture=2;
-	bool IsusedSpriteIndex[kMaxTexture];
+	bool IsusedTextureIndex[kMaxTexture];
+
 	static const int kMaxTriAngle=3;
 	static const int kMaxVertex= kMaxTriAngle*3;
 	bool IsusedTriAngleIndex[kMaxTriAngle];
-	int TriAngleIndex = 0;
+
+	static const int kMaxSprite=3;
+	static const int kMaxSpriteVertex= kMaxSprite *6;
+	bool IsusedSpriteIndex[kMaxSprite];
+	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 	Transform transform{
@@ -85,6 +91,12 @@ private:
 	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataSprite = nullptr;
+	//Index用
+	ID3D12Resource* indexResourceSprite = nullptr;
+	//Index用頂点データ
+	uint32_t* indexDataSprite = nullptr;
+	//Index用バッファビュー
+	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
 
 	#pragma endregion スプライト
 	#pragma region Sphere
@@ -116,6 +128,7 @@ private:
 
 	void MakeVertexBufferView();
 	void MakeVertexBufferViewSprite();
+	void MakeIndexBufferView();
 	void MakeVertexBufferViewSphere();
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
