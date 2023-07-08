@@ -98,7 +98,7 @@ private:
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-void MakeVertexBufferViewSprite();
+	void MakeVertexBufferViewSprite();
 	void MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
@@ -116,7 +116,15 @@ void MakeVertexBufferViewSprite();
 	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ
 	TransformationMatrix* transformationMatrixDataSphere = nullptr;
-void MakeVertexBufferViewSphere();
+	//Index用
+	ID3D12Resource* indexResourceSphere = nullptr;
+	//Index用頂点データ
+	uint32_t* indexDataSphere = nullptr;
+	//Index用バッファビュー
+	D3D12_INDEX_BUFFER_VIEW indexBufferViewSphere{};
+	void MakeVertexBufferViewSphere();
+	void MakeIndexBufferViewSphere();
+
 	#pragma endregion 球
 	#pragma region Light
 	ID3D12Resource* directionalLightResource = nullptr;
