@@ -20,7 +20,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
-	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 4);
+	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
 	materialResourceSphere = CreateBufferResource(sizeof(Material));
 	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
@@ -149,6 +149,7 @@ void MyEngine::Release()
 	vertexResourceSphere->Release();
 	transformationMatrixResourceSphere->Release();
 	materialResourceSphere->Release();
+	indexResourceSphere->Release();
 
 	vertexResourceBox->Release();
 	materialResourceBox->Release();
@@ -330,56 +331,57 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 		float lat = -float(std::numbers::pi) / 2.0f + kLatEvery * latIndex;
 		float uvLength = 1.0f / kSubdivision;
 		for (int lonIndex = 0; lonIndex < kSubdivision;++lonIndex) {
-			uint32_t start = (latIndex * kSubdivision + lonIndex) * 6;
+			uint32_t Vertexstart = (latIndex * kSubdivision + lonIndex) * 4;
+			uint32_t Indexstart = (latIndex * kSubdivision + lonIndex) * 6;
 			float lon = lonIndex * kLonEvery;
 			float u = float(lonIndex) / float(kSubdivision);
 			float v = 1.0f-float(latIndex) / float(kSubdivision);
 		#pragma region VertexData
 			//点A(左下)
-			vertexDataSphere[0].position.x = cos(lat) * cos(lon) + sphere.center.x;
-			vertexDataSphere[0].position.y = sin(lat) + sphere.center.y;
-			vertexDataSphere[0].position.z = cos(lat) * sin(lon) + sphere.center.z;
-			vertexDataSphere[0].position.w = 1.0f;
-			vertexDataSphere[0].texcoord = { u ,v };
-			vertexDataSphere[0].normal.x = vertexDataSphere[0].position.x;
-			vertexDataSphere[0].normal.y = vertexDataSphere[0].position.y;
-			vertexDataSphere[0].normal.z = vertexDataSphere[0].position.z;
+			vertexDataSphere[Vertexstart].position.x = cos(lat) * cos(lon) + sphere.center.x;
+			vertexDataSphere[Vertexstart].position.y = sin(lat) + sphere.center.y;
+			vertexDataSphere[Vertexstart].position.z = cos(lat) * sin(lon) + sphere.center.z;
+			vertexDataSphere[Vertexstart].position.w = 1.0f;
+			vertexDataSphere[Vertexstart].texcoord = { u ,v };
+			vertexDataSphere[Vertexstart].normal.x = vertexDataSphere[Vertexstart].position.x;
+			vertexDataSphere[Vertexstart].normal.y = vertexDataSphere[Vertexstart].position.y;
+			vertexDataSphere[Vertexstart].normal.z = vertexDataSphere[Vertexstart].position.z;
 			//点B(左上)
-			vertexDataSphere[1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
-			vertexDataSphere[1].position.y = sin(lat + kLatEvery) + sphere.center.y;
-			vertexDataSphere[1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
-			vertexDataSphere[1].position.w = 1.0f;
-			vertexDataSphere[1].texcoord = { u,v - uvLength };
-			vertexDataSphere[1].normal.x = vertexDataSphere[1].position.x;
-			vertexDataSphere[1].normal.y = vertexDataSphere[1].position.y;
-			vertexDataSphere[1].normal.z = vertexDataSphere[1].position.z;
+			vertexDataSphere[Vertexstart+1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
+			vertexDataSphere[Vertexstart+1].position.y = sin(lat + kLatEvery) + sphere.center.y;
+			vertexDataSphere[Vertexstart+1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
+			vertexDataSphere[Vertexstart+1].position.w = 1.0f;
+			vertexDataSphere[Vertexstart+1].texcoord = { u,v - uvLength };
+			vertexDataSphere[Vertexstart+1].normal.x = vertexDataSphere[Vertexstart+1].position.x;
+			vertexDataSphere[Vertexstart+1].normal.y = vertexDataSphere[Vertexstart+1].position.y;
+			vertexDataSphere[Vertexstart+1].normal.z = vertexDataSphere[Vertexstart+1].position.z;
 			//点C(右下)
-			vertexDataSphere[2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
-			vertexDataSphere[2].position.y = sin(lat) + sphere.center.y;
-			vertexDataSphere[2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
-			vertexDataSphere[2].position.w = 1.0f;
-			vertexDataSphere[2].texcoord = { u + uvLength,v};
-			vertexDataSphere[2].normal.x = vertexDataSphere[2].position.x;
-			vertexDataSphere[2].normal.y = vertexDataSphere[2].position.y;
-			vertexDataSphere[2].normal.z = vertexDataSphere[2].position.z;
+			vertexDataSphere[Vertexstart+2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
+			vertexDataSphere[Vertexstart+2].position.y = sin(lat) + sphere.center.y;
+			vertexDataSphere[Vertexstart+2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
+			vertexDataSphere[Vertexstart+2].position.w = 1.0f;
+			vertexDataSphere[Vertexstart+2].texcoord = { u + uvLength,v};
+			vertexDataSphere[Vertexstart+2].normal.x = vertexDataSphere[Vertexstart+2].position.x;
+			vertexDataSphere[Vertexstart+2].normal.y = vertexDataSphere[Vertexstart+2].position.y;
+			vertexDataSphere[Vertexstart+2].normal.z = vertexDataSphere[Vertexstart+2].position.z;
 			//点D(右上)
-			vertexDataSphere[3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery) + sphere.center.x;
-			vertexDataSphere[3].position.y = sin(lat + kLatEvery) + sphere.center.y;
-			vertexDataSphere[3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
-			vertexDataSphere[3].position.w = 1.0f;
-			vertexDataSphere[3].texcoord = { u + uvLength,v - uvLength };
-			vertexDataSphere[3].normal.x = vertexDataSphere[3].position.x;
-			vertexDataSphere[3].normal.y = vertexDataSphere[3].position.y;
-			vertexDataSphere[3].normal.z = vertexDataSphere[3].position.z;
+			vertexDataSphere[Vertexstart+3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery) + sphere.center.x;
+			vertexDataSphere[Vertexstart+3].position.y = sin(lat + kLatEvery) + sphere.center.y;
+			vertexDataSphere[Vertexstart+3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
+			vertexDataSphere[Vertexstart+3].position.w = 1.0f;
+			vertexDataSphere[Vertexstart+3].texcoord = { u + uvLength,v - uvLength };
+			vertexDataSphere[Vertexstart+3].normal.x = vertexDataSphere[Vertexstart+3].position.x;
+			vertexDataSphere[Vertexstart+3].normal.y = vertexDataSphere[Vertexstart+3].position.y;
+			vertexDataSphere[Vertexstart+3].normal.z = vertexDataSphere[Vertexstart+3].position.z;
 #pragma endregion 頂点データ
 			//三角形1枚目
-			indexDataSphere[start] = 0;
-			indexDataSphere[start + 1] = 1;
-			indexDataSphere[start + 2] = 2;
+			indexDataSphere[Indexstart] = Vertexstart;
+			indexDataSphere[Indexstart + 1] =Vertexstart+ 1;
+			indexDataSphere[Indexstart + 2] =Vertexstart+ 2;
 			//三角形2枚目
-			indexDataSphere[start + 3] = 1;
-			indexDataSphere[start + 4] = 3;
-			indexDataSphere[start + 5] = 2;
+			indexDataSphere[Indexstart + 3] = Vertexstart+1;
+			indexDataSphere[Indexstart + 4] = Vertexstart+3;
+			indexDataSphere[Indexstart + 5] = Vertexstart+2;
 		}
 	}
 	
@@ -414,7 +416,7 @@ void MyEngine::MakeVertexBufferViewSphere()
 	//リソースの先頭のアドレス
 	vertexBufferViewSphere.BufferLocation = vertexResourceSphere->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4;
+	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
 	//1頂点あたりのアドレス
 	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
 }
@@ -756,7 +758,6 @@ D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(ID3D12DescriptorHea
 	handleCPU.ptr += (descriptorSize*index);
 	return handleCPU;
 }
-
 D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
