@@ -149,6 +149,9 @@
     <ClInclude Include="StructLight.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
+    <ClInclude Include="Matrix3x3.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

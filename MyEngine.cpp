@@ -68,6 +68,9 @@ void MyEngine::ImGui()
 	float ImGuiTranslate[Vector3D] = { transform.translate.x,transform.translate.y ,transform.translate.z };
 	ImGui::SliderFloat3("Translate", ImGuiTranslate, -2, 2, "%.3f");
 	transform.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
+	ImGui::DragFloat2("UVTranslate", &uvTranformTriAngle.translate.x, 0.01f, -10.0f, 10.0f);
+	ImGui::DragFloat2("UVScale", &uvTranformTriAngle.scale.x, 0.01f, -10.0f, 10.0f);
+	ImGui::SliderAngle("UVRotate", &uvTranformTriAngle.rotate.z);
 	ImGui::End();
 #pragma endregion
 #pragma region SpriteImGui
@@ -82,6 +85,9 @@ void MyEngine::ImGui()
 	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
 	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
 	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
+	ImGui::DragFloat2("UVTranslate", &uvTranformSprite.translate.x, 0.01f, -10.0f, 10.0f);
+	ImGui::DragFloat2("UVScale", &uvTranformSprite.scale.x, 0.01f, -10.0f, 10.0f);
+	ImGui::SliderAngle("UVRotate", &uvTranformSprite.rotate.z);
 	ImGui::End();
 #pragma endregion
 #pragma region SphereImGui
@@ -195,7 +201,13 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//色を書き込むアドレスを取得
 	materialResource->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
-	*materialData = color;
+	materialData->color = color;
+	materialData->enableLighting = false;
+	materialData->uvTransform = MakeIdentity4x4();
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformTriAngle.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformTriAngle.rotate.z));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformTriAngle.translate));
+	materialData->uvTransform = uvTransformMatrix;
 	//行列を作る
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	//WVPを書き込むアドレスを取得
@@ -273,6 +285,11 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	materialDataSprite->color = color;
 	//ライティングをしない
 	materialDataSprite->enableLighting = false;
+	materialDataSprite->uvTransform = MakeIdentity4x4();
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformSprite.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
+	materialDataSprite->uvTransform = uvTransformMatrix;
 	//WVPを書き込むためのアドレス取得
 	transformationMatrixResourceSprite->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
@@ -388,8 +405,9 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 	materialResourceSphere->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
 	
 	//ライティングをする
-	materialDataSphere->enableLighting = true;
 	materialDataSphere->color = color;
+	materialDataSphere->enableLighting = true;
+	materialDataSphere->uvTransform = MakeIdentity4x4();
 	//
 	transformationMatrixResourceSphere->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
 	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);

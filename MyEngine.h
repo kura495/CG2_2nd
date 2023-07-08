@@ -43,17 +43,27 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
+	Transform uvTranformTriAngle{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f}
+	};
 	Transform transformSprite{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
+	};
+	Transform uvTranformSprite{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f}
 	};
 	Transform transformSphere{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-
+	
 	HRESULT hr;
 	DirectXCommon* directX_=nullptr;
 
@@ -67,7 +77,7 @@ private:
 	//マテリアルリソース
 	ID3D12Resource* materialResource = nullptr;
 	//色データ
-	Vector4* materialData = nullptr;
+	Material* materialData = nullptr;
 	//WVPリソース
 	ID3D12Resource* wvpResource = nullptr;
 	//WVPデータ

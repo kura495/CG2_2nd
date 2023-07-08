@@ -121,6 +121,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="Material.h" />
+    <ClInclude Include="Matrix3x3.h" />
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix4x4.h" />
