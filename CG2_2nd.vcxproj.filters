@@ -155,6 +155,9 @@
     <ClInclude Include="ModelData.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

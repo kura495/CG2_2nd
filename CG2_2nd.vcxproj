@@ -127,6 +127,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Log.h" />
     <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="MatrixCalc.h" />
+    <ClInclude Include="ResourceObject.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="StructLight.h" />
     <ClInclude Include="Transform.h" />

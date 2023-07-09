@@ -54,7 +54,6 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 		textureResource[i]=nullptr;
 		intermediateResource[i] = nullptr;
 	}
-
 }
 void MyEngine::ImGui()
 {
@@ -175,6 +174,10 @@ void MyEngine::Release()
 	materialResourceBox->Release();
 	transformationMatrixResourceBox->Release();
 	indexResourceBox->Release();
+
+	vertexResourceObj->Release();
+	materialResourceObj->Release();
+	transformationMatrixResourceObj->Release();
 
 	directionalLightResource->Release();
 
@@ -660,15 +663,35 @@ void MyEngine::MakeIndexBufferViewBox()
 }
 #pragma endregion ボックス
 #pragma region obj
-void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position)
+void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
 {
-	VertexData* vertexDataObj = nullptr;
-	vertexResourceObj->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataObj));
+	vertexResourceObj->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
 	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+
+	materialResourceObj->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
+
+	//ライティングをしない
+	materialDataObj->enableLighting = false;
+	materialDataObj->color = color;
+	materialDataObj->uvTransform = MakeIdentity4x4();
+
 	transformationMatrixResourceObj->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
-	transformationMatrixDataObj->WVP = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
-	transformationMatrixDataObj->World = MakeIdentity4x4();
+	Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
+	transformationMatrixDataObj->WVP = Multiply(worldMatrixObj, ViewMatrix);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	transformationMatrixDataObj->World = MakeIdentity4x4();
+
+	//頂点
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
+	//色用のCBufferの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceObj->GetGPUVirtualAddress());
+	//WVP
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj->GetGPUVirtualAddress());
+	//テクスチャ
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[modelData.TextureIndex]);
+	//Light
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->GetGPUVirtualAddress());
+
 	directX_->GetcommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 }
 ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
@@ -687,20 +710,27 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 		if (identifier == "v") {
 			Vector4 position;
 			s >> position.x >> position.y >> position.z;
+			//右手系から左手系へ
+			position.z *= -1.0f;
 			position.w = 1.0f;
 			positions.push_back(position);
 		}
 		else if (identifier=="vt") {
 			Vector2 texcoord;
 			s >> texcoord.x >> texcoord.y;
+			texcoord.y = 1.0f - texcoord.y;
 			texcoords.push_back(texcoord);
-		}else if (identifier=="vn") {
+		}
+		else if (identifier=="vn") {
 			Vector3 normal;
 			s >> normal.x >> normal.y>> normal.z;
+			//右手系から左手系へ
+			normal.z *= -1.0f;
 			normals.push_back(normal);
 		}
 		else if (identifier == "f") {
 			//面は三角形限定
+			VertexData triamgle[3];
 			for (int32_t faceVertex = 0; faceVertex < 3;++faceVertex) {
 				std::string vertexDefinition;
 				s >> vertexDefinition;
@@ -715,17 +745,50 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 				Vector4 position = positions[elementIndices[0] - 1];
 				Vector2 texcoord = texcoords[elementIndices[1] - 1];
 				Vector3 normal = normals[elementIndices[2] - 1];
-				VertexData vertex = { position,texcoord,normal };
-				modelData.vertices.push_back(vertex);
+				//VertexData vertex = { position,texcoord,normal };
+				//modelData.vertices.push_back(vertex);
+				triamgle[faceVertex] = { position,texcoord,normal };
+				
 			}
+			modelData.vertices.push_back(triamgle[2]);
+			modelData.vertices.push_back(triamgle[1]);
+			modelData.vertices.push_back(triamgle[0]);
+		}
+		else if (identifier == "mtllib") {
+			//materialTemplateLibraryファイルの名前を取得する
+			std::string materialFilename;
+			s >> materialFilename;
+			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
 		}
 	}
+	modelData.TextureIndex = LoadTexture(modelData.material.textureFilePath);
 	//頂点リソースを作る
 	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.BufferLocation = vertexResourceObj->GetGPUVirtualAddress();
 	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
 	return modelData;
+}
+MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
+{
+	MaterialData materialData;//構築するMaterialData
+	std::string line;//ファイルから読んだ1行を格納するもの
+	std::ifstream file(directoryPath+'/'+filename);//ファイルを開く
+	assert(file.is_open());//開けなかったら止める
+	while (std::getline(file, line)) {
+		std::string identifier;
+		std::istringstream s(line);
+		s >> identifier;
+		//identifierに応じた処理
+		if (identifier == "map_Kd") {
+			std::string textureFilename;
+			s >> textureFilename;
+			//連結してファイルパスにする
+			materialData.textureFilePath = directoryPath + "/" + textureFilename;
+		}
+	}
+
+	return materialData;
 }
 #pragma endregion obj読み込み
 #pragma region Texture

@@ -8,6 +8,7 @@
 #include"WinApp.h"
 #include"Vector3.h"
 #include"Vector4.h"
+#include"ResourceObject.h"
 #include<dxcapi.h>
 #pragma comment(lib,"dxcompiler.lib")
 #include<dxgidebug.h>
