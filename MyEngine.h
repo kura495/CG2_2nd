@@ -24,14 +24,15 @@ public:
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
 	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
-	void DrawModel(const ModelData& modelData, const Vector3& position);
+	void DrawModel(const ModelData& modelData, const Vector3& position, const Matrix4x4& ViewMatrix, const Vector4& color);
 	int LoadTexture(const std::string& filePath);
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
 private:
 	const int kSubdivision = 16;
 
-	static const int kMaxTexture=2;
+	static const int kMaxTexture=3;
 	bool IsusedTextureIndex[kMaxTexture];
 
 	static const int kMaxTriAngle=3;
@@ -180,6 +181,8 @@ private:
 
 	ModelData modelData;
 	ID3D12Resource* vertexResourceObj=nullptr;
+	//Obj用頂点データ
+	VertexData* vertexDataObj = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewObj{};
 	//マテリアルリソース
 	ID3D12Resource* materialResourceObj = nullptr;
