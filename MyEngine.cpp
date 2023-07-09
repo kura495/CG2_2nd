@@ -42,7 +42,10 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData->intensity = 1.0f;
 	#pragma endregion ライト
-
+	#pragma region obj
+	materialResourceObj = CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
+	#pragma endregion obj
 	descriptorSizeSRV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	descriptorSizeDSV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_DSV);
@@ -101,10 +104,21 @@ void MyEngine::ImGui()
 	float ImGuiTranslateSphere[Vector3D] = { transformSphere.translate.x,transformSphere.translate.y ,transformSphere.translate.z };
 	ImGui::SliderFloat3("TranslateSphere", ImGuiTranslateSphere, -10, 10, "%.3f");
 	transformSphere.translate = { ImGuiTranslateSphere[x],ImGuiTranslateSphere[y],ImGuiTranslateSphere[z] };
-	
-	
 	ImGui::End();
 #pragma endregion
+#pragma region obj
+	ImGui::Begin("Obj");
+	float ImGuiScaleObj[Vector3D] = { transformObj.scale.x,transformObj.scale.y ,transformObj.scale.z };
+	ImGui::SliderFloat3("ScaleObj", ImGuiScaleObj, 1, 30, "%.3f");
+	transformObj.scale = { ImGuiScaleObj[x],ImGuiScaleObj[y],ImGuiScaleObj[z] };
+	float ImGuiRotateObj[Vector3D] = { transformObj.rotate.x,transformObj.rotate.y ,transformObj.rotate.z };
+	ImGui::SliderFloat3("RotateObj", ImGuiRotateObj, -7, 7, "%.3f");
+	transformObj.rotate = { ImGuiRotateObj[x],ImGuiRotateObj[y],ImGuiRotateObj[z] };
+	float ImGuiTranslateObj[Vector3D] = { transformObj.translate.x,transformObj.translate.y ,transformObj.translate.z };
+	ImGui::SliderFloat3("TranslateObj", ImGuiTranslateObj, -10, 10, "%.3f");
+	transformObj.translate = { ImGuiTranslateObj[x],ImGuiTranslateObj[y],ImGuiTranslateObj[z] };
+	ImGui::End();
+#pragma endregion obj読み込み
 #pragma region Light
 	ImGui::Begin("Light");
 	float ImGuidirectionalLightColor[Vector3D] = { directionalLightData->color.x,directionalLightData->color.y ,directionalLightData->color.z };
@@ -625,6 +639,7 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 
 	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
 }
+
 void MyEngine::MakeVertexBufferViewBox()
 {
 	//リソースの先頭のアドレス
@@ -644,7 +659,75 @@ void MyEngine::MakeIndexBufferViewBox()
 	indexBufferViewBox.Format = DXGI_FORMAT_R32_UINT;
 }
 #pragma endregion ボックス
-
+#pragma region obj
+void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position)
+{
+	VertexData* vertexDataObj = nullptr;
+	vertexResourceObj->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataObj));
+	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+	transformationMatrixResourceObj->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
+	transformationMatrixDataObj->WVP = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
+	transformationMatrixDataObj->World = MakeIdentity4x4();
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+}
+ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
+{
+	ModelData modelData;//構築するモデルデータ
+	std::vector<Vector4>positions;//位置　vを保存
+	std::vector<Vector2>texcoords;//テクスチャ座標　vtを保存
+	std::vector<Vector3>normals;//法線　vnを保存
+	std::string line;//ファイルから読んだ一行を格納するもの
+	std::ifstream file(directoryPath + "/" + filename);
+	assert(file.is_open());//開けなかったら止める
+	while (std::getline(file,line)) {
+		std::string identifier;
+		std::istringstream s(line);
+		s >> identifier;//先頭の識別子を読む
+		if (identifier == "v") {
+			Vector4 position;
+			s >> position.x >> position.y >> position.z;
+			position.w = 1.0f;
+			positions.push_back(position);
+		}
+		else if (identifier=="vt") {
+			Vector2 texcoord;
+			s >> texcoord.x >> texcoord.y;
+			texcoords.push_back(texcoord);
+		}else if (identifier=="vn") {
+			Vector3 normal;
+			s >> normal.x >> normal.y>> normal.z;
+			normals.push_back(normal);
+		}
+		else if (identifier == "f") {
+			//面は三角形限定
+			for (int32_t faceVertex = 0; faceVertex < 3;++faceVertex) {
+				std::string vertexDefinition;
+				s >> vertexDefinition;
+				//頂点の要素へのIndexは「位置/UV/法線」で格納されているので、分解してIndexを取得する
+				std::istringstream v(vertexDefinition);
+				uint32_t elementIndices[3];
+				for (int32_t element = 0; element < 3;++element) {
+					std::string index;
+					std::getline(v, index, '/');// /区切りでインデックスを読んでいく
+					elementIndices[element] = std::stoi(index);
+				}
+				Vector4 position = positions[elementIndices[0] - 1];
+				Vector2 texcoord = texcoords[elementIndices[1] - 1];
+				Vector3 normal = normals[elementIndices[2] - 1];
+				VertexData vertex = { position,texcoord,normal };
+				modelData.vertices.push_back(vertex);
+			}
+		}
+	}
+	//頂点リソースを作る
+	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferViewObj.BufferLocation = vertexResourceObj->GetGPUVirtualAddress();
+	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
+	return modelData;
+}
+#pragma endregion obj読み込み
 #pragma region Texture
 int MyEngine::LoadTexture(const std::string& filePath)
 {
@@ -686,6 +769,8 @@ int MyEngine::LoadTexture(const std::string& filePath)
 	directX_->GetDevice()->CreateShaderResourceView(textureResource[SpriteIndex], &srvDesc, textureSrvHandleCPU[SpriteIndex]);
 	return SpriteIndex;
 }
+
+
 
 DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
 {
@@ -751,6 +836,7 @@ ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const Direc
 
 
 #pragma endregion テクスチャ
+
 
 ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 {

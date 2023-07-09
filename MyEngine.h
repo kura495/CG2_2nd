@@ -6,9 +6,12 @@
 #include"VertexData.h"
 #include"Sphere.h"
 #include"Material.h"
+#include"ModelData.h"
 #include"TransformationMatrix.h"
 #include"StructLight.h"
 #include<numbers>
+#include<fstream>
+#include<sstream>
 #include"externals/DirectXTex/DirectXTex.h"
 class MyEngine
 {
@@ -21,8 +24,9 @@ public:
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
 	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
-
+	void DrawModel(const ModelData& modelData, const Vector3& position);
 	int LoadTexture(const std::string& filePath);
+	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 
 private:
 	const int kSubdivision = 16;
@@ -59,6 +63,11 @@ private:
 		{0.0f,0.0f,0.0f}
 	};
 	Transform transformSphere{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
+	Transform transformObj{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
@@ -167,6 +176,22 @@ private:
 	void MakeVertexBufferViewBox();
 	void MakeIndexBufferViewBox();
 #pragma endregion ボックス
+	#pragma region obj
+
+	ModelData modelData;
+	ID3D12Resource* vertexResourceObj=nullptr;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewObj{};
+	//マテリアルリソース
+	ID3D12Resource* materialResourceObj = nullptr;
+	//色データ
+	Material* materialDataObj = nullptr;
+	//Sprite用WVPリソース
+	ID3D12Resource* transformationMatrixResourceObj = nullptr;
+	//Sprite用WVPデータ
+	TransformationMatrix* transformationMatrixDataObj = nullptr; 
+#pragma endregion obj
+
+
 	//テクスチャデータ
 	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
 	//中間リソース
@@ -175,9 +200,6 @@ private:
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
 
-	
-	
-	
 	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
 
 #pragma region ImageLoad
