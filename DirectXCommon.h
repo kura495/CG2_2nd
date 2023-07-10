@@ -14,10 +14,11 @@
 #include<dxgidebug.h>
 #pragma comment(lib,"dxguid.lib")
 #include"externals/DirectXTex/d3dx12.h"
+#include<wrl.h>
 class DirectXCommon
 {
 public:
-
+	
 	void Initialize(WinApp* Window,int32_t kClientWidth, int32_t kClientHeight);
 
 	void PreView();
@@ -64,7 +65,7 @@ private:
 	//DSVDescriptorHeap
 	ID3D12DescriptorHeap* dsvDescriptorHeap = nullptr;
 	//深度
-	ID3D12Resource* depthStencilResource = nullptr;
+	ResourceObject* depthStencilResource = nullptr;
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	//SwapChainからResourceを持ってくる

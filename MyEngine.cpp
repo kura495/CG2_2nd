@@ -149,6 +149,35 @@ void MyEngine::VertexReset()
 	}
 }
 
+void MyEngine::Release()
+{
+	delete vertexResource;
+	delete materialResource;
+	delete wvpResource;
+	delete vertexResourceSprite;
+	delete materialResourceSprite;
+	delete transformationMatrixResourceSprite;
+	delete indexResourceSprite;
+	delete vertexResourceSphere;
+	delete materialResourceSphere;
+	delete transformationMatrixResourceSphere;
+	delete indexResourceSphere;
+	delete directionalLightResource;
+	delete vertexResourceBox;
+	delete materialResourceBox;
+	delete transformationMatrixResourceBox;
+	delete indexResourceBox;
+	delete vertexResourceObj;
+	delete materialResourceObj;
+	delete transformationMatrixResourceObj;
+	for (int i = 0; i < kMaxTexture;i++) {
+		delete textureResource[i];
+		delete intermediateResource[i];
+	}
+	
+
+}
+
 #pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
