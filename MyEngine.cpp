@@ -148,10 +148,6 @@ void MyEngine::VertexReset()
 		}
 	}
 }
-void MyEngine::Release()
-{
-	
-}
 
 #pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
