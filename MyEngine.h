@@ -79,17 +79,17 @@ private:
 
 	#pragma region TriAngle
 	//バーテックスリソース
-	ID3D12Resource* vertexResource = nullptr;
+	ResourceObject* vertexResource = nullptr;
 	//頂点データ
 	VertexData* vertexData = nullptr;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	//マテリアルリソース
-	ID3D12Resource* materialResource = nullptr;
+	ResourceObject* materialResource = nullptr;
 	//色データ
 	Material* materialData = nullptr;
 	//WVPリソース
-	ID3D12Resource* wvpResource = nullptr;
+	ResourceObject* wvpResource = nullptr;
 	//WVPデータ
 	Matrix4x4* wvpData = nullptr;
 	void MakeVertexBufferView();
@@ -99,21 +99,21 @@ private:
 	static const int kMaxSpriteVertex= kMaxSprite *6;
 	bool IsusedSpriteIndex[kMaxSprite];
 	//Sprite用頂点データ
-	ID3D12Resource* vertexResourceSprite = nullptr;
+	ResourceObject* vertexResourceSprite = nullptr;
 	//Sprite用頂点データ
 	VertexData* vertexDataSprite = nullptr;
 	//Sprite用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
 	//マテリアルリソース
-	ID3D12Resource* materialResourceSprite = nullptr;
+	ResourceObject* materialResourceSprite = nullptr;
 	//色データ
 	Material* materialDataSprite = nullptr;
 	//Sprite用WVPリソース
-	ID3D12Resource* transformationMatrixResourceSprite = nullptr;
+	ResourceObject* transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataSprite = nullptr;
 	//Index用
-	ID3D12Resource* indexResourceSprite = nullptr;
+	ResourceObject* indexResourceSprite = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
@@ -123,21 +123,21 @@ private:
 	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ
-	ID3D12Resource* vertexResourceSphere = nullptr;
+	ResourceObject* vertexResourceSphere = nullptr;
 	//Sphere用頂点データ
 	VertexData* vertexDataSphere=nullptr;
 	//Sphere用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere{};
 	//マテリアルリソース
-	ID3D12Resource* materialResourceSphere = nullptr;
+	ResourceObject* materialResourceSphere = nullptr;
 	//色データ
 	Material* materialDataSphere = nullptr;
 	//Sphere用WVPリソース
-	ID3D12Resource* transformationMatrixResourceSphere = nullptr;
+	ResourceObject* transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ
 	TransformationMatrix* transformationMatrixDataSphere = nullptr;
 	//Index用
-	ID3D12Resource* indexResourceSphere = nullptr;
+	ResourceObject* indexResourceSphere = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSphere = nullptr;
 	//Index用バッファビュー
@@ -147,7 +147,7 @@ private:
 
 	#pragma endregion 球
 	#pragma region Light
-	ID3D12Resource* directionalLightResource = nullptr;
+	ResourceObject* directionalLightResource = nullptr;
 	DirectionalLight* directionalLightData = nullptr;
 	#pragma endregion ライト
 	#pragma region Box
@@ -155,21 +155,21 @@ private:
 	static const int kMaxBoxVertex = kMaxBox * 36;
 	bool IsusedBoxIndex[kMaxBox];
 	//Box用頂点データ
-	ID3D12Resource* vertexResourceBox = nullptr;
+	ResourceObject* vertexResourceBox = nullptr;
 	//Box用頂点データ
 	VertexData* vertexDataBox = nullptr;
 	//Box用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewBox{};
 	//マテリアルリソース
-	ID3D12Resource* materialResourceBox = nullptr;
+	ResourceObject* materialResourceBox = nullptr;
 	//色データ
 	Material* materialDataBox = nullptr;
 	//Box用WVPリソース
-	ID3D12Resource* transformationMatrixResourceBox = nullptr;
+	ResourceObject* transformationMatrixResourceBox = nullptr;
 	//Box用WVPデータ
 	TransformationMatrix* transformationMatrixDataBox = nullptr;
 	//Index用
-	ID3D12Resource* indexResourceBox = nullptr;
+	ResourceObject* indexResourceBox = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataBox = nullptr;
 	//Index用バッファビュー
@@ -180,25 +180,25 @@ private:
 	#pragma region obj
 
 	ModelData modelData;
-	ID3D12Resource* vertexResourceObj=nullptr;
+	ResourceObject* vertexResourceObj=nullptr;
 	//Obj用頂点データ
 	VertexData* vertexDataObj = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewObj{};
 	//マテリアルリソース
-	ID3D12Resource* materialResourceObj = nullptr;
+	ResourceObject* materialResourceObj = nullptr;
 	//色データ
 	Material* materialDataObj = nullptr;
 	//Sprite用WVPリソース
-	ID3D12Resource* transformationMatrixResourceObj = nullptr;
+	ResourceObject* transformationMatrixResourceObj = nullptr;
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataObj = nullptr; 
 #pragma endregion obj
 
 
 	//テクスチャデータ
-	ID3D12Resource* textureResource[kMaxTexture] = { nullptr };
+	ResourceObject* textureResource[kMaxTexture] = { nullptr };
 	//中間リソース
-	ID3D12Resource* intermediateResource[kMaxTexture];
+	ResourceObject* intermediateResource[kMaxTexture];
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];

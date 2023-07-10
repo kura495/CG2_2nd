@@ -72,6 +72,6 @@ void GameScene::Draw()
 void GameScene::Release()
 {
 	ImGui_ImplDX12_Shutdown();
-	myEngine_->Release();
+	
 	directX_->Release();
 }
