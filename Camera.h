@@ -1,7 +1,7 @@
 #pragma once
 #include"MatrixCalc.h"
-#include"Transform.h"
-#include"Vector3.h"
+#include"includeStruct\Transform.h"
+#include"includeStruct\Vector3.h"
 #include"ImGuiManager.h"
 class Camera
 {

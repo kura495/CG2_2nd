@@ -6,8 +6,8 @@
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #include"WinApp.h"
-#include"Vector3.h"
-#include"Vector4.h"
+#include"includeStruct\Vector3.h"
+#include"includeStruct\Vector4.h"
 #include"ResourceObject.h"
 #include<dxcapi.h>
 #pragma comment(lib,"dxcompiler.lib")
@@ -39,7 +39,6 @@ private:
 	WinApp* winApp_;
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
-
 	HRESULT hr;
 	//TransitionBarrier
 	D3D12_RESOURCE_BARRIER barrier{};

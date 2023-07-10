@@ -120,22 +120,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="ImGuiManager.h" />
-    <ClInclude Include="Material.h" />
-    <ClInclude Include="Matrix3x3.h" />
-    <ClInclude Include="ModelData.h" />
+    <ClInclude Include="includeStruct\Material.h" />
+    <ClInclude Include="includeStruct\Matrix3x3.h" />
+    <ClInclude Include="includeStruct\Matrix4x4.h" />
+    <ClInclude Include="includeStruct\ModelData.h" />
+    <ClInclude Include="includeStruct\Sphere.h" />
+    <ClInclude Include="includeStruct\StructLight.h" />
+    <ClInclude Include="includeStruct\Transform.h" />
+    <ClInclude Include="includeStruct\TransformationMatrix.h" />
+    <ClInclude Include="includeStruct\Vector2.h" />
+    <ClInclude Include="includeStruct\Vector3.h" />
+    <ClInclude Include="includeStruct\Vector4.h" />
+    <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Log.h" />
-    <ClInclude Include="Matrix4x4.h" />
     <ClInclude Include="MatrixCalc.h" />
     <ClInclude Include="ResourceObject.h" />
-    <ClInclude Include="Sphere.h" />
-    <ClInclude Include="StructLight.h" />
-    <ClInclude Include="Transform.h" />
-    <ClInclude Include="TransformationMatrix.h" />
-    <ClInclude Include="Vector2.h" />
-    <ClInclude Include="Vector3.h" />
-    <ClInclude Include="Vector4.h" />
-    <ClInclude Include="VertexData.h" />
     <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>

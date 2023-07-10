@@ -16,8 +16,14 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{d7caa169-3c67-4e07-897f-0d9115a5eac6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\math">
+      <UniqueIdentifier>{87b4747d-9fc9-48b6-9b92-c2630b72220f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\math">
+      <UniqueIdentifier>{83379801-3e76-464c-85f4-74fdc32c596e}</UniqueIdentifier>
+    </Filter>
     <Filter Include="ヘッダー ファイル\includeStruct">
-      <UniqueIdentifier>{2678d0b7-2414-4687-b484-05a9d8ca8473}</UniqueIdentifier>
+      <UniqueIdentifier>{73939f7d-cb0a-4e43-8d59-dafcbde55a75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -34,9 +40,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="MyEngine.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixCalc.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
@@ -69,6 +72,9 @@
     <ClCompile Include="ImGuiManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="MatrixCalc.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.h">
@@ -81,9 +87,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="MyEngine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixCalc.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
@@ -119,44 +122,47 @@
     <ClInclude Include="ImGuiManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector2.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Vector4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Material.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="TransformationMatrix.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="StructLight.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Matrix3x3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceObject.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="MatrixCalc.h">
+      <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Material.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Matrix3x3.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\ModelData.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Sphere.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Transform.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\StructLight.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Vector2.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\VertexData.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Vector3.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\Vector4.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\TransformationMatrix.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
