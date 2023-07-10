@@ -25,6 +25,12 @@
     <Filter Include="ヘッダー ファイル\includeStruct">
       <UniqueIdentifier>{73939f7d-cb0a-4e43-8d59-dafcbde55a75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Scene">
+      <UniqueIdentifier>{1d3cf361-2ae9-4da3-998d-cf03fbb07988}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene">
+      <UniqueIdentifier>{170c7fbf-bc0e-4790-9b8a-12f60c8bf849}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -40,9 +46,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="MyEngine.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
@@ -75,6 +78,9 @@
     <ClCompile Include="MatrixCalc.cpp">
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\GameScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Log.h">
@@ -87,9 +93,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="MyEngine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
@@ -163,6 +166,9 @@
     </ClInclude>
     <ClInclude Include="includeStruct\TransformationMatrix.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
