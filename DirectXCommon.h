@@ -27,13 +27,13 @@ public:
 
 	void Release();
 	
-	ID3D12GraphicsCommandList* GetcommandList()const { return commandList; }
+	ID3D12GraphicsCommandList* GetcommandList()const { return commandList.Get(); }
 
-	ID3D12Device* GetDevice()const { return device; }
+	ID3D12Device* GetDevice()const { return device.Get(); }
 
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc; }
 	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
-	ID3D12DescriptorHeap* GetsrvDescriptorHeap()const { return srvDescriptorHeap; }
+	ID3D12DescriptorHeap* GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
 	
 private:
 	WinApp* winApp_;
@@ -43,36 +43,36 @@ private:
 	//TransitionBarrier
 	D3D12_RESOURCE_BARRIER barrier{};
 	//DXGIファクトリー
-	IDXGIFactory7* dxgiFactory = nullptr;
+	Microsoft::WRL::ComPtr<IDXGIFactory7>dxgiFactory = nullptr;
 	//アダプターを作成
-	IDXGIAdapter4* useAdapter = nullptr;
+	Microsoft::WRL::ComPtr<IDXGIAdapter4>useAdapter = nullptr;
 	//デバイス
-	ID3D12Device* device = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Device>device = nullptr;
 	//コマンドキューを生成
-	ID3D12CommandQueue* commandQueue = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12CommandQueue> commandQueue = nullptr;
 	//コマンドアロケータを作成
-	ID3D12CommandAllocator* commandAllocator = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12CommandAllocator>commandAllocator = nullptr;
 	//コマンドリストを作成
-	ID3D12GraphicsCommandList* commandList = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>commandList = nullptr;
 	//スワップチェーンを作成
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
-	IDXGISwapChain4* swapChain = nullptr;
+	Microsoft::WRL::ComPtr<IDXGISwapChain4>swapChain = nullptr;
 	//RTVDescriptorHeap
-	ID3D12DescriptorHeap* rtvDescriptorHeap = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>rtvDescriptorHeap = nullptr;
 	//SRVDescriptorHeap
-	ID3D12DescriptorHeap* srvDescriptorHeap = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>srvDescriptorHeap = nullptr;
 	//DSVDescriptorHeap
-	ID3D12DescriptorHeap* dsvDescriptorHeap = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>dsvDescriptorHeap = nullptr;
 	//深度
-	ResourceObject* depthStencilResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>depthStencilResource = nullptr;
 	//RTVの設定
 	D3D12_RENDER_TARGET_VIEW_DESC rtvDesc{};
 	//SwapChainからResourceを持ってくる
-	ID3D12Resource* swapChainResources[2] = { nullptr };
+	Microsoft::WRL::ComPtr<ID3D12Resource>swapChainResources[2] = { nullptr };
 	//RTVを2つつくるので2つ用意
 	D3D12_CPU_DESCRIPTOR_HANDLE rtvHandles[2];
 	//Fenceを作る
-	ID3D12Fence* fence = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Fence>fence = nullptr;
 	uint64_t fenceValue = 0;
 	//FenceのSignalを待つイベント
 	HANDLE fenceEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
@@ -84,7 +84,7 @@ private:
 	IDxcBlobUtf8* shaderError = nullptr;
 	IDxcBlob* shaderBlob = nullptr;
 	//ルートシグネチャ―
-	ID3D12RootSignature* rootSignature = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>rootSignature = nullptr;
 	ID3DBlob* signatureBlob = nullptr;
 	ID3DBlob* errorBlob = nullptr;
 	//インプットレイアウト
@@ -98,18 +98,20 @@ private:
 	IDxcBlob* vertexShaderBlob = nullptr;
 	IDxcBlob* pixelShaderBlob = nullptr;
 	//PSO
-	ID3D12PipelineState* graphicsPipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>graphicsPipelineState = nullptr;
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//シザー
 	D3D12_RECT scissorRect{};
 #ifdef _DEBUG
-	ID3D12Debug1* debugController = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Debug1>debugController = nullptr;
 #endif
 
 //プライベート関数
-	ID3D12DescriptorHeap* CreateDescriptorHeap(ID3D12Device* device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
-	ID3D12Resource* CreateDepthStencilTextureResource(int32_t width, int32_t height);
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
+	 CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+	Microsoft::WRL::ComPtr<ID3D12Resource>
+	 CreateDepthStencilTextureResource(int32_t width, int32_t height);
 	void MakeDXGIFactory();
 	void MakeD3D12Device();
 	void MakeCommandQueue();
