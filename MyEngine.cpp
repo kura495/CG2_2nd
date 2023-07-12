@@ -831,7 +831,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(Microsoft
 	heapProperties.Type = D3D12_HEAP_TYPE_DEFAULT;//細かい設定を行う
 
 	//Resourceの生成
-	ID3D12Resource* resource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> resource = nullptr;
 	hr = device->CreateCommittedResource(
 		&heapProperties,//Heapの設定
 		D3D12_HEAP_FLAG_NONE,//Heapの特殊な設定
