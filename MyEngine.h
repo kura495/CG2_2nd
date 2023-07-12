@@ -19,7 +19,6 @@ public:
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
 	void VertexReset();
-	void Release();
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
@@ -75,21 +74,22 @@ private:
 	};
 	
 	HRESULT hr;
-	DirectXCommon* directX_=nullptr;
+	DirectXCommon*directX_=nullptr;
 
 	#pragma region TriAngle
 	//バーテックスリソース
-	ResourceObject* vertexResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>
+	 vertexResource = nullptr;
 	//頂点データ
 	VertexData* vertexData = nullptr;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 	//マテリアルリソース
-	ResourceObject* materialResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
 	//色データ
 	Material* materialData = nullptr;
 	//WVPリソース
-	ResourceObject* wvpResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = nullptr;
 	//WVPデータ
 	Matrix4x4* wvpData = nullptr;
 	void MakeVertexBufferView();
@@ -99,21 +99,21 @@ private:
 	static const int kMaxSpriteVertex= kMaxSprite *6;
 	bool IsusedSpriteIndex[kMaxSprite];
 	//Sprite用頂点データ
-	ResourceObject* vertexResourceSprite = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite = nullptr;
 	//Sprite用頂点データ
 	VertexData* vertexDataSprite = nullptr;
 	//Sprite用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
 	//マテリアルリソース
-	ResourceObject* materialResourceSprite = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite = nullptr;
 	//色データ
 	Material* materialDataSprite = nullptr;
 	//Sprite用WVPリソース
-	ResourceObject* transformationMatrixResourceSprite = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataSprite = nullptr;
 	//Index用
-	ResourceObject* indexResourceSprite = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
@@ -123,21 +123,21 @@ private:
 	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ
-	ResourceObject* vertexResourceSphere = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSphere = nullptr;
 	//Sphere用頂点データ
 	VertexData* vertexDataSphere=nullptr;
 	//Sphere用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere{};
 	//マテリアルリソース
-	ResourceObject* materialResourceSphere = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSphere = nullptr;
 	//色データ
 	Material* materialDataSphere = nullptr;
 	//Sphere用WVPリソース
-	ResourceObject* transformationMatrixResourceSphere = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ
 	TransformationMatrix* transformationMatrixDataSphere = nullptr;
 	//Index用
-	ResourceObject* indexResourceSphere = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceSphere = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSphere = nullptr;
 	//Index用バッファビュー
@@ -147,7 +147,7 @@ private:
 
 	#pragma endregion 球
 	#pragma region Light
-	ResourceObject* directionalLightResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>directionalLightResource = nullptr;
 	DirectionalLight* directionalLightData = nullptr;
 	#pragma endregion ライト
 	#pragma region Box
@@ -155,21 +155,21 @@ private:
 	static const int kMaxBoxVertex = kMaxBox * 36;
 	bool IsusedBoxIndex[kMaxBox];
 	//Box用頂点データ
-	ResourceObject* vertexResourceBox = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceBox = nullptr;
 	//Box用頂点データ
 	VertexData* vertexDataBox = nullptr;
 	//Box用バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewBox{};
 	//マテリアルリソース
-	ResourceObject* materialResourceBox = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceBox = nullptr;
 	//色データ
 	Material* materialDataBox = nullptr;
 	//Box用WVPリソース
-	ResourceObject* transformationMatrixResourceBox = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceBox = nullptr;
 	//Box用WVPデータ
 	TransformationMatrix* transformationMatrixDataBox = nullptr;
 	//Index用
-	ResourceObject* indexResourceBox = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceBox = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataBox = nullptr;
 	//Index用バッファビュー
@@ -180,40 +180,40 @@ private:
 	#pragma region obj
 
 	ModelData modelData;
-	ResourceObject* vertexResourceObj=nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceObj=nullptr;
 	//Obj用頂点データ
 	VertexData* vertexDataObj = nullptr;
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewObj{};
 	//マテリアルリソース
-	ResourceObject* materialResourceObj = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceObj = nullptr;
 	//色データ
 	Material* materialDataObj = nullptr;
 	//Sprite用WVPリソース
-	ResourceObject* transformationMatrixResourceObj = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceObj = nullptr;
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataObj = nullptr; 
 #pragma endregion obj
 
 
 	//テクスチャデータ
-	ResourceObject* textureResource[kMaxTexture] = { nullptr };
+	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource[kMaxTexture] = { nullptr };
 	//中間リソース
-	ResourceObject* intermediateResource[kMaxTexture];
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource[kMaxTexture];
 	//descriptorHandle
 	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
 
-	ID3D12Resource* CreateBufferResource(size_t sizeInBytes);
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 
 #pragma region ImageLoad
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
-	ID3D12Resource* CreateTextureResource(ID3D12Device*device,const DirectX::TexMetadata& metadata);
-	ID3D12Resource* UploadTextureData(ID3D12Resource* texture,const DirectX::ScratchImage&mipImages);
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>device,const DirectX::TexMetadata& metadata);
+	Microsoft::WRL::ComPtr<ID3D12Resource> UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture,const DirectX::ScratchImage&mipImages);
 #pragma endregion 画像読み込み
 
 #pragma region descriptorHeap
-	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
-	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_CPU_DESCRIPTOR_HANDLE GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
+	D3D12_GPU_DESCRIPTOR_HANDLE GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index);
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;
 	uint32_t descriptorSizeDSV;

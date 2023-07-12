@@ -8,7 +8,6 @@
 #include"WinApp.h"
 #include"includeStruct\Vector3.h"
 #include"includeStruct\Vector4.h"
-#include"ResourceObject.h"
 #include<dxcapi.h>
 #pragma comment(lib,"dxcompiler.lib")
 #include<dxgidebug.h>
@@ -26,14 +25,15 @@ public:
 	void PostView();
 
 	void Release();
-	
-	ID3D12GraphicsCommandList* GetcommandList()const { return commandList.Get(); }
-
-	ID3D12Device* GetDevice()const { return device.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>
+	 GetcommandList()const { return commandList.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12Device>
+	 GetDevice()const { return device.Get(); }
 
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc; }
 	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
-	ID3D12DescriptorHeap* GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
+	 GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
 	
 private:
 	WinApp* winApp_;

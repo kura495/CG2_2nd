@@ -17,7 +17,7 @@ private:
 	int32_t kClientWidth_=0;
 	int32_t kClientHeight_=0;
 	DirectXCommon* directX_ = nullptr;
-	MyEngine* myEngine_ = nullptr;
+	MyEngine*myEngine_ = nullptr;
 	Camera* camera_ = nullptr;
 	ImGuiManager* ImGuiManager_ = nullptr;
 	Vector4 Left[3] = { 

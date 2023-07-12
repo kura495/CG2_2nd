@@ -6,46 +6,46 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	kClientHeight_ = kClientHeight;
 	directX_ = directX;
 	#pragma region TriAngle
-	vertexResource=new ResourceObject(CreateBufferResource(sizeof(VertexData)* kMaxVertex));
+	vertexResource=CreateBufferResource(sizeof(VertexData)* kMaxVertex);
 
-	materialResource = new ResourceObject(CreateBufferResource(sizeof(Material) * kMaxTriAngle));
-	wvpResource = new ResourceObject(CreateBufferResource(sizeof(TransformationMatrix)));
+	materialResource = CreateBufferResource(sizeof(Material) * kMaxTriAngle);
+	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 	#pragma endregion 三角形
 	#pragma region Sprite
-	vertexResourceSprite = new ResourceObject(CreateBufferResource(sizeof(VertexData)* 4));
-	materialResourceSprite = new ResourceObject(CreateBufferResource(sizeof(Material)* kMaxSprite));
-	transformationMatrixResourceSprite = new ResourceObject(CreateBufferResource(sizeof(TransformationMatrix)));
+	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4);
+	materialResourceSprite = CreateBufferResource(sizeof(Material) * kMaxSprite);
+	transformationMatrixResourceSprite =CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
-	indexResourceSprite = new ResourceObject(CreateBufferResource(sizeof(uint32_t)* kMaxSpriteVertex));
+	indexResourceSprite =CreateBufferResource(sizeof(uint32_t)* kMaxSpriteVertex);
 	MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
-	vertexResourceSphere = new ResourceObject(CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision));
-	materialResourceSphere = new ResourceObject(CreateBufferResource(sizeof(Material)));
-	transformationMatrixResourceSphere = new ResourceObject(CreateBufferResource(sizeof(TransformationMatrix)));
+	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
+	materialResourceSphere = CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
-	indexResourceSphere = new ResourceObject(CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision));
+	indexResourceSphere = CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
 	MakeIndexBufferViewSphere();
 	#pragma endregion 球
 	#pragma region Box
-	vertexResourceBox = new ResourceObject(CreateBufferResource(sizeof(VertexData) * 24));
-	materialResourceBox = new ResourceObject(CreateBufferResource(sizeof(Material) * kMaxBox));
-	transformationMatrixResourceBox = new ResourceObject(CreateBufferResource(sizeof(TransformationMatrix)));
+	vertexResourceBox = CreateBufferResource(sizeof(VertexData) * 24);
+	materialResourceBox = CreateBufferResource(sizeof(Material) * kMaxBox);
+	transformationMatrixResourceBox = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewBox();
-	indexResourceBox = new ResourceObject(CreateBufferResource(sizeof(uint32_t) * kMaxBoxVertex));
+	indexResourceBox = CreateBufferResource(sizeof(uint32_t) * kMaxBoxVertex);
 	MakeIndexBufferViewBox();
 #pragma endregion ボックス
 	#pragma region Light
-	directionalLightResource = new ResourceObject(CreateBufferResource(sizeof(DirectionalLight)));
-	directionalLightResource->Get()->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
+	directionalLightResource = CreateBufferResource(sizeof(DirectionalLight));
+	directionalLightResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
 	directionalLightData->color={ 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData->intensity = 1.0f;
 	#pragma endregion ライト
 	#pragma region obj
-	materialResourceObj = new ResourceObject(CreateBufferResource(sizeof(Material)));
-	transformationMatrixResourceObj = new ResourceObject(CreateBufferResource(sizeof(TransformationMatrix)));
+	materialResourceObj = CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
 	#pragma endregion obj
 	descriptorSizeSRV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	descriptorSizeRTV = directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
@@ -149,35 +149,6 @@ void MyEngine::VertexReset()
 	}
 }
 
-void MyEngine::Release()
-{
-	delete vertexResource;
-	delete materialResource;
-	delete wvpResource;
-	delete vertexResourceSprite;
-	delete materialResourceSprite;
-	delete transformationMatrixResourceSprite;
-	delete indexResourceSprite;
-	delete vertexResourceSphere;
-	delete materialResourceSphere;
-	delete transformationMatrixResourceSphere;
-	delete indexResourceSphere;
-	delete directionalLightResource;
-	delete vertexResourceBox;
-	delete materialResourceBox;
-	delete transformationMatrixResourceBox;
-	delete indexResourceBox;
-	delete vertexResourceObj;
-	delete materialResourceObj;
-	delete transformationMatrixResourceObj;
-	for (int i = 0; i < kMaxTexture;i++) {
-		delete textureResource[i];
-		delete intermediateResource[i];
-	}
-	
-
-}
-
 #pragma region Draw
 void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
@@ -197,7 +168,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 		//MaxSpriteより多い
 		assert(false);
 	}
-	vertexResource->Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
 	vertexData[TriAngleIndex].position = Leftbottom;
 	vertexData[TriAngleIndex].texcoord = {0.0f,1.0f};
@@ -211,7 +182,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	
 	
 	//色を書き込むアドレスを取得
-	materialResource->Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
 	materialData->color = color;
 	materialData->enableLighting = false;
@@ -223,22 +194,22 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//行列を作る
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	//WVPを書き込むアドレスを取得
-	wvpResource->Get()->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
+	wvpResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 	//単位行列を書き込む
 	*wvpData =Multiply(worldMatrix,ViewMatrix);
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	directX_->GetcommandList()->DrawInstanced(TriAngleIndex+3, 1, 0, 0);
+	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList().Get()->DrawInstanced(TriAngleIndex+3, 1, 0, 0);
 }
 void MyEngine::MakeVertexBufferView()
 {
-	vertexBufferView.BufferLocation = vertexResource->Get()->GetGPUVirtualAddress();
+	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(VertexData) * kMaxVertex;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
@@ -265,7 +236,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	}
 #pragma endregion 位置決め
 
-	vertexResourceSprite->Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
+	vertexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
 	
 	//左下
 	vertexDataSprite[0].position = LeftBottom;
@@ -280,7 +251,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	vertexDataSprite[3].position = RightTop;
 	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
 	//インデックスリソースにデータを書き込む
-	indexResourceSprite->Get()->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
+	indexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
 
 	//三角形1枚目
 	indexDataSprite[SpriteIndex] = 0;
@@ -293,7 +264,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	
 	
 	//色の書き込み
-	materialResourceSprite->Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
+	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
 	materialDataSprite->color = color;
 	//ライティングをしない
 	materialDataSprite->enableLighting = false;
@@ -303,7 +274,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
 	materialDataSprite->uvTransform = uvTransformMatrix;
 	//WVPを書き込むためのアドレス取得
-	transformationMatrixResourceSprite->Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
+	transformationMatrixResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
 	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
 	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
 	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
@@ -312,26 +283,26 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
 	transformationMatrixDataSprite->World = MakeIdentity4x4();
 
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewSprite);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
 
-	directX_->GetcommandList()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
+	directX_->GetcommandList().Get()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
 }
 void MyEngine::MakeVertexBufferViewSprite()
 {
 	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite->Get()->GetGPUVirtualAddress();
+	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
 	//使用する頂点サイズ
 	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
 	//1頂点あたりのアドレス
@@ -340,7 +311,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 void MyEngine::MakeIndexBufferViewSprite()
 {
 	//リソース先頭アドレス
-	indexBufferViewSprite.BufferLocation = indexResourceSprite->Get()->GetGPUVirtualAddress();
+	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
 	//使用するインデックスサイズ
 	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t)* kMaxSpriteVertex;
 	//インデックスはuint32_t
@@ -350,8 +321,8 @@ void MyEngine::MakeIndexBufferViewSprite()
 #pragma region Sphere
 void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
 {
-	vertexResourceSphere->Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
-	indexResourceSphere->Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
+	vertexResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
+	indexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
 	//経度分割の1つ分の角度　φ 横
 	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
 	//緯度分割の1つ分の角度　θ 縦
@@ -414,37 +385,37 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 		}
 	}
 	
-	materialResourceSphere->Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
+	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
 	
 	//ライティングをする
 	materialDataSphere->color = color;
 	materialDataSphere->enableLighting = true;
 	materialDataSphere->uvTransform = MakeIdentity4x4();
 	//
-	transformationMatrixResourceSphere->Get()->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
+	transformationMatrixResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
 	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
 	transformationMatrixDataSphere->WVP = Multiply(worldMatrixSphere, ViewMatrix);
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	transformationMatrixDataSphere->World = MakeIdentity4x4();
 	
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
-	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSphere);
+	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
+	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewSphere);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceSphere.Get()->GetGPUVirtualAddress());
 	//WVP
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere.Get()->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
 
-	directX_->GetcommandList()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
+	directX_->GetcommandList().Get()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
 }
 void MyEngine::MakeVertexBufferViewSphere()
 {
 	//リソースの先頭のアドレス
-	vertexBufferViewSphere.BufferLocation = vertexResourceSphere->Get()->GetGPUVirtualAddress();
+	vertexBufferViewSphere.BufferLocation = vertexResourceSphere.Get()->GetGPUVirtualAddress();
 	//使用する頂点サイズ
 	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
 	//1頂点あたりのアドレス
@@ -453,7 +424,7 @@ void MyEngine::MakeVertexBufferViewSphere()
 void MyEngine::MakeIndexBufferViewSphere()
 {
 	//リソース先頭アドレス
-	indexBufferViewSphere.BufferLocation = indexResourceSphere->Get()->GetGPUVirtualAddress();
+	indexBufferViewSphere.BufferLocation = indexResourceSphere.Get()->GetGPUVirtualAddress();
 	//使用するインデックスサイズ
 	indexBufferViewSphere.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
 	//インデックスはuint32_t
@@ -482,7 +453,7 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 	}
 #pragma endregion 位置決め
 
-	vertexResourceBox->Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataBox));
+	vertexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataBox));
 
 #pragma region flont
 	//左下
@@ -570,7 +541,7 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 #pragma endregion 上
 
 	//インデックスリソースにデータを書き込む
-	indexResourceBox->Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataBox));
+	indexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataBox));
 #pragma region flont
 	//三角形1枚目
 	indexDataBox[BoxIndex] = 0;indexDataBox[BoxIndex + 1] = 1;indexDataBox[BoxIndex + 2] = 2;
@@ -609,31 +580,31 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 #pragma endregion 上
 
 	//色の書き込み
-	materialResourceBox->Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataBox));
+	materialResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataBox));
 	materialDataBox->color = color;
 	//ライティングをしない
 	materialDataBox->enableLighting = false;
 	//WVPを書き込むためのアドレス取得
-	transformationMatrixResourceBox->Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataBox));
+	transformationMatrixResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataBox));
 	Matrix4x4 worldMatrixBox = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 worldViewMatrixBox = Multiply(worldMatrixBox, ViewportMatrix);
 	//
 	transformationMatrixDataBox->WVP = worldViewMatrixBox;
 	transformationMatrixDataBox->World = MakeIdentity4x4();
 
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewBox);
-	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewBox);
+	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewBox);
+	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewBox);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceBox->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceBox.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceBox->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceBox.Get()->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
 
 	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
 }
@@ -641,7 +612,7 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 void MyEngine::MakeVertexBufferViewBox()
 {
 	//リソースの先頭のアドレス
-	vertexBufferViewBox.BufferLocation = vertexResourceBox->Get()->GetGPUVirtualAddress();
+	vertexBufferViewBox.BufferLocation = vertexResourceBox.Get()->GetGPUVirtualAddress();
 	//使用する頂点サイズ
 	vertexBufferViewBox.SizeInBytes = sizeof(VertexData) * 24;
 	//1頂点あたりのアドレス
@@ -650,7 +621,7 @@ void MyEngine::MakeVertexBufferViewBox()
 void MyEngine::MakeIndexBufferViewBox()
 {
 	//リソース先頭アドレス
-	indexBufferViewBox.BufferLocation = indexResourceBox->Get()->GetGPUVirtualAddress();
+	indexBufferViewBox.BufferLocation = indexResourceBox.Get()->GetGPUVirtualAddress();
 	//使用するインデックスサイズ
 	indexBufferViewBox.SizeInBytes = sizeof(uint32_t) * kMaxBoxVertex;
 	//インデックスはuint32_t
@@ -660,34 +631,34 @@ void MyEngine::MakeIndexBufferViewBox()
 #pragma region obj
 void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
 {
-	vertexResourceObj->Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
+	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
 	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
 
-	materialResourceObj->Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
+	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
 
 	//ライティングをしない
 	materialDataObj->enableLighting = false;
 	materialDataObj->color = color;
 	materialDataObj->uvTransform = MakeIdentity4x4();
 
-	transformationMatrixResourceObj->Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
+	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
 	Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
 	transformationMatrixDataObj->WVP = Multiply(worldMatrixObj, ViewMatrix);
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	transformationMatrixDataObj->World = MakeIdentity4x4();
 
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
+	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceObj->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceObj.Get()->GetGPUVirtualAddress());
 	//WVP
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj.Get()->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[modelData.TextureIndex]);
+	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[modelData.TextureIndex]);
 	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource->Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
 
-	directX_->GetcommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	directX_->GetcommandList().Get()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 }
 ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
@@ -758,8 +729,8 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 	}
 	modelData.TextureIndex = LoadTexture(modelData.material.textureFilePath);
 	//頂点リソースを作る
-	vertexResourceObj = new ResourceObject(CreateBufferResource(sizeof(VertexData) * modelData.vertices.size()));
-	vertexBufferViewObj.BufferLocation = vertexResourceObj->Get()->GetGPUVirtualAddress();
+	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
 	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
 	return modelData;
@@ -808,8 +779,8 @@ int MyEngine::LoadTexture(const std::string& filePath)
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = ImageFileOpen(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textureResource[SpriteIndex] = new ResourceObject(CreateTextureResource(directX_->GetDevice(), metadata));
-	intermediateResource[SpriteIndex]= new ResourceObject(UploadTextureData(textureResource[SpriteIndex]->Get(), mipImages));
+	textureResource[SpriteIndex] =CreateTextureResource(directX_->GetDevice(), metadata);
+	intermediateResource[SpriteIndex]=UploadTextureData(textureResource[SpriteIndex].Get(), mipImages);
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -824,7 +795,7 @@ int MyEngine::LoadTexture(const std::string& filePath)
 	textureSrvHandleCPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	textureSrvHandleGPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの作成
-	directX_->GetDevice()->CreateShaderResourceView(textureResource[SpriteIndex]->Get(), &srvDesc, textureSrvHandleCPU[SpriteIndex]);
+	directX_->GetDevice()->CreateShaderResourceView(textureResource[SpriteIndex].Get(), &srvDesc, textureSrvHandleCPU[SpriteIndex]);
 	return SpriteIndex;
 }
 
@@ -844,7 +815,7 @@ DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
 	return mipImage;
 }
 
-ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const DirectX::TexMetadata& metadata)
+Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata)
 {
 	//metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -874,18 +845,18 @@ ID3D12Resource* MyEngine::CreateTextureResource(ID3D12Device* device, const Dire
 }
 
 [[nodiscard]]
-ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const DirectX::ScratchImage& mipImages)
+Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages)
 {
 	std::vector<D3D12_SUBRESOURCE_DATA>subresources;
-	DirectX::PrepareUpload(directX_->GetDevice(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
-	uint64_t intermediateSize = GetRequiredIntermediateSize(texture, 0, UINT(subresources.size()));
-	ID3D12Resource* intermediateResource = CreateBufferResource(intermediateSize);
-	UpdateSubresources(directX_->GetcommandList(), texture, intermediateResource, 0, 0, UINT(subresources.size()), subresources.data());
+	DirectX::PrepareUpload(directX_->GetDevice().Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
+	uint64_t intermediateSize = GetRequiredIntermediateSize(texture.Get(), 0, UINT(subresources.size()));
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource = CreateBufferResource(intermediateSize);
+	UpdateSubresources(directX_->GetcommandList().Get(), texture.Get(), intermediateResource.Get(), 0, 0, UINT(subresources.size()), subresources.data());
 	//Tetureへの転送後は利用できるようにD3D12_RESOURCE_STATE_COPY_DESTからD3D12_RESOURCE_STATE_GENERIC_READへResourceStateを変更する
 	D3D12_RESOURCE_BARRIER barrier{};
 	barrier.Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION;
 	barrier.Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE;
-	barrier.Transition.pResource = texture;
+	barrier.Transition.pResource = texture.Get();
 	barrier.Transition.Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES;
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_COPY_DEST;
 	barrier.Transition.StateAfter = D3D12_RESOURCE_STATE_GENERIC_READ;
@@ -897,9 +868,9 @@ ID3D12Resource* MyEngine::UploadTextureData(ID3D12Resource* texture, const Direc
 #pragma endregion テクスチャ
 
 
-ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
+Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateBufferResource(size_t sizeInBytes)
 {
-	ID3D12Resource* Resource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
 	D3D12_RESOURCE_DESC ResourceDesc{};
@@ -915,13 +886,13 @@ ID3D12Resource* MyEngine::CreateBufferResource(size_t sizeInBytes)
 	assert(SUCCEEDED(hr));
 	return Resource;
 }
-D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize*index);
 	return handleCPU;
 }
-D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GetGPUDescriptorHandle(ID3D12DescriptorHeap* descriptorHeap, uint32_t descriptorSize, uint32_t index)
+D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);
