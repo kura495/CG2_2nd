@@ -93,7 +93,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="DirectXCommon.cpp" />
+    <ClCompile Include="Bace\DirectXCommon.cpp" />
+    <ClCompile Include="Bace\MyEngine.cpp" />
+    <ClCompile Include="Bace\WinApp.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -103,15 +105,15 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
     <ClCompile Include="GameObject\Camera\Camera.cpp" />
     <ClCompile Include="math\MatrixCalc.cpp" />
-    <ClCompile Include="MyEngine.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene\GameScene.cpp" />
     <ClCompile Include="Utility\ImGuiManager.cpp" />
     <ClCompile Include="Utility\Log.cpp" />
-    <ClCompile Include="WinApp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectXCommon.h" />
+    <ClInclude Include="Bace\DirectXCommon.h" />
+    <ClInclude Include="Bace\MyEngine.h" />
+    <ClInclude Include="Bace\WinApp.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -134,11 +136,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\Vector4.h" />
     <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="math\MatrixCalc.h" />
-    <ClInclude Include="MyEngine.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\Log.h" />
-    <ClInclude Include="WinApp.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">

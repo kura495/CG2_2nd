@@ -1,6 +1,6 @@
 #pragma once
-#include"includeStruct\Matrix4x4.h"
-#include"includeStruct\Vector3.h"
+#include"IncludeStruct\Matrix4x4.h"
+#include"IncludeStruct\Vector3.h"
 #include<cmath>
 Matrix4x4 MakeIdentity4x4();
 Matrix4x4 Add(const Matrix4x4& m1, const Matrix4x4& m2);

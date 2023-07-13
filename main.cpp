@@ -1,6 +1,6 @@
-#include"WinApp.h"
-#include"DirectXCommon.h"
-#include"MyEngine.h"
+#include"Bace\WinApp.h"
+#include"Bace\DirectXCommon.h"
+#include"Bace\MyEngine.h"
 #include"Scene\GameScene.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//COMの初期化
