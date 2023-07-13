@@ -135,7 +135,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="math\MatrixCalc.h" />
     <ClInclude Include="MyEngine.h" />
-    <ClInclude Include="ResourceObject.h" />
     <ClInclude Include="Scene\GameScene.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\Log.h" />
