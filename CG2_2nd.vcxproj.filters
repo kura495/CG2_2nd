@@ -31,12 +31,27 @@
     <Filter Include="ヘッダー ファイル\Scene">
       <UniqueIdentifier>{170c7fbf-bc0e-4790-9b8a-12f60c8bf849}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Utility">
+      <UniqueIdentifier>{3e70da1c-6964-4bb2-8d35-79994a30c634}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Utility">
+      <UniqueIdentifier>{5a099ea9-f46d-4895-adc4-1c7ba8f5c2b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{042e87f0-d2fd-4e2d-9e88-b8a6ff7ba3a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Camera">
+      <UniqueIdentifier>{500fad0c-668b-452c-b8a4-51bb11f7f1be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject">
+      <UniqueIdentifier>{9902b081-ade2-499b-b33e-59099ae83bb3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Camera">
+      <UniqueIdentifier>{d8f18e12-536f-43ae-9bce-8521a74482bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Log.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="DirectXCommon.cpp">
@@ -46,9 +61,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="MyEngine.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -72,20 +84,23 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixCalc.cpp">
-      <Filter>ソース ファイル\math</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\GameScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject\Camera\Camera.cpp">
+      <Filter>ソース ファイル\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Log.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="math\MatrixCalc.cpp">
+      <Filter>ソース ファイル\math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Log.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="DirectXCommon.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -93,9 +108,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="MyEngine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -122,14 +134,8 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="ResourceObject.h">
       <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixCalc.h">
-      <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Material.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
@@ -138,9 +144,6 @@
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Matrix4x4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\ModelData.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Sphere.h">
@@ -169,6 +172,21 @@
     </ClInclude>
     <ClInclude Include="Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Log.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\ModelData.h">
+      <Filter>ヘッダー ファイル\includeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Camera\Camera.h">
+      <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="math\MatrixCalc.h">
+      <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

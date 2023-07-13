@@ -1,8 +1,8 @@
 #pragma once
-#include"MatrixCalc.h"
+#include"math\MatrixCalc.h"
 #include"includeStruct\Transform.h"
 #include"includeStruct\Vector3.h"
-#include"ImGuiManager.h"
+#include"Utility\ImGuiManager.h"
 class Camera
 {
 public:

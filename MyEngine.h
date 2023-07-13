@@ -1,6 +1,6 @@
 #pragma once
 #include"DirectXCommon.h"
-#include"MatrixCalc.h"
+#include"math\MatrixCalc.h"
 #include"includeStruct\Matrix4x4.h"
 #include"includeStruct\Transform.h"
 #include"includeStruct\VertexData.h"
