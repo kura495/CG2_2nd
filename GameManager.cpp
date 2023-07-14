@@ -14,6 +14,8 @@ void GameManager::Initialize()
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
 	myEngine = new MyEngine();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
+	state = new GameTitle();
 	gameScene = new GameScene();
 	gameScene->Initialize(directX, myEngine, winApp, kClientWidth, kClientHeight);
+
 }
