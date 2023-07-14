@@ -8,5 +8,5 @@ public:
 	void Draw();
 
 private:
-
+	int time;
 };

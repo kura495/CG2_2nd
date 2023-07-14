@@ -8,11 +8,13 @@
 class GamePlayState :public GameState
 {
 public:
+	GamePlayState();
 	void Initialize();
 	void Update();
 	void Draw();
 
 private:
+
 	MyEngine* myEngine = nullptr;
 	Camera* camera_ = nullptr;
 	Vector4 Left[3] = {

@@ -19,8 +19,10 @@ void GameManager::Initialize()
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
 	//State
-	state = new GamePlayState();
-	state->Initialize();
+	state[TITLE]=std::make_unique<GameTitleState>();
+	state[PLAY]= std::make_unique<GamePlayState>();
+	GameState::StateNo = TITLE;
+
 }
 void GameManager::Gameloop()
 {
@@ -32,8 +34,8 @@ void GameManager::Gameloop()
 		else {
 			imGuiManager->BeginFrame();
 			directX->PreView();
-			state->Update();
-			state->Draw();
+			state[GameState::StateNo]->Update();
+			state[GameState::StateNo]->Draw();
 			imGuiManager->EndFrame();
 			directX->PostView();
 		}
