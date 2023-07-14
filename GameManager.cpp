@@ -3,7 +3,7 @@ void GameManager::Initialize()
 {
 	//COMの初期化
 	CoInitializeEx(0, COINIT_MULTITHREADED);
-	//ウィンドウクラス
+	//Window
 	winApp = new WinApp();
 	kClientWidth = 1280;
 	kClientHeight = 720;
@@ -11,11 +11,14 @@ void GameManager::Initialize()
 	//DirectX
 	directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
+	//Engine
 	myEngine = new MyEngine();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
-	//state = new GameTitleState();
+	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
+	//State
+	//state = new GameTitleState();
 }
 void GameManager::Gameloop()
 {

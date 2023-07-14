@@ -1,7 +1,7 @@
 #pragma once
-#include"Bace/WinApp.h"
-#include"Bace/DirectXCommon.h"
-#include"Bace/MyEngine.h"
+#include"Base/WinApp.h"
+#include"Base/DirectXCommon.h"
+#include"Base/MyEngine.h"
 #include"Utility/ImGuiManager.h"
 #include"Scene/State/GameTitleState.h"
 #include"Scene/State/GamePlayState.h"
