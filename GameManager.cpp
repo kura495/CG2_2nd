@@ -38,6 +38,7 @@ void GameManager::Gameloop()
 
 void GameManager::Release()
 {
+	ImGui_ImplDX12_Shutdown();
 	delete myEngine;
 	delete directX;
 	CoUninitialize();
