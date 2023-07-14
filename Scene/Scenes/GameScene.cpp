@@ -8,8 +8,7 @@ void GameScene::Initialize(DirectXCommon* directX, MyEngine* myEngine,WinApp*win
 	kClientHeight_ = kClientHeight;
 	camera_ = new Camera();
 	camera_->Initialize(kClientWidth_, kClientHeight_);
-	ImGuiManager_ = new ImGuiManager();
-	ImGuiManager_->Initialize(winApp,directX_);
+
 	//リソースを作る
 	UV=myEngine_->LoadTexture("resources/uvChecker.png");
 	Ball=myEngine_->LoadTexture("resources/monsterBall.png");
@@ -24,8 +23,7 @@ void GameScene::UpDate()
 void GameScene::Draw()
 {
 	
-	ImGuiManager_->BeginFrame();
-	directX_->PreView();
+	
 	//描画ここから
 #pragma region ImGui
 	ImGui::Begin("Color");
@@ -64,8 +62,7 @@ void GameScene::Draw()
 	//myEngine_->DrawModel(modelData,{0,0,0}, camera_->transformationMatrixData,Color[0]);
 	//描画ここまで
 	myEngine_->VertexReset();
-	ImGuiManager_->EndFrame();
-	directX_->PostView();
+	
 }
 
 void GameScene::Release()

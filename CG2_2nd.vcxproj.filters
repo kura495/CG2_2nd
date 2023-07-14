@@ -55,6 +55,18 @@
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{87b4747d-9fc9-48b6-9b92-c2630b72220f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\Scene\Scenes">
+      <UniqueIdentifier>{1f0eefed-a1ad-4094-8d67-35dd48995bdc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Scene\State">
+      <UniqueIdentifier>{ce7a2ccb-3c79-4d96-9a64-5c69d1f951a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\Scenes">
+      <UniqueIdentifier>{4ca89b34-3a8b-4f95-9e13-b57cf5eb3c18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scene\State">
+      <UniqueIdentifier>{4daa0f17-004f-4069-be16-b52ffc9211c4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -81,9 +93,6 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\GameScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="GameObject\Camera\Camera.cpp">
       <Filter>ソース ファイル\GameObject\Camera</Filter>
     </ClCompile>
@@ -107,6 +116,9 @@
     </ClCompile>
     <ClCompile Include="GameManager.cpp">
       <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Scenes\GameScene.cpp">
+      <Filter>ソース ファイル\Scene\Scenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -167,9 +179,6 @@
     <ClInclude Include="includeStruct\TransformationMatrix.h">
       <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Scene\GameScene.h">
-      <Filter>ヘッダー ファイル\Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Utility\ImGuiManager.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
@@ -196,6 +205,21 @@
     </ClInclude>
     <ClInclude Include="GameManager.h">
       <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Scenes\GameScene.h">
+      <Filter>ヘッダー ファイル\Scene\Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\State\GameClearState.h">
+      <Filter>ヘッダー ファイル\Scene\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\State\GamePlayState.h">
+      <Filter>ヘッダー ファイル\Scene\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\State\IgameState.h">
+      <Filter>ヘッダー ファイル\Scene\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\State\GameTitleState.h">
+      <Filter>ヘッダー ファイル\Scene\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
