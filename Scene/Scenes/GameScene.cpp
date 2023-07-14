@@ -1,13 +1,9 @@
 #include"GameScene.h"
-
-void GameScene::Initialize(DirectXCommon* directX, MyEngine* myEngine,WinApp*winApp,int32_t kClientWidth,int32_t kClientHeight)
+void GameScene::Initialize(MyEngine* myEngine)
 {
-	directX_ = directX;
-	myEngine_ = myEngine;
-	kClientWidth_ = kClientWidth;
-	kClientHeight_ = kClientHeight;
+	MyEngine* myEngine_ = myEngine;
 	camera_ = new Camera();
-	camera_->Initialize(kClientWidth_, kClientHeight_);
+	camera_->Initialize(1280, 720);
 
 	//リソースを作る
 	UV=myEngine_->LoadTexture("resources/uvChecker.png");
@@ -32,7 +28,6 @@ void GameScene::Draw()
 	Color[0] = { ImGuiColor[x],ImGuiColor[y],ImGuiColor[z] };
 	ImGui::End();
 	camera_->ImGui();
-	myEngine_->ImGui();
 	ImGui::Begin("Sphere");
 	ImGui::Checkbox("Texture",&useMonsterBall);
 	ImGui::End();
@@ -55,19 +50,12 @@ void GameScene::Draw()
 	ImGui::End();
 #pragma endregion
 	
-	myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData, UV);
+	//myEngine_->Draw(Left[0], Top[0], Right[0], Color[0], camera_->transformationMatrixData, UV);
 	//myEngine_->Draw(Left[1], Top[1], Right[1], Color[0], camera_->transformationMatrixData, UV);
 	//myEngine_->DrawSprite(LeftTop[0], LeftBottom[0], RightTop[0], RightBottom[0], Color[0], UV);
 	//myEngine_->DrawSphere(sphere, camera_->transformationMatrixData,Color[0], SphereTexture);
 	//myEngine_->DrawModel(modelData,{0,0,0}, camera_->transformationMatrixData,Color[0]);
 	//描画ここまで
-	myEngine_->VertexReset();
+	//myEngine->VertexReset();
 	
-}
-
-void GameScene::Release()
-{
-	ImGui_ImplDX12_Shutdown();
-	delete myEngine_;
-	delete directX_;
 }

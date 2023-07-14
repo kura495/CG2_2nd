@@ -12,13 +12,15 @@ void GameManager::Initialize()
 	directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
 	//Engine
-	myEngine = new MyEngine();
+	myEngine =MyEngine::GetInstance();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
+	
 	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
 	//State
-	//state = new GameTitleState();
+	state = new GamePlayState();
+	state->Initialize();
 }
 void GameManager::Gameloop()
 {
@@ -30,8 +32,8 @@ void GameManager::Gameloop()
 		else {
 			imGuiManager->BeginFrame();
 			directX->PreView();
-			//state->Update();
-			//state->Draw();
+			state->Update();
+			state->Draw();
 			imGuiManager->EndFrame();
 			directX->PostView();
 		}
@@ -42,14 +44,6 @@ void GameManager::Gameloop()
 void GameManager::Release()
 {
 	ImGui_ImplDX12_Shutdown();
-	delete myEngine;
-	delete directX;
 	CoUninitialize();
-	IDXGIDebug1* debug;
-	if (SUCCEEDED(DXGIGetDebugInterface1(0, IID_PPV_ARGS(&debug)))) {
-		debug->ReportLiveObjects(DXGI_DEBUG_ALL, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_APP, DXGI_DEBUG_RLO_ALL);
-		debug->ReportLiveObjects(DXGI_DEBUG_D3D12, DXGI_DEBUG_RLO_ALL);
-		debug->Release();
-	}
+	
 }

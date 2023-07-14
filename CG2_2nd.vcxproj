@@ -119,8 +119,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bace\DirectXCommon.h" />
-    <ClInclude Include="Bace\MyEngine.h" />
     <ClInclude Include="Bace\WinApp.h" />
+    <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="D3DResourceLeakChecker.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />

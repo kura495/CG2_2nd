@@ -203,9 +203,6 @@
     <ClInclude Include="Bace\DirectXCommon.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
-    <ClInclude Include="Bace\MyEngine.h">
-      <Filter>ヘッダー ファイル\Base</Filter>
-    </ClInclude>
     <ClInclude Include="Bace\WinApp.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
@@ -228,6 +225,12 @@
       <Filter>ヘッダー ファイル\Scene\State</Filter>
     </ClInclude>
     <ClInclude Include="Utility\Log.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\MyEngine.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DResourceLeakChecker.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
   </ItemGroup>

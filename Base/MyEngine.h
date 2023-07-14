@@ -16,6 +16,7 @@
 class MyEngine
 {
 public:
+	static MyEngine* GetInstance();
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
 	void VertexReset();
