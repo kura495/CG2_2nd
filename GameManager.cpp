@@ -21,6 +21,7 @@ void GameManager::Initialize()
 	//State
 	state[TITLE]=std::make_unique<GameTitleState>();
 	state[PLAY]= std::make_unique<GamePlayState>();
+	state[PLAY]->Initialize();
 	GameState::StateNo = TITLE;
 
 }

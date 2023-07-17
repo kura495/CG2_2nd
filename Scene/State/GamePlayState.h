@@ -8,7 +8,7 @@
 class GamePlayState :public GameState
 {
 public:
-	GamePlayState();
+	//GamePlayState();
 	void Initialize();
 	void Update();
 	void Draw();

@@ -1,15 +1,15 @@
 #include"Scene/State/GamePlayState.h"
 
-GamePlayState::GamePlayState()
-{
-	camera_ = new Camera();
-	camera_->Initialize(1280, 720);
-	myEngine = MyEngine::GetInstance();
-	//リソースを作る
-	UV = myEngine->LoadTexture("resources/uvChecker.png");
-	Ball = myEngine->LoadTexture("resources/monsterBall.png");
-	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
-}
+//GamePlayState::GamePlayState()
+//{
+//	camera_ = new Camera();
+//	camera_->Initialize(1280, 720);
+//	myEngine = MyEngine::GetInstance();
+//	//リソースを作る
+//	UV = myEngine->LoadTexture("resources/uvChecker.png");
+//	Ball = myEngine->LoadTexture("resources/monsterBall.png");
+//	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
+//}
 
 void GamePlayState::Initialize()
 {
