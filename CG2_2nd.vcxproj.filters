@@ -22,9 +22,6 @@
     <Filter Include="ヘッダー ファイル\math">
       <UniqueIdentifier>{83379801-3e76-464c-85f4-74fdc32c596e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\includeStruct">
-      <UniqueIdentifier>{73939f7d-cb0a-4e43-8d59-dafcbde55a75}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Scene">
       <UniqueIdentifier>{1d3cf361-2ae9-4da3-998d-cf03fbb07988}</UniqueIdentifier>
     </Filter>
@@ -48,6 +45,9 @@
     </Filter>
     <Filter Include="ヘッダー ファイル\GameObject\Camera">
       <UniqueIdentifier>{d8f18e12-536f-43ae-9bce-8521a74482bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Struct">
+      <UniqueIdentifier>{73939f7d-cb0a-4e43-8d59-dafcbde55a75}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -107,9 +107,6 @@
     <ClInclude Include="WinApp.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="MyEngine.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -137,39 +134,6 @@
     <ClInclude Include="ResourceObject.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="includeStruct\Material.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Matrix3x3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Matrix4x4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Sphere.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Transform.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\StructLight.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Vector2.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\VertexData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Vector3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\Vector4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\TransformationMatrix.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\GameScene.h">
       <Filter>ヘッダー ファイル\Scene</Filter>
     </ClInclude>
@@ -179,14 +143,50 @@
     <ClInclude Include="Utility\Log.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
-    <ClInclude Include="includeStruct\ModelData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
-    </ClInclude>
     <ClInclude Include="GameObject\Camera\Camera.h">
       <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="math\MatrixCalc.h">
       <Filter>ヘッダー ファイル\math</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEngine.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Material.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Matrix3x3.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Matrix4x4.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\ModelData.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Sphere.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\StructLight.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Transform.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\TransformationMatrix.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Vector2.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Vector3.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\Vector4.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Struct\VertexData.h">
+      <Filter>ヘッダー ファイル\Struct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

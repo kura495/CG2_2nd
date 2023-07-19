@@ -46,6 +46,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ExternalIncludePath>$(SolutionDir)/;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ExternalIncludePath>$(SolutionDir)/;$(ExternalIncludePath)</ExternalIncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -121,22 +124,22 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
     <ClInclude Include="GameObject\Camera\Camera.h" />
-    <ClInclude Include="includeStruct\Material.h" />
-    <ClInclude Include="includeStruct\Matrix3x3.h" />
-    <ClInclude Include="includeStruct\Matrix4x4.h" />
-    <ClInclude Include="includeStruct\ModelData.h" />
-    <ClInclude Include="includeStruct\Sphere.h" />
-    <ClInclude Include="includeStruct\StructLight.h" />
-    <ClInclude Include="includeStruct\Transform.h" />
-    <ClInclude Include="includeStruct\TransformationMatrix.h" />
-    <ClInclude Include="includeStruct\Vector2.h" />
-    <ClInclude Include="includeStruct\Vector3.h" />
-    <ClInclude Include="includeStruct\Vector4.h" />
-    <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="math\MatrixCalc.h" />
     <ClInclude Include="MyEngine.h" />
     <ClInclude Include="ResourceObject.h" />
     <ClInclude Include="Scene\GameScene.h" />
+    <ClInclude Include="Struct\Material.h" />
+    <ClInclude Include="Struct\Matrix3x3.h" />
+    <ClInclude Include="Struct\Matrix4x4.h" />
+    <ClInclude Include="Struct\ModelData.h" />
+    <ClInclude Include="Struct\Sphere.h" />
+    <ClInclude Include="Struct\StructLight.h" />
+    <ClInclude Include="Struct\Transform.h" />
+    <ClInclude Include="Struct\TransformationMatrix.h" />
+    <ClInclude Include="Struct\Vector2.h" />
+    <ClInclude Include="Struct\Vector3.h" />
+    <ClInclude Include="Struct\Vector4.h" />
+    <ClInclude Include="Struct\VertexData.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\Log.h" />
     <ClInclude Include="WinApp.h" />
