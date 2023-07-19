@@ -118,9 +118,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Utility\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bace\DirectXCommon.h" />
-    <ClInclude Include="Bace\WinApp.h" />
+    <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="D3DResourceLeakChecker.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
