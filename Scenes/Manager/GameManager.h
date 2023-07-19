@@ -3,10 +3,10 @@
 #include"Base/DirectXCommon.h"
 #include"Base/MyEngine.h"
 #include"Utility/ImGuiManager.h"
-#include"Scene/State/GameTitleState.h"
-#include"Scene/State/GamePlayState.h"
-#include"Scene/State/GameClearState.h"
-#include"Scene/State/IgameState.h"
+#include"Scenes/State/GameTitleState.h"
+#include"Scenes/State/GamePlayState.h"
+#include"Scenes/State/GameClearState.h"
+#include"Scenes/State/IgameState.h"
 class GameManager
 {
 public:

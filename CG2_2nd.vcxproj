@@ -106,14 +106,13 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="GameClearState.cpp" />
-    <ClCompile Include="GameManager.cpp" />
     <ClCompile Include="GameObject\Camera\Camera.cpp" />
-    <ClCompile Include="GamePlayState.cpp" />
-    <ClCompile Include="GameTitleState.cpp" />
     <ClCompile Include="math\MatrixCalc.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Scene\Scenes\GameScene.cpp" />
+    <ClCompile Include="Scenes\Manager\GameManager.cpp" />
+    <ClCompile Include="Scenes\State\GameClearState.cpp" />
+    <ClCompile Include="Scenes\State\GamePlayState.cpp" />
+    <ClCompile Include="Scenes\State\GameTitleState.cpp" />
     <ClCompile Include="Utility\ImGuiManager.cpp" />
     <ClCompile Include="Utility\Log.cpp" />
   </ItemGroup>
@@ -121,7 +120,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\MyEngine.h" />
     <ClInclude Include="Base\WinApp.h" />
-    <ClInclude Include="D3DResourceLeakChecker.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -130,7 +128,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
-    <ClInclude Include="GameManager.h" />
     <ClInclude Include="GameObject\Camera\Camera.h" />
     <ClInclude Include="includeStruct\Material.h" />
     <ClInclude Include="includeStruct\Matrix3x3.h" />
@@ -145,11 +142,11 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\Vector4.h" />
     <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="math\MatrixCalc.h" />
-    <ClInclude Include="Scene\Scenes\GameScene.h" />
-    <ClInclude Include="Scene\State\GameClearState.h" />
-    <ClInclude Include="Scene\State\GamePlayState.h" />
-    <ClInclude Include="Scene\State\GameTitleState.h" />
-    <ClInclude Include="Scene\State\IgameState.h" />
+    <ClInclude Include="Scenes\Manager\GameManager.h" />
+    <ClInclude Include="Scenes\State\GameClearState.h" />
+    <ClInclude Include="Scenes\State\GamePlayState.h" />
+    <ClInclude Include="Scenes\State\GameTitleState.h" />
+    <ClInclude Include="Scenes\State\IgameState.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\Log.h" />
   </ItemGroup>

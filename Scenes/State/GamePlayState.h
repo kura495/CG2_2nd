@@ -1,7 +1,6 @@
 #pragma once
 #include"IgameState.h"
 #include"Base/MyEngine.h"
-#include"GameManager.h"
 #include"GameObject/Camera/Camera.h"
 #include"IncludeStruct/Sphere.h"
 #include"IncludeStruct/ModelData.h"

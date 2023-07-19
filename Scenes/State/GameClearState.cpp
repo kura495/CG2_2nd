@@ -1,4 +1,4 @@
-#include"Scene/State/GameClearState.h"
+#include"Scenes/State/GameClearState.h"
 
 void GameClearState::Initialize()
 {

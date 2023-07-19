@@ -16,12 +16,6 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{d7caa169-3c67-4e07-897f-0d9115a5eac6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Scene">
-      <UniqueIdentifier>{1d3cf361-2ae9-4da3-998d-cf03fbb07988}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ヘッダー ファイル\Scene">
-      <UniqueIdentifier>{170c7fbf-bc0e-4790-9b8a-12f60c8bf849}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Utility">
       <UniqueIdentifier>{3e70da1c-6964-4bb2-8d35-79994a30c634}</UniqueIdentifier>
     </Filter>
@@ -55,17 +49,23 @@
     <Filter Include="ソース ファイル\Math">
       <UniqueIdentifier>{87b4747d-9fc9-48b6-9b92-c2630b72220f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Scene\Scenes">
-      <UniqueIdentifier>{1f0eefed-a1ad-4094-8d67-35dd48995bdc}</UniqueIdentifier>
+    <Filter Include="ソース ファイル\Scenes">
+      <UniqueIdentifier>{4daa0f17-004f-4069-be16-b52ffc9211c4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\Scene\State">
+    <Filter Include="ヘッダー ファイル\Scenes">
       <UniqueIdentifier>{ce7a2ccb-3c79-4d96-9a64-5c69d1f951a3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Scene\Scenes">
-      <UniqueIdentifier>{4ca89b34-3a8b-4f95-9e13-b57cf5eb3c18}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Scenes\State">
+      <UniqueIdentifier>{23c14a85-fee4-41c0-bb09-43b1d5f71aa3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Scene\State">
-      <UniqueIdentifier>{4daa0f17-004f-4069-be16-b52ffc9211c4}</UniqueIdentifier>
+    <Filter Include="ヘッダー ファイル\Scenes\Manager">
+      <UniqueIdentifier>{a12342b7-6a3c-4011-a2ee-bc9da68c4b95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scenes\Manager">
+      <UniqueIdentifier>{d7d1cf80-41a1-433d-aa34-ec9099cfbd06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Scenes\State">
+      <UniqueIdentifier>{815f09b2-983d-4b5d-9155-7098162ef22a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -102,21 +102,6 @@
     <ClCompile Include="math\MatrixCalc.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
-    <ClCompile Include="GameManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Scene\Scenes\GameScene.cpp">
-      <Filter>ソース ファイル\Scene\Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTitleState.cpp">
-      <Filter>ソース ファイル\Scene\State</Filter>
-    </ClCompile>
-    <ClCompile Include="GameClearState.cpp">
-      <Filter>ソース ファイル\Scene\State</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePlayState.cpp">
-      <Filter>ソース ファイル\Scene\State</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\Log.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
@@ -128,6 +113,18 @@
     </ClCompile>
     <ClCompile Include="Base\WinApp.cpp">
       <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\Manager\GameManager.cpp">
+      <Filter>ソース ファイル\Scenes\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\State\GameClearState.cpp">
+      <Filter>ソース ファイル\Scenes\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\State\GamePlayState.cpp">
+      <Filter>ソース ファイル\Scenes\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Scenes\State\GameTitleState.cpp">
+      <Filter>ソース ファイル\Scenes\State</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,38 +197,32 @@
     <ClInclude Include="math\MatrixCalc.h">
       <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
-    <ClInclude Include="GameManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\Scenes\GameScene.h">
-      <Filter>ヘッダー ファイル\Scene\Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\State\GameClearState.h">
-      <Filter>ヘッダー ファイル\Scene\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\State\GamePlayState.h">
-      <Filter>ヘッダー ファイル\Scene\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\State\IgameState.h">
-      <Filter>ヘッダー ファイル\Scene\State</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\State\GameTitleState.h">
-      <Filter>ヘッダー ファイル\Scene\State</Filter>
-    </ClInclude>
     <ClInclude Include="Utility\Log.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Base\MyEngine.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
-    <ClInclude Include="D3DResourceLeakChecker.h">
-      <Filter>ヘッダー ファイル\Utility</Filter>
-    </ClInclude>
     <ClInclude Include="Base\DirectXCommon.h">
       <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="Base\WinApp.h">
       <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\Manager\GameManager.h">
+      <Filter>ヘッダー ファイル\Scenes\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\State\GameClearState.h">
+      <Filter>ヘッダー ファイル\Scenes\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\State\GamePlayState.h">
+      <Filter>ヘッダー ファイル\Scenes\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\State\GameTitleState.h">
+      <Filter>ヘッダー ファイル\Scenes\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Scenes\State\IgameState.h">
+      <Filter>ヘッダー ファイル\Scenes\State</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
