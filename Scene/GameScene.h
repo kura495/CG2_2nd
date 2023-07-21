@@ -1,11 +1,11 @@
 #pragma once
-#include"MyEngine.h"
+#include"Mesh.h"
 #include"GameObject\Camera\Camera.h"
 #include"Utility\ImGuiManager.h"
 class GameScene
 {
 public:
-	void Initialize(DirectXCommon* directX, MyEngine* myEngine,WinApp* winApp, int32_t kClientWidth,int32_t kClientHeight);
+	void Initialize(DirectXCommon* directX, Mesh* Mesh,WinApp* winApp, int32_t kClientWidth,int32_t kClientHeight);
 
 	void UpDate();
 
@@ -17,7 +17,7 @@ private:
 	int32_t kClientWidth_=0;
 	int32_t kClientHeight_=0;
 	DirectXCommon* directX_ = nullptr;
-	MyEngine*myEngine_ = nullptr;
+	Mesh* mesh_ = nullptr;
 	Camera* camera_ = nullptr;
 	ImGuiManager* ImGuiManager_ = nullptr;
 	Vector4 Left[3] = { 

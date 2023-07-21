@@ -1,6 +1,6 @@
-#include "MyEngine.h"
+#include "Mesh.h"
 
-void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight)
+void Mesh::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight)
 {
 	kClientWidth_ = kClientWidth;
 	kClientHeight_ = kClientHeight;
@@ -56,7 +56,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 		intermediateResource[i] = nullptr;
 	}
 }
-void MyEngine::ImGui()
+void Mesh::ImGui()
 {
 #pragma region TriAngleImGui
 	ImGui::ShowDemoWindow();
@@ -134,7 +134,7 @@ void MyEngine::ImGui()
 	ImGui::End();
 #pragma endregion ライト
 }
-void MyEngine::VertexReset()
+void Mesh::VertexReset()
 {
 	for (int i = 0; i < kMaxTriAngle; ++i) {
 		if (IsusedTriAngleIndex[i] == true) {
@@ -150,7 +150,7 @@ void MyEngine::VertexReset()
 }
 
 #pragma region Draw
-void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
+void Mesh::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color,const Matrix4x4& ViewMatrix, const int Index)
 {
 	int TriAngleIndex = kMaxVertex + 1;
 	for (int i = 0; i < kMaxTriAngle; ++i) {
@@ -207,7 +207,7 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList().Get()->DrawInstanced(TriAngleIndex+3, 1, 0, 0);
 }
-void MyEngine::MakeVertexBufferView()
+void Mesh::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(VertexData) * kMaxVertex;
@@ -215,7 +215,7 @@ void MyEngine::MakeVertexBufferView()
 }
 #pragma endregion 三角形
 #pragma region Sprite
-void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
+void Mesh::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
 {
 #pragma region 
 	int SpriteIndex = kMaxSpriteVertex + 1;
@@ -299,7 +299,7 @@ void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, cons
 
 	directX_->GetcommandList().Get()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
 }
-void MyEngine::MakeVertexBufferViewSprite()
+void Mesh::MakeVertexBufferViewSprite()
 {
 	//リソースの先頭のアドレス
 	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
@@ -308,7 +308,7 @@ void MyEngine::MakeVertexBufferViewSprite()
 	//1頂点あたりのアドレス
 	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
 }
-void MyEngine::MakeIndexBufferViewSprite()
+void Mesh::MakeIndexBufferViewSprite()
 {
 	//リソース先頭アドレス
 	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
@@ -319,7 +319,7 @@ void MyEngine::MakeIndexBufferViewSprite()
 }
 #pragma endregion スプライト
 #pragma region Sphere
-void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
+void Mesh::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
 {
 	vertexResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
 	indexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
@@ -412,7 +412,7 @@ void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, con
 
 	directX_->GetcommandList().Get()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
 }
-void MyEngine::MakeVertexBufferViewSphere()
+void Mesh::MakeVertexBufferViewSphere()
 {
 	//リソースの先頭のアドレス
 	vertexBufferViewSphere.BufferLocation = vertexResourceSphere.Get()->GetGPUVirtualAddress();
@@ -421,7 +421,7 @@ void MyEngine::MakeVertexBufferViewSphere()
 	//1頂点あたりのアドレス
 	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
 }
-void MyEngine::MakeIndexBufferViewSphere()
+void Mesh::MakeIndexBufferViewSphere()
 {
 	//リソース先頭アドレス
 	indexBufferViewSphere.BufferLocation = indexResourceSphere.Get()->GetGPUVirtualAddress();
@@ -432,7 +432,7 @@ void MyEngine::MakeIndexBufferViewSphere()
 }
 #pragma endregion 球
 #pragma region Box
-void MyEngine::DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index)
+void Mesh::DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index)
 {
 #pragma region 
 	int BoxIndex = kMaxBoxVertex + 1;
@@ -609,7 +609,7 @@ void MyEngine::DrawBox(const float& width, const float& hight, const float& dept
 	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
 }
 
-void MyEngine::MakeVertexBufferViewBox()
+void Mesh::MakeVertexBufferViewBox()
 {
 	//リソースの先頭のアドレス
 	vertexBufferViewBox.BufferLocation = vertexResourceBox.Get()->GetGPUVirtualAddress();
@@ -618,7 +618,7 @@ void MyEngine::MakeVertexBufferViewBox()
 	//1頂点あたりのアドレス
 	vertexBufferViewBox.StrideInBytes = sizeof(VertexData);
 }
-void MyEngine::MakeIndexBufferViewBox()
+void Mesh::MakeIndexBufferViewBox()
 {
 	//リソース先頭アドレス
 	indexBufferViewBox.BufferLocation = indexResourceBox.Get()->GetGPUVirtualAddress();
@@ -629,7 +629,7 @@ void MyEngine::MakeIndexBufferViewBox()
 }
 #pragma endregion ボックス
 #pragma region obj
-void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
+void Mesh::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
 {
 	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
 	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
@@ -660,7 +660,7 @@ void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,con
 
 	directX_->GetcommandList().Get()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
 }
-ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
+ModelData Mesh::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
 	ModelData modelData;//構築するモデルデータ
 	std::vector<Vector4>positions;//位置　vを保存
@@ -735,7 +735,7 @@ ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::str
 	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
 	return modelData;
 }
-MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
+MaterialData Mesh::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
 {
 	MaterialData materialData;//構築するMaterialData
 	std::string line;//ファイルから読んだ1行を格納するもの
@@ -758,7 +758,7 @@ MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath
 }
 #pragma endregion obj読み込み
 #pragma region Texture
-int MyEngine::LoadTexture(const std::string& filePath)
+int Mesh::LoadTexture(const std::string& filePath)
 {
 	int SpriteIndex= kMaxTexture+1;
 	for (int i = 0; i < kMaxTexture;++i) {
@@ -801,7 +801,7 @@ int MyEngine::LoadTexture(const std::string& filePath)
 
 
 
-DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
+DirectX::ScratchImage Mesh::ImageFileOpen(const std::string& filePath)
 {
 	//テクスチャファイルを読み込みプログラムで扱えるようにする
 	DirectX::ScratchImage image{};
@@ -815,7 +815,7 @@ DirectX::ScratchImage MyEngine::ImageFileOpen(const std::string& filePath)
 	return mipImage;
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata)
+Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device> device, const DirectX::TexMetadata& metadata)
 {
 	//metadataを基にResourceの設定
 	D3D12_RESOURCE_DESC resourceDesc{};
@@ -845,7 +845,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateTextureResource(Microsoft
 }
 
 [[nodiscard]]
-Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages)
+Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::UploadTextureData(Microsoft::WRL::ComPtr<ID3D12Resource> texture, const DirectX::ScratchImage& mipImages)
 {
 	std::vector<D3D12_SUBRESOURCE_DATA>subresources;
 	DirectX::PrepareUpload(directX_->GetDevice().Get(), mipImages.GetImages(), mipImages.GetImageCount(), mipImages.GetMetadata(), subresources);
@@ -868,7 +868,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::UploadTextureData(Microsoft::WR
 #pragma endregion テクスチャ
 
 
-Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateBufferResource(size_t sizeInBytes)
+Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateBufferResource(size_t sizeInBytes)
 {
 	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -886,13 +886,13 @@ Microsoft::WRL::ComPtr<ID3D12Resource> MyEngine::CreateBufferResource(size_t siz
 	assert(SUCCEEDED(hr));
 	return Resource;
 }
-D3D12_CPU_DESCRIPTOR_HANDLE MyEngine::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>descriptorHeap, uint32_t descriptorSize, uint32_t index)
+D3D12_CPU_DESCRIPTOR_HANDLE Mesh::GetCPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_CPU_DESCRIPTOR_HANDLE handleCPU = descriptorHeap->GetCPUDescriptorHandleForHeapStart();
 	handleCPU.ptr += (descriptorSize*index);
 	return handleCPU;
 }
-D3D12_GPU_DESCRIPTOR_HANDLE MyEngine::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index)
+D3D12_GPU_DESCRIPTOR_HANDLE Mesh::GetGPUDescriptorHandle(Microsoft::WRL::ComPtr<ID3D12DescriptorHeap> descriptorHeap, uint32_t descriptorSize, uint32_t index)
 {
 	D3D12_GPU_DESCRIPTOR_HANDLE handleGPU = descriptorHeap->GetGPUDescriptorHandleForHeapStart();
 	handleGPU.ptr += (descriptorSize * index);

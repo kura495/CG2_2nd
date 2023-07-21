@@ -1,6 +1,6 @@
 #include"WinApp.h"
 #include"DirectXCommon.h"
-#include"MyEngine.h"
+#include"Mesh.h"
 #include"Scene\GameScene.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//COMの初期化
@@ -14,12 +14,12 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX
 	DirectXCommon* directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
-	MyEngine* myEngine = new MyEngine();
-	myEngine->Initialize(directX, kClientWidth, kClientHeight);
+	Mesh* mesh_ = new Mesh();
+	mesh_->Initialize(directX, kClientWidth, kClientHeight);
 
 	MSG msg{};
 	GameScene* gameScene = new GameScene();
-	gameScene->Initialize(directX,myEngine,winApp, kClientWidth, kClientHeight);
+	gameScene->Initialize(directX, mesh_,winApp, kClientWidth, kClientHeight);
 
 	while (msg.message != WM_QUIT) {
 		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE)) {
