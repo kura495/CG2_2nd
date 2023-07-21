@@ -16,6 +16,7 @@ void GamePlayState::Initialize()
 	camera_ = new Camera();
 	camera_->Initialize(1280, 720);
 	myEngine = MyEngine::GetInstance();
+	input = Input::GetInstance();
 	//リソースを作る
 	UV = myEngine->LoadTexture("resources/uvChecker.png");
 	Ball = myEngine->LoadTexture("resources/monsterBall.png");
@@ -24,8 +25,10 @@ void GamePlayState::Initialize()
 
 void GamePlayState::Update()
 {
+	input->Update();
+	keys = input->GetAllKey();
+	preKeys = input->GetAllPreKey();
 	camera_->Update();
-	
 }
 
 void GamePlayState::Draw()
@@ -35,6 +38,10 @@ void GamePlayState::Draw()
 	myEngine->DrawSprite(LeftTop[0], LeftBottom[0], RightTop[0], RightBottom[0], Color[0], UV);
 	myEngine->DrawSphere(sphere, camera_->transformationMatrixData,Color[0], SphereTexture);
 	myEngine->DrawModel(modelData,{0,0,0}, camera_->transformationMatrixData,Color[0]);
+	if (keys[DIK_0]!=0&&preKeys[DIK_0]==0) {
+		OutputDebugStringA("Hit 0\n");
+	}
+	
 	//描画ここまで
 	myEngine->VertexReset();
 }

@@ -1,9 +1,14 @@
-#pragma once
+﻿#pragma once
 #include"IgameState.h"
 #include"Base/MyEngine.h"
 #include"GameObject/Camera/Camera.h"
 #include"IncludeStruct/Sphere.h"
 #include"IncludeStruct/ModelData.h"
+#define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
+#include<dinput.h>
+#pragma comment(lib,"dinput8.lib")
+#pragma comment(lib,"dxguid.lib")
+#include"Input/Input.h"
 class GamePlayState :public GameState
 {
 public:
@@ -71,4 +76,7 @@ private:
 		{0.0f,0.0f,10.0f},
 	};
 	ModelData modelData;
+	Input* input = nullptr;
+	std::array<BYTE, 256> keys;
+	std::array<BYTE, 256> preKeys;
 };

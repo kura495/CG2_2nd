@@ -1,5 +1,11 @@
 ﻿#include"Input.h"
 
+Input* Input::GetInstance()
+{
+	static Input instance;
+	return &instance;
+}
+
 void Input::Initialize(WinApp*winApp_){
 	//DirectInputのオブジェクトを作成
 	hr = DirectInput8Create(winApp_->GetHINSTANCE(),DIRECTINPUT_VERSION,IID_IDirectInput8,(void**)&directInput,nullptr);
@@ -17,13 +23,10 @@ void Input::Initialize(WinApp*winApp_){
 
 void Input::Update()
 {
+	preKey = key;
 	//キーボード情報の取得開始
 	keyboard->Acquire();
+	key = {};
 	//全キーの入力状態を取得する
-	BYTE key[256] = {};
-	keyboard->GetDeviceState(sizeof(key),key);
-	if (key[DIK_0]) {
-		OutputDebugStringA("Hit 0\n");
-	}
-	
+	keyboard->GetDeviceState(sizeof(key), key.data());
 }
