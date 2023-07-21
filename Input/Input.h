@@ -12,9 +12,6 @@ public:
 	static Input* GetInstance();
 	void Initialize(WinApp* winApp_);
 	void Update();
-
-	const std::array<BYTE, 256>& GetAllKey()const { return key; }
-	const std::array<BYTE, 256>& GetAllPreKey()const { return preKey; }
 	/// <summary>
 	/// 押した瞬間
 	/// </summary>
@@ -22,11 +19,17 @@ public:
 	/// <returns></returns>
 	bool pushKey(uint8_t keyNumber);
 	/// <summary>
-	/// 
+	/// 押している間
 	/// </summary>
 	/// <param name="keyNumber"></param>
 	/// <returns></returns>
-	bool pressKey(uint8_t keyNumber);
+	bool IspushKey(uint8_t keyNumber);
+	/// <summary>
+	/// 離した瞬間
+	/// </summary>
+	/// <param name="keyNumber"></param>
+	/// <returns></returns>
+	bool Key(uint8_t keyNumber);
 
 private:
 	HRESULT hr;
@@ -34,6 +37,5 @@ private:
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard = nullptr;
 	std::array<BYTE, 256> key;
 	std::array<BYTE, 256> preKey;
-
 };
 

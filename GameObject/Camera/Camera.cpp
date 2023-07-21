@@ -14,7 +14,6 @@ void Camera::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 
 void Camera::Update()
 {
-
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
 	Matrix4x4 cameraMatrix = MakeAffineMatrix(cameraTransform.scale, cameraTransform.rotate, cameraTransform.translate);
 	Matrix4x4 viewMatrix = Inverse(cameraMatrix);

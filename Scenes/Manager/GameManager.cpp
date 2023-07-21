@@ -42,6 +42,7 @@ void GameManager::Gameloop()
 		else {
 			imGuiManager->BeginFrame();
 			directX->PreView();
+			input->Update();
 			state[GameState::StateNo]->Update();
 			state[GameState::StateNo]->Draw();
 			imGuiManager->EndFrame();

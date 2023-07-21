@@ -30,3 +30,18 @@ void Input::Update()
 	//全キーの入力状態を取得する
 	keyboard->GetDeviceState(sizeof(key), key.data());
 }
+
+bool Input::pushKey(uint8_t keyNumber)
+{
+	if (key[keyNumber]!=0&&preKey[keyNumber]==0) {
+		return true;
+	}
+	return false;
+}
+bool Input::IspushKey(uint8_t keyNumber)
+{
+	if (preKey[keyNumber] != 0) {
+			return true;
+	}
+return false;
+}
