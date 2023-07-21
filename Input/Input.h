@@ -9,7 +9,7 @@ class Input
 {
 public:
 	void Initialize(WinApp* winApp_);
-
+	void Update();
 private:
 	HRESULT hr;
 	Microsoft::WRL::ComPtr<IDirectInput8>directInput = nullptr;

@@ -7,6 +7,7 @@
 #include"Scenes/State/GamePlayState.h"
 #include"Scenes/State/GameClearState.h"
 #include"Scenes/State/IgameState.h"
+#include"Input/Input.h"
 class GameManager
 {
 public:
@@ -28,7 +29,7 @@ private:
 	int32_t kClientWidth;
 	int32_t kClientHeight;
 	ImGuiManager* imGuiManager = nullptr;
-	
+	Input* input = nullptr;
 	MSG msg{};
 	//State
 	std::unique_ptr<GameState>state[GameStateMax];
