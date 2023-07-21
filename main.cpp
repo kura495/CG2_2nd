@@ -1,6 +1,6 @@
 #include"WinApp.h"
 #include"DirectX.h"
-#include"DrawEngine.h"
+#include"Mesh.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//ウィンドウクラス
 	WinApp* winApp = new WinApp();
@@ -11,10 +11,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX
 	DirectX* directX = new DirectX();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
-	DrawEngine* drawEngine[10];
+	Mesh* mesh[10];
 	for (int i = 0; i < 10; i++) {
-		drawEngine[i] = new DrawEngine();
-		drawEngine[i]->Initialize(directX);
+		mesh[i] = new Mesh();
+		mesh[i]->Initialize(directX);
 	}
 	MSG msg{};
 	Vector4 Left[10] = {
@@ -63,13 +63,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ゲームループ
 			directX->PreView();
 			for (int i = 0; i < 10; i++) {
-				drawEngine[i]->Draw(Left[i], Top[i], Right[i]);
+				mesh[i]->Draw(Left[i], Top[i], Right[i]);
 			}
 			directX->PostView();
 		}
 	}
 	for (int i = 0; i < 10; i++) {
-		drawEngine[i]->Release();
+		mesh[i]->Release();
 	}
 	
 	directX->Release();
