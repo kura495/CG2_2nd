@@ -1,11 +1,11 @@
-#pragma once
+ï»¿#pragma once
 #include<string>
 #include<sstream>
 #include<fstream>
 #include<cassert>
 /// <summary>
-	/// CSV‚ğ“Ç‚İ‚Ş
+	/// CSVã‚’èª­ã¿è¾¼ã‚€
 	/// </summary>
-	/// <param name="filename">ƒtƒ@ƒCƒ‹–¼</param>
+	/// <param name="filename">ãƒ•ã‚¡ã‚¤ãƒ«å</param>
 	/// <returns></returns>
 std::stringstream LoadCSVData(const std::string& filename);

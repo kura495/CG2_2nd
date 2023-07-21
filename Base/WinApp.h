@@ -14,10 +14,11 @@ public:
 	void Initialize(int32_t kClientWidth, int32_t kClientHeight);
 	
 	HWND GetHWND() const { return hwnd_; };
+	HINSTANCE GetHINSTANCE()const { return wc.hInstance; }
 
 private:
 	HWND hwnd_=nullptr;
-
+	WNDCLASS wc{};
 
 };
 
