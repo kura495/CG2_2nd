@@ -114,6 +114,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Scenes\State\GamePlayState.cpp" />
     <ClCompile Include="Scenes\State\GameTitleState.cpp" />
     <ClCompile Include="Utility\ImGuiManager.cpp" />
+    <ClCompile Include="Utility\LoadCSV.cpp" />
     <ClCompile Include="Utility\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +152,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Utility\CollisionConfig.h" />
     <ClInclude Include="Utility\CollisionManager.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
+    <ClInclude Include="Utility\LoadCSV.h" />
     <ClInclude Include="Utility\Log.h" />
   </ItemGroup>
   <ItemGroup>

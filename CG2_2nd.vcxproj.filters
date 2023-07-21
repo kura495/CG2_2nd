@@ -126,6 +126,9 @@
     <ClCompile Include="Scenes\State\GameTitleState.cpp">
       <Filter>ソース ファイル\Scenes\State</Filter>
     </ClCompile>
+    <ClCompile Include="Utility\LoadCSV.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -231,6 +234,9 @@
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Utility\CollisionManager.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\LoadCSV.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
   </ItemGroup>
