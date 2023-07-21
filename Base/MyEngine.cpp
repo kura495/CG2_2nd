@@ -178,7 +178,6 @@ void MyEngine::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4
 	//左下
 	vertexData[TriAngleIndex].position = Leftbottom;
 	vertexData[TriAngleIndex].texcoord = {0.0f,1.0f};
-	
 	//上
 	vertexData[TriAngleIndex+1].position = top;
 	vertexData[TriAngleIndex+1].texcoord = {0.5f,0.0f};
