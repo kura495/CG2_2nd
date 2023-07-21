@@ -1,5 +1,8 @@
 #pragma once
 #include<string>
+#include<sstream>
+#include<fstream>
+#include<cassert>
 /// <summary>
 	/// CSV‚ğ“Ç‚İ‚Ş
 	/// </summary>

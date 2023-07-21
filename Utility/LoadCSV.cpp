@@ -1,5 +1,5 @@
-#include"Lo"
-std::stringstream GameScene::LoadCSVData(const std::string& filename) {
+#include"LoadCSV.h"
+std::stringstream LoadCSVData(const std::string& filename) {
 	std::ifstream file;
 	file.open(filename);
 	assert(file.is_open());
