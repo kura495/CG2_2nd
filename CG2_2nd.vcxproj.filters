@@ -224,6 +224,15 @@
     <ClInclude Include="Scenes\State\IgameState.h">
       <Filter>ヘッダー ファイル\Scenes\State</Filter>
     </ClInclude>
+    <ClInclude Include="Utility\Collider.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\CollisionConfig.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\CollisionManager.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.VS.hlsl" />

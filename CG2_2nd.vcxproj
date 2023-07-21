@@ -147,6 +147,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Scenes\State\GamePlayState.h" />
     <ClInclude Include="Scenes\State\GameTitleState.h" />
     <ClInclude Include="Scenes\State\IgameState.h" />
+    <ClInclude Include="Utility\Collider.h" />
+    <ClInclude Include="Utility\CollisionConfig.h" />
+    <ClInclude Include="Utility\CollisionManager.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\Log.h" />
   </ItemGroup>
