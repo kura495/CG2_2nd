@@ -1,6 +1,6 @@
 #include"WinApp.h"
 #include"DirectX.h"
-#include"DrawEngine.h"
+#include"Mesh.h"
 #define RED Vector4{ 1.0f,0.0f,0.0f,1.0f };
 #define GREEN Vector4{ 0.0f,1.0f,0.0f,1.0f };
 #define BLUE Vector4{ 0.0f,0.0f,1.0f,1.0f };
@@ -16,10 +16,10 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//DirectX
 	DirectX* directX = new DirectX();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
-	DrawEngine* drawEngine[10];
+	Mesh* mesh[10];
 	for (int i = 0; i < 10; i++) {
-		drawEngine[i] = new DrawEngine();
-		drawEngine[i]->Initialize(directX);
+		mesh[i] = new Mesh();
+		mesh[i]->Initialize(directX);
 	}
 	MSG msg{};
 	const int kTriangleMax = 10;
@@ -81,13 +81,13 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 			//ゲームループ
 			directX->PreView();
 			for (int i = 0; i < kTriangleMax; i++) {
-				drawEngine[i]->Draw(Left[i], Top[i], Right[i], Color[i]);
+				mesh[i]->Draw(Left[i], Top[i], Right[i], Color[i]);
 			}
 			directX->PostView();
 		}
 	}
 	for (int i = 0; i < kTriangleMax; i++) {
-		drawEngine[i]->Release();
+		mesh[i]->Release();
 	}
 	
 	directX->Release();

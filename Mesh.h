@@ -1,6 +1,6 @@
 #pragma once
 #include"DirectX.h"
-class DrawEngine
+class Mesh
 {
 public:
 	void Initialize(DirectX* directX);

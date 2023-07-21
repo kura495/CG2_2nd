@@ -1,6 +1,6 @@
-#include "DrawEngine.h"
+#include "Mesh.h"
 
-void DrawEngine::Initialize(DirectX* directX)
+void Mesh::Initialize(DirectX* directX)
 {
 	directX_ = directX;
 	vertexResource = CreateBufferResource(sizeof(Vector4)*3);
@@ -9,7 +9,7 @@ void DrawEngine::Initialize(DirectX* directX)
 	
 }
 
-void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4 color)
+void Mesh::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4 color)
 {	
 	//左下
 	vertexData[0] = Leftbottom;
@@ -28,13 +28,13 @@ void DrawEngine::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom,Vector4
 	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
-void DrawEngine::Release()
+void Mesh::Release()
 {
 	vertexResource->Release();
 	materialResource->Release();
 }
 
-void DrawEngine::MakeVertexResource()
+void Mesh::MakeVertexResource()
 {
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
 	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
@@ -51,7 +51,7 @@ void DrawEngine::MakeVertexResource()
 	assert(SUCCEEDED(hr));
 }
 
-void DrawEngine::MakeVertexBufferView()
+void Mesh::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(Vector4) * 3;
@@ -59,7 +59,7 @@ void DrawEngine::MakeVertexBufferView()
 	vertexResource->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 }
 
-ID3D12Resource* DrawEngine::CreateBufferResource(size_t sizeInBytes)
+ID3D12Resource* Mesh::CreateBufferResource(size_t sizeInBytes)
 {
 	ID3D12Resource* Resource = nullptr;
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
