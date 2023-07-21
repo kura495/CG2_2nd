@@ -8,6 +8,7 @@
 #include<dinput.h>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
+#include"Audio/XAudio2.h"
 #include"Input/Input.h"
 class GamePlayState :public GameState
 {
@@ -35,9 +36,7 @@ private:
 	,{2.0f,-0.5f,0.0f,1.0f} };
 	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite
-
-	Vector4 LeftTop[2] =
-	{
+	Vector4 LeftTop[2] = {
 		{ 0.0f,0.0f,0.0f,1.0f },
 		{ 640.0f,0.0f,0.0f,1.0f }
 	};
@@ -45,13 +44,11 @@ private:
 		{ 0.0f,360.0f,0.0f,1.0f },
 		{ 640.0f,360.0f,0.0f,1.0f }
 	};
-
 	Vector4 RightTop[2] = {
 		{ 640.0f,0.0f,0.0f,1.0f },
 		{ 1280.0f,0.0f,0.0f,1.0f }
 
 	};
-
 	Vector4 RightBottom[2] = {
 		{ 640.0f,360.0f,0.0f,1.0f },
 		{ 1280.0f,360.0f,0.0f,1.0f }
@@ -79,4 +76,6 @@ private:
 	Input* input = nullptr;
 	std::array<BYTE, 256> keys;
 	std::array<BYTE, 256> preKeys;
+	XAudio2* Audio=nullptr;
+	int mokugyo;
 };

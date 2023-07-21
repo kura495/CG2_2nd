@@ -1,5 +1,10 @@
 #include"XAudio2.h"
-void MyXAudio2::Initialize() { 
+XAudio2* XAudio2::GetInstance()
+{
+	static XAudio2 instance;
+	return &instance;
+}
+void XAudio2::Initialize() {
 	hr=XAudio2Create(&XAudioInterface,0,XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	hr = XAudioInterface->CreateMasteringVoice(&pMasteringVoice);
@@ -46,7 +51,7 @@ void MyXAudio2::Initialize() {
 	// Assuming pVoice sends to pMasteringVoice
 }
 
-int MyXAudio2::LoadAudio(const wchar_t* filePath) { 
+int XAudio2::LoadAudio(const wchar_t* filePath) {
 	//位置決め
 #pragma region Index
 	int AudioIndex = kMaxAudio + 1;
@@ -177,7 +182,7 @@ int MyXAudio2::LoadAudio(const wchar_t* filePath) {
 		return AudioIndex;
 }
 
-void MyXAudio2::Release() { 
+void XAudio2::Release() {
 	
 	for (int i=0;i<kMaxAudio;i++) {
 		if (pSourceVoice[i]) {
@@ -195,7 +200,7 @@ void MyXAudio2::Release() {
 	CoUninitialize();
 }
 
-void MyXAudio2::Play(int AudioIndex,float AudioVolume,int pan) { 
+void XAudio2::Play(int AudioIndex,float AudioVolume,int pan) {
 	// pan of -1.0 indicates all left speaker, 
 // 1.0 is all right speaker, 0.0 is split between left and right
 	right = 0;
@@ -220,4 +225,4 @@ void MyXAudio2::Play(int AudioIndex,float AudioVolume,int pan) {
 	pSourceVoice[AudioIndex]->Start(0);
 }
 
-void MyXAudio2::Log(const std::string& message) { OutputDebugStringA(message.c_str()); }
+void XAudio2::Log(const std::string& message) { OutputDebugStringA(message.c_str()); }

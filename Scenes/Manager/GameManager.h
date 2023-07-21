@@ -7,6 +7,7 @@
 #include"Scenes/State/GamePlayState.h"
 #include"Scenes/State/GameClearState.h"
 #include"Scenes/State/IgameState.h"
+#include"Audio/XAudio2.h"
 #include"Input/Input.h"
 class GameManager
 {
@@ -30,6 +31,7 @@ private:
 	int32_t kClientHeight;
 	ImGuiManager* imGuiManager = nullptr;
 	Input* input = nullptr;
+	XAudio2* Audio = nullptr;
 	MSG msg{};
 	//State
 	std::unique_ptr<GameState>state[GameStateMax];

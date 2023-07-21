@@ -28,9 +28,9 @@ struct SoundData {
 	//バッファのサイズ
 	unsigned int bufferSize;
 };
-class MyXAudio2 {
+class XAudio2 {
 public:
-
+	static XAudio2* GetInstance();
 	void Initialize();
 	int LoadAudio(const wchar_t* filePath);
 	void Release();

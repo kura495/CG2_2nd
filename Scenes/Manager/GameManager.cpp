@@ -12,11 +12,16 @@ void GameManager::Initialize()
 	directX = new DirectXCommon();
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
 	//Engine
-	myEngine =MyEngine::GetInstance();
+	myEngine = MyEngine::GetInstance();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
-
+	//Audio
+	Audio = XAudio2::GetInstance();
+	Audio->Initialize();
+	//Input
 	input = Input::GetInstance();
 	input->Initialize(winApp);
+
+
 	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);

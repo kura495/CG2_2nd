@@ -17,10 +17,13 @@ void GamePlayState::Initialize()
 	camera_->Initialize(1280, 720);
 	myEngine = MyEngine::GetInstance();
 	input = Input::GetInstance();
+	Audio = XAudio2::GetInstance();
 	//リソースを作る
+	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	UV = myEngine->LoadTexture("resources/uvChecker.png");
 	Ball = myEngine->LoadTexture("resources/monsterBall.png");
 	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
+	
 }
 
 void GamePlayState::Update()
@@ -29,6 +32,7 @@ void GamePlayState::Update()
 	keys = input->GetAllKey();
 	preKeys = input->GetAllPreKey();
 	camera_->Update();
+	Audio->Play(mokugyo,0.1f,0);
 }
 
 void GamePlayState::Draw()
