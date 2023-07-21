@@ -9,12 +9,50 @@ void Debug::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 
 void Debug::Update()
 {
+#pragma region rotation
 	if (input->IspushKey(DIK_A)) {
 		const float speed = -0.5f;
 		Vector3 rotate{ speed,0,0 };
 		rotation_ = Add(rotation_, rotate);
 	}
-
+	else if (input->IspushKey(DIK_D)) {
+		const float speed = 0.5f;
+		Vector3 rotate{ speed,0,0 };
+		rotation_ = Add(rotation_, rotate);
+	}
+	if (input->IspushKey(DIK_W)) {
+		const float speed = 0.5f;
+		Vector3 rotate{ 0,speed,0 };
+		rotation_ = Add(rotation_, rotate);
+	}
+	else if (input->IspushKey(DIK_S)) {
+		const float speed = -0.5f;
+		Vector3 rotate{ 0,speed,0 };
+		rotation_ = Add(rotation_, rotate);
+	}
+#pragma endregion 回転
+#pragma region translation_
+	if (input->IspushKey(DIK_LEFT)) {
+		const float speed = -0.5f;
+		Vector3 translate{ speed,0,0 };
+		translation_ = Add(translation_, translate);
+	}
+	else if (input->IspushKey(DIK_RIGHT)) {
+		const float speed = 0.5f;
+		Vector3 translate{ speed,0,0 };
+		translation_ = Add(translation_, translate);
+	}
+	if (input->IspushKey(DIK_UP)) {
+		const float speed = -0.5f;
+		Vector3 translate{ 0,speed,0 };
+		translation_ = Add(translation_, translate);
+	}
+	else if (input->IspushKey(DIK_DOWN)) {
+		const float speed = 0.5f;
+		Vector3 translate{ 0,speed,0 };
+		translation_ = Add(translation_, translate);
+	}
+#pragma endregion 移動
 	MatrixUpdate();
 
 }

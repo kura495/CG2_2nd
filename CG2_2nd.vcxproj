@@ -111,6 +111,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="GameObject\Camera\DebugCamera.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math\MatrixCalc.cpp" />
+    <ClCompile Include="math\VectorCalc.cpp" />
     <ClCompile Include="Scenes\Manager\GameManager.cpp" />
     <ClCompile Include="Scenes\State\GameClearState.cpp" />
     <ClCompile Include="Scenes\State\GamePlayState.cpp" />
@@ -118,7 +120,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Utility\ImGuiManager.cpp" />
     <ClCompile Include="Utility\LoadCSV.cpp" />
     <ClCompile Include="Utility\Log.cpp" />
-    <ClCompile Include="VectorCalc.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Audio\XAudio2.h" />
@@ -149,6 +150,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="Input\Input.h" />
     <ClInclude Include="math\MatrixCalc.h" />
+    <ClInclude Include="math\VectorCalc.h" />
     <ClInclude Include="Scenes\Manager\GameManager.h" />
     <ClInclude Include="Scenes\State\GameClearState.h" />
     <ClInclude Include="Scenes\State\GamePlayState.h" />
@@ -160,7 +162,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\LoadCSV.h" />
     <ClInclude Include="Utility\Log.h" />
-    <ClInclude Include="VectorCalc.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">

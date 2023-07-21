@@ -3,6 +3,7 @@
 #include"includeStruct/Matrix4x4.h"
 #include"includeStruct/Transform.h"
 #include"Math/MatrixCalc.h"
+#include"Math/VectorCalc.h"
 #include"Input/Input.h"
 class Debug
 {

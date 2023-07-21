@@ -147,7 +147,10 @@
     <ClCompile Include="GameObject\Camera\DebugCamera.cpp">
       <Filter>ソース ファイル\GameObject\Camera</Filter>
     </ClCompile>
-    <ClCompile Include="VectorCalc.cpp">
+    <ClCompile Include="math\VectorCalc.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="math\MatrixCalc.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
   </ItemGroup>
@@ -269,8 +272,8 @@
     <ClInclude Include="GameObject\Camera\DebugCamera.h">
       <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="VectorCalc.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="math\VectorCalc.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
