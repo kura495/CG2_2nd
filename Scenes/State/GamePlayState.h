@@ -4,12 +4,13 @@
 #include"GameObject/Camera/Camera.h"
 #include"IncludeStruct/Sphere.h"
 #include"IncludeStruct/ModelData.h"
+#include"Audio/XAudio2.h"
+#include"Input/Input.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include<dinput.h>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
-#include"Audio/XAudio2.h"
-#include"Input/Input.h"
+
 class GamePlayState :public GameState
 {
 public:

@@ -18,7 +18,8 @@ void Input::Initialize(WinApp*winApp_){
 	assert(SUCCEEDED(hr));
 	//排他制御レベルのセット
 	hr = keyboard->SetCooperativeLevel(winApp_->GetHWND(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
-
+	key = {};
+	preKey = {};
 }
 
 void Input::Update()

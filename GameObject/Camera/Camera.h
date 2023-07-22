@@ -1,27 +1,45 @@
-#pragma once
+﻿#pragma once
 #include"Math/MatrixCalc.h"
+#include"Math/VectorCalc.h"
 #include"IncludeStruct/Transform.h"
 #include"IncludeStruct/Vector3.h"
 #include"Utility/ImGuiManager.h"
+#include"Input/Input.h"
+
 class Camera
 {
 public:
 	void Initialize(int32_t kClientWidth, int32_t kClientHeight);
 	void Update();
-	Matrix4x4 transformationMatrixData;
 	void ImGui();
+	const Matrix4x4& GetWorldMatrix() const { return transformationMatrixData; }
+#ifdef _DEBUG
+	void DebugCamera(bool Flag) {
+		DebucCameraFlag = Flag;
+}
+#endif // DEBUG
+
+	
 private:
-	Transform cameraTransform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,-10.0f},
-	};
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
+	// X,Y,Z軸回りのローカル回転角
+	Vector3 rotation_ = { 0,0,0 };
+	//Matrix4x4 matRot_;
+	// ローカル座標
+	Vector3 translation_ = { 0,0,-50 };
+	//　ビュー行列
+	Matrix4x4 ViewMatrix;
+	// 射影行列
+	Matrix4x4 ProjectionMatrix;
+	Matrix4x4 worldMatrix;
+	Input* input = nullptr;
+	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
+	Matrix4x4 transformationMatrixData;
+#ifdef _DEBUG
+	bool DebucCameraFlag = false;
+	void DebugCameraMove();
+#endif // DEBUG
+
 };
 

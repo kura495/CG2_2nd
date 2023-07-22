@@ -144,9 +144,6 @@
     <ClCompile Include="Input\Input.cpp">
       <Filter>ソース ファイル\Input</Filter>
     </ClCompile>
-    <ClCompile Include="GameObject\Camera\DebugCamera.cpp">
-      <Filter>ソース ファイル\GameObject\Camera</Filter>
-    </ClCompile>
     <ClCompile Include="math\VectorCalc.cpp">
       <Filter>ソース ファイル\Math</Filter>
     </ClCompile>
@@ -268,9 +265,6 @@
     </ClInclude>
     <ClInclude Include="Input\Input.h">
       <Filter>ヘッダー ファイル\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject\Camera\DebugCamera.h">
-      <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
     </ClInclude>
     <ClInclude Include="math\VectorCalc.h">
       <Filter>ヘッダー ファイル\Math</Filter>
