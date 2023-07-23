@@ -10,6 +10,8 @@ void Camera::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
+	matRot_ = MakeIdentity4x4();
+	input = Input::GetInstance();
 }
 void Camera::Update()
 {
@@ -21,7 +23,9 @@ void Camera::Update()
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
 #ifdef _DEBUG
-DebugCameraMove();
+	if (DebucCameraFlag) {
+		DebugCameraMove();
+	}
 #endif // _DEBUG
 
 	
@@ -48,52 +52,59 @@ void Camera::ImGui()
 void Camera::DebugCameraMove()
 {
 #pragma region rotation
-	if (DebucCameraFlag) {
-		if (input->IspushKey(DIK_A)) {
-			const float speed = -0.5f;
+		if (input->IspushKey(DIK_LEFT)) {
+			Matrix4x4 matRotDelta = MakeIdentity4x4();
+			const float speed = -0.05f;
+			Vector3 rotate{ 0,speed,0 };
+			rotation_ = Add(rotation_, rotate);
+		}
+		else if (input->IspushKey(DIK_RIGHT)) {
+			const float speed = 0.05f;
+			Vector3 rotate{ 0,speed,0 };
+			rotation_ = Add(rotation_, rotate);
+		}
+		if (input->IspushKey(DIK_UP)) {
+			const float speed = -0.05f;
 			Vector3 rotate{ speed,0,0 };
 			rotation_ = Add(rotation_, rotate);
+		}
+		else if (input->IspushKey(DIK_DOWN)) {
+			const float speed = 0.05f;
+			Vector3 rotate{ speed,0,0 };
+			rotation_ = Add(rotation_, rotate);
+		}
+#pragma endregion 回転
+#pragma region translation_
+		if (input->IspushKey(DIK_A)) {
+			const float speed = -0.5f;
+			Vector3 translate{ speed,0,0 };
+			translation_ = Add(translation_, translate);
 		}
 		else if (input->IspushKey(DIK_D)) {
 			const float speed = 0.5f;
-			Vector3 rotate{ speed,0,0 };
-			rotation_ = Add(rotation_, rotate);
+			Vector3 translate{ speed,0,0 };
+			translation_ = Add(translation_, translate);
 		}
 		if (input->IspushKey(DIK_W)) {
 			const float speed = 0.5f;
-			Vector3 rotate{ 0,speed,0 };
-			rotation_ = Add(rotation_, rotate);
+			Vector3 translate{ 0,speed,0 };
+			translation_ = Add(translation_, translate);
 		}
 		else if (input->IspushKey(DIK_S)) {
 			const float speed = -0.5f;
-			Vector3 rotate{ 0,speed,0 };
-			rotation_ = Add(rotation_, rotate);
-		}
-	}
-#pragma endregion 回転
-#pragma region translation_
-	if (DebucCameraFlag) {
-		if (input->IspushKey(DIK_LEFT)) {
-			const float speed = -0.5f;
-			Vector3 translate{ speed,0,0 };
-			translation_ = Add(translation_, translate);
-		}
-		else if (input->IspushKey(DIK_RIGHT)) {
-			const float speed = 0.5f;
-			Vector3 translate{ speed,0,0 };
-			translation_ = Add(translation_, translate);
-		}
-		if (input->IspushKey(DIK_UP)) {
-			const float speed = -0.5f;
 			Vector3 translate{ 0,speed,0 };
 			translation_ = Add(translation_, translate);
 		}
-		else if (input->IspushKey(DIK_DOWN)) {
+		if (input->IspushKey(DIK_E)) {
 			const float speed = 0.5f;
-			Vector3 translate{ 0,speed,0 };
+			Vector3 translate{ 0,0,speed };
 			translation_ = Add(translation_, translate);
 		}
-	}
+		else if (input->IspushKey(DIK_Q)) {
+			const float speed = -0.5f;
+			Vector3 translate{ 0,0,speed };
+			translation_ = Add(translation_, translate);
+		}
 #pragma endregion 移動
 }
 #endif // DEBUG

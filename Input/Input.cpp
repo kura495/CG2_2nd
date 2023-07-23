@@ -41,7 +41,7 @@ bool Input::pushKey(uint8_t keyNumber)
 }
 bool Input::IspushKey(uint8_t keyNumber)
 {
-	if (preKey[keyNumber] != 0) {
+	if (key[keyNumber] != 0) {
 			return true;
 	}
 return false;
