@@ -5,30 +5,27 @@ void Camera::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 	kClientWidth_= kClientWidth;
 	kClientHeight_= kClientHeight;
 	worldMatrix = MakeAffineMatrix({1,1,1},{0,0,0}, {0,0,0});
-	Matrix4x4 cameraMatrix = MakeAffineMatrix({1,1,1},rotation_,translation_);
+	Matrix4x4 cameraMatrix = MakeAffineMatrix({1,1,1}, GetmatRot(), translation_);
 	ViewMatrix = Inverse(cameraMatrix);
 	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
-	matRot_ = MakeIdentity4x4();
 	input = Input::GetInstance();
+	matRot_ = MakeIdentity4x4();
 }
 void Camera::Update()
 {
-
-	worldMatrix = MakeAffineMatrix({ 1,1,1 }, { 0,0,0 }, { 0,0,0 });
-	Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1,1,1 }, rotation_, translation_);
-	ViewMatrix = Inverse(cameraMatrix);
-	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
-	transformationMatrixData = worldViewProjectionMatrix;
 #ifdef _DEBUG
 	if (DebucCameraFlag) {
 		DebugCameraMove();
 	}
 #endif // _DEBUG
-
-	
+	worldMatrix = MakeAffineMatrix({ 1,1,1 }, { 0,0,0 }, { 0,0,0 });
+	Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1,1,1 }, {0,0,0}, translation_);
+	ViewMatrix = Inverse(cameraMatrix);
+	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
+	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
+	transformationMatrixData = worldViewProjectionMatrix;
 }
 void Camera::ImGui()
 {
@@ -47,32 +44,37 @@ void Camera::ImGui()
 
 	ImGui::End();
 }
+Vector3 Camera::GetmatRot()
+{
+	Vector3 result;
+	result.x = matRot_.m[1][1] * matRot_.m[1][2] * matRot_.m[2][1] * matRot_.m[2][2];
+	result.y = matRot_.m[1][0] * matRot_.m[1][2] * matRot_.m[2][0] * matRot_.m[2][2];
+	result.z = matRot_.m[0][0] * matRot_.m[0][1] * matRot_.m[1][0] * matRot_.m[1][1];
 
+	return result;
+}
 #ifdef _DEBUG
 void Camera::DebugCameraMove()
 {
 #pragma region rotation
-		if (input->IspushKey(DIK_LEFT)) {
-			Matrix4x4 matRotDelta = MakeIdentity4x4();
-			const float speed = -0.05f;
-			Vector3 rotate{ 0,speed,0 };
-			rotation_ = Add(rotation_, rotate);
-		}
-		else if (input->IspushKey(DIK_RIGHT)) {
-			const float speed = 0.05f;
-			Vector3 rotate{ 0,speed,0 };
-			rotation_ = Add(rotation_, rotate);
-		}
+		Matrix4x4 matRotDelta = MakeIdentity4x4();
 		if (input->IspushKey(DIK_UP)) {
 			const float speed = -0.05f;
-			Vector3 rotate{ speed,0,0 };
-			rotation_ = Add(rotation_, rotate);
+			matRotDelta = Multiply(matRotDelta, MakeRotateXMatrix(speed));
 		}
 		else if (input->IspushKey(DIK_DOWN)) {
 			const float speed = 0.05f;
-			Vector3 rotate{ speed,0,0 };
-			rotation_ = Add(rotation_, rotate);
+			matRotDelta = Multiply(matRotDelta, MakeRotateXMatrix(speed));
 		}
+		if (input->IspushKey(DIK_LEFT)) {
+			const float speed = -0.05f;
+			matRotDelta = Multiply(matRotDelta, MakeRotateYMatrix(speed));
+		}
+		else if (input->IspushKey(DIK_RIGHT)) {
+			const float speed = 0.05f;
+			matRotDelta = Multiply(matRotDelta, MakeRotateYMatrix(speed));
+		}
+		matRot_ = Multiply(matRotDelta,matRot_);
 #pragma endregion 回転
 #pragma region translation_
 		if (input->IspushKey(DIK_A)) {

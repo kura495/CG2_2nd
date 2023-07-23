@@ -24,7 +24,7 @@ private:
 	Vector3 rotation_ = { 0,0,0 };
 	// 累積回転行列
 	Matrix4x4 matRot_;
-	Vector3 GetmatRot_();
+	Vector3 GetmatRot();
 	// ローカル座標
 	Vector3 translation_ = { 0,0,-50 };
 	//　ビュー行列

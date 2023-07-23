@@ -20,8 +20,6 @@ void GameManager::Initialize()
 	//Input
 	input = Input::GetInstance();
 	input->Initialize(winApp);
-
-
 	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
@@ -30,7 +28,6 @@ void GameManager::Initialize()
 	state[PLAY]= std::make_unique<GamePlayState>();
 	state[PLAY]->Initialize();
 	GameState::StateNo = TITLE;
-
 }
 void GameManager::Gameloop()
 {
