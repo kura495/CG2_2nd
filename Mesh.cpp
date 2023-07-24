@@ -1,30 +1,28 @@
 #include "Mesh.h"
 
-void Mesh::Initialize(DirectX* directX)
+void Mesh::Initialize(DirectXCommon* directXCommon,Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
 {
-	directX_ = directX;
+	directX_ = directXCommon;
 	MakeVertexResource();
 	MakeVertexBufferView();
-}
-
-void Mesh::Draw(Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
-{	
 	//左下
 	vertexData[0] = Leftbottom;
 	//上
 	vertexData[1] = top;
 	//右下
 	vertexData[2] = Rightbottom;
+}
+void Mesh::Draw()
+{	
+	
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
-
 void Mesh::Release()
 {
 	vertexResource->Release();
 }
-
 void Mesh::MakeVertexResource()
 {
 	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
@@ -41,7 +39,6 @@ void Mesh::MakeVertexResource()
 	hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &vertexResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&vertexResource));
 	assert(SUCCEEDED(hr));
 }
-
 void Mesh::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource->GetGPUVirtualAddress();

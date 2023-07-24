@@ -12,27 +12,19 @@
 #include<dxgidebug.h>
 #pragma comment(lib,"dxguid.lib")
 
-class DirectX
+class DirectXCommon
 {
 public:
-
 	void Initialize(WinApp* Window,int32_t kClientWidth, int32_t kClientHeight);
-
 	void PreView();
-
 	void PostView();
-
 	void Release();
-
 	ID3D12GraphicsCommandList* GetcommandList()const { return commandList; }
-
 	ID3D12Device* GetDevice()const { return device; }
-
 private:
 	WinApp* winApp_;
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
-
 	HRESULT hr;
 	//TransitionBarrier
 	D3D12_RESOURCE_BARRIER barrier{};
@@ -84,8 +76,6 @@ private:
 	IDxcBlob* pixelShaderBlob = nullptr;
 	//PSO
 	ID3D12PipelineState* graphicsPipelineState = nullptr;
-	
-	
 	//ビューポート
 	D3D12_VIEWPORT viewport{};
 	//シザー

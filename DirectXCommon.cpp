@@ -1,8 +1,8 @@
-#include"DirectX.h"
+#include"DirectXCommon.h"
 
 
 
-void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
+void DirectXCommon::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
 {
 	winApp_ = winApp;
 	kClientWidth_ = kClientWidth;
@@ -75,7 +75,7 @@ void DirectX::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHei
 	MakeScissor();
 }
 
-void DirectX::PreView()
+void DirectXCommon::PreView()
 {
 	//コマンドを積む
 	//バックバッファのインデックス取得
@@ -103,7 +103,7 @@ void DirectX::PreView()
 	commandList->SetPipelineState(graphicsPipelineState);
 }
 
-void DirectX::PostView()
+void DirectXCommon::PostView()
 {
 	//RenderTargetからPresentにする
 	barrier.Transition.StateBefore = D3D12_RESOURCE_STATE_RENDER_TARGET;
@@ -131,7 +131,7 @@ void DirectX::PostView()
 
 }
 
-void DirectX::Release()
+void DirectXCommon::Release()
 {
 	CloseHandle(fenceEvent);
 	fence->Release();
@@ -168,7 +168,7 @@ void DirectX::Release()
 
 
 //プライベート関数
-void DirectX::MakeDXGIFactory()
+void DirectXCommon::MakeDXGIFactory()
 {
 	//DXGIファクトリーを作成
 	hr = CreateDXGIFactory(IID_PPV_ARGS(&dxgiFactory));
@@ -188,7 +188,7 @@ void DirectX::MakeDXGIFactory()
 	assert(useAdapter != nullptr);
 }
 
-void DirectX::MakeD3D12Device()
+void DirectXCommon::MakeD3D12Device()
 {
 	//機能レベル
 	D3D_FEATURE_LEVEL featureLevels[]{
@@ -211,7 +211,7 @@ void DirectX::MakeD3D12Device()
 	Log("Complete create D3D12Device!!!\n");
 }
 
-void DirectX::MakeCommandQueue()
+void DirectXCommon::MakeCommandQueue()
 {
 	//コマンドキューを生成
 	D3D12_COMMAND_QUEUE_DESC commandQueueDesc{};
@@ -221,7 +221,7 @@ void DirectX::MakeCommandQueue()
 
 }
 
-void DirectX::MakeCommandAllocator()
+void DirectXCommon::MakeCommandAllocator()
 {
 	//コマンドアロケータを作成
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&commandAllocator));
@@ -229,7 +229,7 @@ void DirectX::MakeCommandAllocator()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::MakeCommandList()
+void DirectXCommon::MakeCommandList()
 {
 	//コマンドリストを作成
 	hr = device->CreateCommandList(0, D3D12_COMMAND_LIST_TYPE_DIRECT, commandAllocator, nullptr, IID_PPV_ARGS(&commandList));
@@ -237,7 +237,7 @@ void DirectX::MakeCommandList()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::MakeSwapChain()
+void DirectXCommon::MakeSwapChain()
 {
 	//スワップチェーンを作成
 	DXGI_SWAP_CHAIN_DESC1 swapChainDesc{};
@@ -254,7 +254,7 @@ void DirectX::MakeSwapChain()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::MakeDescriptorHeap()
+void DirectXCommon::MakeDescriptorHeap()
 {
 	//ディスクリプタヒープの作成
 	D3D12_DESCRIPTOR_HEAP_DESC rtvDescriptorHeapDesc{};
@@ -284,7 +284,7 @@ void DirectX::MakeDescriptorHeap()
 	device->CreateRenderTargetView(swapChainResources[1], &rtvDesc, rtvHandles[1]);
 }
 
-void DirectX::MakeFence()
+void DirectXCommon::MakeFence()
 {
 	//Fenceを作る
 	hr = device->CreateFence(fenceValue, D3D12_FENCE_FLAG_NONE, IID_PPV_ARGS(&fence));
@@ -293,7 +293,7 @@ void DirectX::MakeFence()
 	assert(fenceEvent != nullptr);
 }
 
-void DirectX::MakeDXC()
+void DirectXCommon::MakeDXC()
 {
 	//dxCompiler初期化
 	hr = DxcCreateInstance(CLSID_DxcUtils, IID_PPV_ARGS(&dxcUtils));
@@ -306,7 +306,7 @@ void DirectX::MakeDXC()
 	assert(SUCCEEDED(hr));
 }
 
-IDxcBlob* DirectX::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* DirectXCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
 {
 	//ログにメッセージ
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n",filePath,profile)));
@@ -353,7 +353,7 @@ IDxcBlob* DirectX::CompileShader(const std::wstring& filePath, const wchar_t* pr
 	return shaderBlob;
 }
 
-void DirectX::MakeRootSignature()
+void DirectXCommon::MakeRootSignature()
 {
 	D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 	descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -367,7 +367,7 @@ void DirectX::MakeRootSignature()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::MakeInputLayOut()
+void DirectXCommon::MakeInputLayOut()
 {
 	inputElementDescs[0].SemanticName = "POSITION";
 	inputElementDescs[0].SemanticIndex = 0;
@@ -377,25 +377,25 @@ void DirectX::MakeInputLayOut()
 	inputLayoutDesc.NumElements = _countof(inputElementDescs);
 }
 
-void DirectX::MakeBlendState()
+void DirectXCommon::MakeBlendState()
 {
 	blendDesc.RenderTarget[0].RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
 }
 
-void DirectX::MakeRasterizarState()
+void DirectXCommon::MakeRasterizarState()
 {
 	rasterizerDesc.CullMode = D3D12_CULL_MODE_BACK;
 	rasterizerDesc.FillMode = D3D12_FILL_MODE_SOLID;
 }
 
-void DirectX::MakeShaderCompile()
+void DirectXCommon::MakeShaderCompile()
 {
 	vertexShaderBlob = CompileShader(L"Object3D.VS.hlsl", L"vs_6_0", dxcUtils, dxcCompiler, includeHandler);
 	assert(vertexShaderBlob != nullptr);
 	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
 }
 
-void DirectX::MakePipelineStateObject()
+void DirectXCommon::MakePipelineStateObject()
 {
 	D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 	graphicsPipelineStateDesc.pRootSignature = rootSignature;
@@ -416,7 +416,7 @@ void DirectX::MakePipelineStateObject()
 	assert(SUCCEEDED(hr));
 }
 
-void DirectX::MakeViewport()
+void DirectXCommon::MakeViewport()
 {
 	viewport.Width = (float)kClientWidth_;
 	viewport.Height = (float)kClientHeight_;
@@ -426,7 +426,7 @@ void DirectX::MakeViewport()
 	viewport.MaxDepth = 1.0f;
 }
 
-void DirectX::MakeScissor()
+void DirectXCommon::MakeScissor()
 {
 	scissorRect.left = 0;
 	scissorRect.right = kClientWidth_;
