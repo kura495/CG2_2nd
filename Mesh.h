@@ -3,9 +3,15 @@
 class Mesh
 {
 public:
-	void Initialize(DirectXCommon* directX,Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom);
+	void Initialize(DirectXCommon* directX);
 	void Draw();
 	void Release();
+	/// <summary>
+	/// 0=左下
+	/// 1=上
+	/// 2=右下
+	/// </summary>
+	Vector4* vertexData=nullptr;
 private:
 	HRESULT hr;
 	DirectXCommon* directX_=nullptr;
@@ -13,7 +19,7 @@ private:
 	ID3D12Resource* vertexResource = nullptr;
 	//バーテックスバッファビュー
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	Vector4* vertexData=nullptr;
+	
 	void MakeVertexResource();
 	void MakeVertexBufferView();
 };

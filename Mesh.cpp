@@ -1,16 +1,10 @@
 #include "Mesh.h"
 
-void Mesh::Initialize(DirectXCommon* directXCommon,Vector4 Leftbottom,Vector4 top,Vector4 Rightbottom)
+void Mesh::Initialize(DirectXCommon* directXCommon)
 {
 	directX_ = directXCommon;
 	MakeVertexResource();
 	MakeVertexBufferView();
-	//左下
-	vertexData[0] = Leftbottom;
-	//上
-	vertexData[1] = top;
-	//右下
-	vertexData[2] = Rightbottom;
 }
 void Mesh::Draw()
 {	
