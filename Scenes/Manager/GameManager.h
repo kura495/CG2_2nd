@@ -12,11 +12,12 @@
 class GameManager
 {
 public:
+	void Run();
 	
-	void Initialize();
-	void Gameloop();
 	
 private:
+	void Initialize();
+	void Gameloop();
 	//Base
 	enum GameStateNo {
 		TITLE,

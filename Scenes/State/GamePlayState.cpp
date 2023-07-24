@@ -25,16 +25,19 @@ void GamePlayState::Initialize()
 	Ball = myEngine->LoadTexture("resources/monsterBall.png");
 	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
 	modelData2 = myEngine->LoadObjFile("resources", "Base.obj");
-	camera_->DebugCamera(true);
 }
 void GamePlayState::Update()
 {
-	//if (input->IspushKey(DIK_1)) {
-	//
-	//}
-	//if (input->IspushKey(DIK_2)) {
-	//camera_->DebugCamera(false);
-	//}
+#ifdef _DEBUG
+if (input->IspushKey(DIK_1)) {
+		camera_->DebugCamera(true);
+	}
+	if (input->IspushKey(DIK_2)) {
+	camera_->DebugCamera(false);
+	}
+#endif // _DEBUG
+
+	
 
 	camera_->Update();
 	Audio->Play(mokugyo,0.1f,0);

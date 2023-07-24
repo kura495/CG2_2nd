@@ -1,4 +1,9 @@
 #include"GameManager.h"
+void GameManager::Run()
+{
+	Initialize();
+	Gameloop();
+}
 void GameManager::Initialize()
 {
 	//COMの初期化
