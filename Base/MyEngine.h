@@ -32,7 +32,7 @@ public:
 private:
 	const int kSubdivision = 16;
 
-	static const int kMaxTexture=3;
+	static const int kMaxTexture=10;
 	bool IsusedTextureIndex[kMaxTexture];
 
 	static const int kMaxTriAngle=3;

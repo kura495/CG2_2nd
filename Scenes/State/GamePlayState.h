@@ -60,6 +60,7 @@ private:
 	};
 	int UV;
 	int Ball;
+	int Base;
 	int Max;
 	bool useMonsterBall = true;
 	int SphereTexture = 0;
@@ -74,6 +75,8 @@ private:
 		{0.0f,0.0f,10.0f},
 	};
 	ModelData modelData;
+	ModelData modelData2;
+
 	Input* input = nullptr;
 	std::array<BYTE, 256> keys;
 	std::array<BYTE, 256> preKeys;

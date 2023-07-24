@@ -24,10 +24,18 @@ void GamePlayState::Initialize()
 	UV = myEngine->LoadTexture("resources/uvChecker.png");
 	Ball = myEngine->LoadTexture("resources/monsterBall.png");
 	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
+	modelData2 = myEngine->LoadObjFile("resources", "Base.obj");
 	camera_->DebugCamera(true);
 }
 void GamePlayState::Update()
 {
+	//if (input->IspushKey(DIK_1)) {
+	//
+	//}
+	//if (input->IspushKey(DIK_2)) {
+	//camera_->DebugCamera(false);
+	//}
+
 	camera_->Update();
 	Audio->Play(mokugyo,0.1f,0);
 }
@@ -38,6 +46,7 @@ void GamePlayState::Draw()
 	//myEngine->DrawSprite(LeftTop[0], LeftBottom[0], RightTop[0], RightBottom[0], Color[0], UV);
 	myEngine->DrawSphere(sphere, camera_->GetWorldMatrix(),Color[0], SphereTexture);
 	myEngine->DrawModel(modelData,{0,0,0}, camera_->GetWorldMatrix(),Color[0]);
+	myEngine->DrawModel(modelData2,{0,0,0}, camera_->GetWorldMatrix(),Color[0]);
 	if (input->IspushKey(DIK_0)) {
 		OutputDebugStringA("Hit 0\n");
 	}

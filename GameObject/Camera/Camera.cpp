@@ -4,14 +4,20 @@ void Camera::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 {
 	kClientWidth_= kClientWidth;
 	kClientHeight_= kClientHeight;
+	matRot_ = MakeIdentity4x4();
 	worldMatrix = MakeAffineMatrix({1,1,1},{0,0,0}, {0,0,0});
-	Matrix4x4 cameraMatrix = MakeAffineMatrix({1,1,1}, GetmatRot(), translation_);
+	/*Matrix4x4 cameraMatrix = MakeAffineMatrix({1,1,1},{0,0,0}, translation_);*/
+	Matrix4x4 cameraMatrix = MakeIdentity4x4();
+	cameraMatrix = Multiply(cameraMatrix, matRot_);
+	Matrix4x4 Move = MakeTranslateMatrix(translation_);
+	cameraMatrix = Multiply(cameraMatrix, Move);
 	ViewMatrix = Inverse(cameraMatrix);
+	ViewMatrix = Multiply(ViewMatrix, matRot_);
 	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
 	input = Input::GetInstance();
-	matRot_ = MakeIdentity4x4();
+	
 }
 void Camera::Update()
 {
@@ -21,8 +27,13 @@ void Camera::Update()
 	}
 #endif // _DEBUG
 	worldMatrix = MakeAffineMatrix({ 1,1,1 }, { 0,0,0 }, { 0,0,0 });
-	Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1,1,1 }, {0,0,0}, translation_);
+	/*Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1,1,1 }, {0,0,0}, translation_);*/
+	Matrix4x4 cameraMatrix = MakeIdentity4x4();
+	cameraMatrix = Multiply(cameraMatrix,matRot_);
+	Matrix4x4 Move = MakeTranslateMatrix(translation_);
+	cameraMatrix = Multiply(cameraMatrix, Move);
 	ViewMatrix = Inverse(cameraMatrix);
+	
 	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
@@ -47,8 +58,8 @@ void Camera::ImGui()
 Vector3 Camera::GetmatRot()
 {
 	Vector3 result;
-	result.x = matRot_.m[1][1] * matRot_.m[1][2] * matRot_.m[2][1] * matRot_.m[2][2];
-	result.y = matRot_.m[1][0] * matRot_.m[1][2] * matRot_.m[2][0] * matRot_.m[2][2];
+	result.x = matRot_.m[0][0] * matRot_.m[0][1]* matRot_.m[0][2];
+	result.y = matRot_.m[0][0] * matRot_.m[0][2] * matRot_.m[2][0] * matRot_.m[2][2];
 	result.z = matRot_.m[0][0] * matRot_.m[0][1] * matRot_.m[1][0] * matRot_.m[1][1];
 
 	return result;
