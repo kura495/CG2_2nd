@@ -1,18 +1,18 @@
 #pragma once
 #include"DirectXCommon.h"
-#include"MatrixCalc.h"
-#include"includeStruct/Matrix4x4.h"
-#include"includeStruct/Transform.h"
-#include"includeStruct/VertexData.h"
-#include"includeStruct/Sphere.h"
-#include"includeStruct/Material.h"
-#include"includeStruct/ModelData.h"
-#include"includeStruct/TransformationMatrix.h"
-#include"includeStruct/StructLight.h"
+#include"../Math/MatrixCalc.h"
+#include"../IncludeStruct/Matrix4x4.h"
+#include"../IncludeStruct/Transform.h"
+#include"../IncludeStruct/VertexData.h"
+#include"../IncludeStruct/Sphere.h"
+#include"../IncludeStruct/Material.h"
+#include"../IncludeStruct/ModelData.h"
+#include"../IncludeStruct/TransformationMatrix.h"
+#include"../IncludeStruct/StructLight.h"
 #include<numbers>
 #include<fstream>
 #include<sstream>
-#include"externals/DirectXTex/DirectXTex.h"
+#include"../externals/DirectXTex/DirectXTex.h"
 class MyEngine
 {
 public:

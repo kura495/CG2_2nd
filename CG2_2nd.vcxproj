@@ -96,7 +96,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Base\DirectXCommon.cpp" />
     <ClCompile Include="Base\MyEngine.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
-    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
     <ClCompile Include="externals\imgui\imgui_draw.cpp" />
@@ -104,17 +103,17 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="externals\imgui\imgui_impl_win32.cpp" />
     <ClCompile Include="externals\imgui\imgui_tables.cpp" />
     <ClCompile Include="externals\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="GameObject\Camera\Camera.cpp" />
     <ClCompile Include="GameScene.cpp" />
-    <ClCompile Include="ImGuiManager.cpp" />
-    <ClCompile Include="Log.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MatrixCalc.cpp" />
+    <ClCompile Include="Math\MatrixCalc.cpp" />
+    <ClCompile Include="Utility\ImGuiManager.cpp" />
+    <ClCompile Include="Utility\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\MyEngine.h" />
     <ClInclude Include="Base\WinApp.h" />
-    <ClInclude Include="Camera.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
     <ClInclude Include="externals\imgui\imgui_impl_dx12.h" />
@@ -123,8 +122,8 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="externals\imgui\imstb_rectpack.h" />
     <ClInclude Include="externals\imgui\imstb_textedit.h" />
     <ClInclude Include="externals\imgui\imstb_truetype.h" />
+    <ClInclude Include="GameObject\Camera\Camera.h" />
     <ClInclude Include="GameScene.h" />
-    <ClInclude Include="ImGuiManager.h" />
     <ClInclude Include="includeStruct\Material.h" />
     <ClInclude Include="includeStruct\Matrix3x3.h" />
     <ClInclude Include="includeStruct\Matrix4x4.h" />
@@ -137,8 +136,9 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\Vector3.h" />
     <ClInclude Include="includeStruct\Vector4.h" />
     <ClInclude Include="includeStruct\VertexData.h" />
-    <ClInclude Include="Log.h" />
-    <ClInclude Include="MatrixCalc.h" />
+    <ClInclude Include="Math\MatrixCalc.h" />
+    <ClInclude Include="Utility\ImGuiManager.h" />
+    <ClInclude Include="Utility\Log.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Object3d.PS.hlsl">

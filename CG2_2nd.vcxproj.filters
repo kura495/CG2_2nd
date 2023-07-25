@@ -16,30 +16,45 @@
     <Filter Include="imgui">
       <UniqueIdentifier>{d7caa169-3c67-4e07-897f-0d9115a5eac6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ヘッダー ファイル\includeStruct">
-      <UniqueIdentifier>{2678d0b7-2414-4687-b484-05a9d8ca8473}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\Base">
       <UniqueIdentifier>{577ef144-f3c9-4139-ab8f-e7721d7633b7}</UniqueIdentifier>
     </Filter>
     <Filter Include="ヘッダー ファイル\Base">
       <UniqueIdentifier>{3d0565c8-e62b-46d4-87b6-c948370c01d5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ヘッダー ファイル\IncludeStruct">
+      <UniqueIdentifier>{2678d0b7-2414-4687-b484-05a9d8ca8473}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Utility">
+      <UniqueIdentifier>{4c320701-3c24-4bfa-9765-854792d70062}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Math">
+      <UniqueIdentifier>{763f66a2-c708-43dd-8d09-ffe459961653}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Math">
+      <UniqueIdentifier>{494c2f08-b35b-4a99-b20e-f36178cbb6d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Utility">
+      <UniqueIdentifier>{300782ea-98ca-4eb6-84a4-50a83018e10f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject">
+      <UniqueIdentifier>{2be5aadb-2b73-471f-a72b-783c6e5cf91a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\GameObject\Camera">
+      <UniqueIdentifier>{33d0b1e3-3b7a-4328-b112-b027b2976e7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject">
+      <UniqueIdentifier>{cd1a09ac-ef6f-4285-bf99-db3671b925b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Camera">
+      <UniqueIdentifier>{d01e561a-2b42-4641-ba81-475b5be96f9f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Log.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="MatrixCalc.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Camera.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -63,9 +78,6 @@
     <ClCompile Include="externals\imgui\imgui_widgets.cpp">
       <Filter>imgui</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Base\DirectXCommon.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
@@ -75,18 +87,21 @@
     <ClCompile Include="Base\WinApp.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
+    <ClCompile Include="GameObject\Camera\Camera.cpp">
+      <Filter>ソース ファイル\GameObject\Camera</Filter>
+    </ClCompile>
+    <ClCompile Include="Math\MatrixCalc.cpp">
+      <Filter>ソース ファイル\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\ImGuiManager.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Utility\Log.cpp">
+      <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Log.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="MatrixCalc.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="GameScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Camera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -113,44 +128,53 @@
     <ClInclude Include="externals\imgui\imstb_truetype.h">
       <Filter>imgui</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="includeStruct\Material.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Matrix3x3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Matrix4x4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\ModelData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Sphere.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\StructLight.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Transform.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\TransformationMatrix.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Vector2.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Vector3.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\Vector4.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="includeStruct\VertexData.h">
-      <Filter>ヘッダー ファイル\includeStruct</Filter>
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Camera\Camera.h">
+      <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
+    </ClInclude>
+    <ClInclude Include="Math\MatrixCalc.h">
+      <Filter>ヘッダー ファイル\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\ImGuiManager.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="Utility\Log.h">
+      <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
     <ClInclude Include="Base\DirectXCommon.h">
       <Filter>ヘッダー ファイル\Base</Filter>

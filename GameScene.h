@@ -1,7 +1,7 @@
 #pragma once
-#include"MyEngine.h"
-#include"Camera.h"
-#include"ImGuiManager.h"
+#include"Base/MyEngine.h"
+#include"GameObject/Camera/Camera.h"
+#include"Utility/ImGuiManager.h"
 class GameScene
 {
 public:
