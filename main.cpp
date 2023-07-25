@@ -16,65 +16,7 @@ int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	directX->Initialize(winApp, kClientWidth, kClientHeight);
 	MyEngine* myEngine = new MyEngine();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
-	//MyEngine* drawEngine[10];
-	//for (int i = 0; i < 10; i++) {
-	//	drawEngine[i] = new MyEngine();
-	//	drawEngine[i]->Initialize(directX);
-	//}
-	//const int kTriangleMax = 10;
-	//Vector4 Left[kTriangleMax] = {
-	//	{-0.1f,0.9f,0.0f,1.0f},
-	//	{-0.1f,0.8f,0.0f,1.0f},
-	//	{-0.1f,0.7f,0.0f,1.0f},
-	//	{-0.1f,0.6f,0.0f,1.0f},
-	//	{-0.1f,0.5f,0.0f,1.0f},
-	//	{-0.1f,0.4f,0.0f,1.0f},
-	//	{-0.1f,0.3f,0.0f,1.0f},
-	//	{-0.1f,0.2f,0.0f,1.0f},
-	//	{-0.1f,0.1f,0.0f,1.0f},
-	//	{-0.1f,0.0f,0.0f,1.0f}
-	//};
-	//Vector4 Top[kTriangleMax] = {
-	//	{0.0f,1.0f,0.0f,1.0f},
-	//	{0.0f,0.9f,0.0f,1.0f},
-	//	{0.0f,0.8f,0.0f,1.0f},
-	//	{0.0f,0.7f,0.0f,1.0f},
-	//	{0.0f,0.6f,0.0f,1.0f},
-	//	{0.0f,0.5f,0.0f,1.0f},
-	//	{0.0f,0.4f,0.0f,1.0f},
-	//	{0.0f,0.3f,0.0f,1.0f},
-	//	{0.0f,0.2f,0.0f,1.0f},
-	//	{0.0f,0.1f,0.0f,1.0f}
-	//};
-	//Vector4 Right[kTriangleMax] = {
-	//	{0.1f,0.9f,0.0f,1.0f},
-	//	{0.1f,0.8f,0.0f,1.0f},
-	//	{0.1f,0.7f,0.0f,1.0f},
-	//	{0.1f,0.6f,0.0f,1.0f},
-	//	{0.1f,0.5f,0.0f,1.0f},
-	//	{0.1f,0.4f,0.0f,1.0f},
-	//	{0.1f,0.3f,0.0f,1.0f},
-	//	{0.1f,0.2f,0.0f,1.0f},
-	//	{0.1f,0.1f,0.0f,1.0f},
-	//	{0.1f,0.0f,0.0f,1.0f},
-	//};
-	//Vector4 Color[kTriangleMax] = {
-	//	{ 1.0f,0.0f,0.0f,1.0f },//RED
-	//	{ 0.0f,1.0f,0.0f,1.0f },//GREEN
-	//	{ 0.0f,0.0f,1.0f,1.0f },//BLUE
-	//	{ 1.0f,0.0f,0.0f,1.0f },
-	//	{ 0.0f,1.0f,0.0f,1.0f },
-	//	{ 0.0f,0.0f,1.0f,1.0f },
-	//	{ 1.0f,0.0f,0.0f,1.0f },
-	//	{ 0.0f,1.0f,0.0f,1.0f },
-	//	{ 0.0f,0.0f,1.0f,1.0f },
-	//	{ 1.0f,0.0f,0.0f,1.0f },
-	//};
-	//Transform transform{
-	//	{1.0f,1.0f,1.0f},
-	//	{0.0f,0.0f,0.0f},
-	//	{0.0f,0.0f,0.0f},
-	//};
+
 	MSG msg{};
 	GameScene* gameScene = new GameScene();
 	gameScene->Initialize(directX,myEngine,winApp, kClientWidth, kClientHeight);

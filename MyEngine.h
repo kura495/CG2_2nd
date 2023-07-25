@@ -1,14 +1,14 @@
 #pragma once
 #include"DirectXCommon.h"
 #include"MatrixCalc.h"
-#include"Matrix4x4.h"
-#include"Transform.h"
-#include"VertexData.h"
-#include"Sphere.h"
-#include"Material.h"
-#include"ModelData.h"
-#include"TransformationMatrix.h"
-#include"StructLight.h"
+#include"includeStruct/Matrix4x4.h"
+#include"includeStruct/Transform.h"
+#include"includeStruct/VertexData.h"
+#include"includeStruct/Sphere.h"
+#include"includeStruct/Material.h"
+#include"includeStruct/ModelData.h"
+#include"includeStruct/TransformationMatrix.h"
+#include"includeStruct/StructLight.h"
 #include<numbers>
 #include<fstream>
 #include<sstream>

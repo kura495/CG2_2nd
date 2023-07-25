@@ -119,40 +119,40 @@
     <ClInclude Include="ImGuiManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix4x4.h">
+    <ClInclude Include="includeStruct\Material.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Vector2.h">
+    <ClInclude Include="includeStruct\Matrix3x3.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Vector3.h">
+    <ClInclude Include="includeStruct\Matrix4x4.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Vector4.h">
+    <ClInclude Include="includeStruct\ModelData.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Sphere.h">
+    <ClInclude Include="includeStruct\Sphere.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Transform.h">
+    <ClInclude Include="includeStruct\StructLight.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="VertexData.h">
+    <ClInclude Include="includeStruct\Transform.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Material.h">
+    <ClInclude Include="includeStruct\TransformationMatrix.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="TransformationMatrix.h">
+    <ClInclude Include="includeStruct\Vector2.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="StructLight.h">
+    <ClInclude Include="includeStruct\Vector3.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="Matrix3x3.h">
+    <ClInclude Include="includeStruct\Vector4.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="ModelData.h">
+    <ClInclude Include="includeStruct\VertexData.h">
       <Filter>ヘッダー ファイル\includeStruct</Filter>
     </ClInclude>
   </ItemGroup>
