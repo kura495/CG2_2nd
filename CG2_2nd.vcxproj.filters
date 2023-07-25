@@ -49,18 +49,15 @@
     <Filter Include="ヘッダー ファイル\Struct">
       <UniqueIdentifier>{73939f7d-cb0a-4e43-8d59-dafcbde55a75}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Base">
+      <UniqueIdentifier>{de580844-7872-4a08-bce2-f7fec10e2958}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\Base">
+      <UniqueIdentifier>{3492788e-2df7-4c3e-ad3d-742995f0a824}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectXCommon.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="WinApp.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Mesh.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="externals\imgui\imgui.cpp">
@@ -99,14 +96,17 @@
     <ClCompile Include="math\MatrixCalc.cpp">
       <Filter>ソース ファイル\math</Filter>
     </ClCompile>
+    <ClCompile Include="Base\DirectXCommon.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\Mesh.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Base\WinApp.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="DirectXCommon.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="WinApp.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="externals\imgui\imconfig.h">
       <Filter>imgui</Filter>
     </ClInclude>
@@ -149,9 +149,6 @@
     <ClInclude Include="math\MatrixCalc.h">
       <Filter>ヘッダー ファイル\math</Filter>
     </ClInclude>
-    <ClInclude Include="Mesh.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="Struct\Material.h">
       <Filter>ヘッダー ファイル\Struct</Filter>
     </ClInclude>
@@ -187,6 +184,15 @@
     </ClInclude>
     <ClInclude Include="Struct\VertexData.h">
       <Filter>ヘッダー ファイル\Struct</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\DirectXCommon.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Mesh.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\WinApp.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

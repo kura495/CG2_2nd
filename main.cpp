@@ -1,7 +1,7 @@
-#include"WinApp.h"
-#include"DirectXCommon.h"
-#include"Mesh.h"
-#include"Scene\GameScene.h"
+#include"Base/WinApp.h"
+#include"Base/DirectXCommon.h"
+#include"Base/Mesh.h"
+#include"Scene/GameScene.h"
 int WINAPI WinMain(HINSTANCE, HINSTANCE, LPSTR, int) {
 	//COMの初期化
 	CoInitializeEx(0, COINIT_MULTITHREADED);
