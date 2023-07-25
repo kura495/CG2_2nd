@@ -1,11 +1,11 @@
 #pragma once
-#include"DirectXCommon.h"
-#include"Math\MatrixCalc.h"
-#include"IncludeStruct\Matrix4x4.h"
-#include"IncludeStruct\Transform.h"
-#include"IncludeStruct\VertexData.h"
+#include"Mesh.h"
+
+
+
+
 #include"IncludeStruct\Sphere.h"
-#include"IncludeStruct\Material.h"
+
 #include"IncludeStruct\ModelData.h"
 #include"IncludeStruct\TransformationMatrix.h"
 #include"IncludeStruct\StructLight.h"
@@ -35,24 +35,9 @@ private:
 	static const int kMaxTexture=10;
 	bool IsusedTextureIndex[kMaxTexture];
 
-	static const int kMaxTriAngle=3;
-	static const int kMaxVertex= kMaxTriAngle*3;
-	bool IsusedTriAngleIndex[kMaxTriAngle];
-
-	
-	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-	Transform uvTranformTriAngle{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f}
-	};
+
 	Transform transformSprite{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
@@ -77,24 +62,7 @@ private:
 	HRESULT hr;
 	DirectXCommon*directX_=nullptr;
 
-	#pragma region TriAngle
-	//バーテックスリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>
-	 vertexResource = nullptr;
-	//頂点データ
-	VertexData* vertexData = nullptr;
-	//バーテックスバッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//マテリアルリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
-	//色データ
-	Material* materialData = nullptr;
-	//WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = nullptr;
-	//WVPデータ
-	Matrix4x4* wvpData = nullptr;
-	void MakeVertexBufferView();
-	#pragma endregion 三角形
+
 	#pragma region sprite
 	static const int kMaxSprite=3;
 	static const int kMaxSpriteVertex= kMaxSprite *6;
@@ -194,7 +162,6 @@ private:
 	//Sprite用WVPデータ
 	TransformationMatrix* transformationMatrixDataObj = nullptr; 
 #pragma endregion obj
-
 
 	//テクスチャデータ
 	Microsoft::WRL::ComPtr<ID3D12Resource> textureResource[kMaxTexture] = { nullptr };
