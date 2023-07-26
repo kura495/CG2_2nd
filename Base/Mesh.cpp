@@ -50,12 +50,12 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const  uint32
 	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
-void Mesh::ImGui(const char* string)
+void Mesh::ImGui(const char* Title)
 {
 #pragma region TriAngleImGui
 	ImGui::ShowDemoWindow();
 
-	ImGui::Begin(string);
+	ImGui::Begin(Title);
 	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
 	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
 	transform.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };

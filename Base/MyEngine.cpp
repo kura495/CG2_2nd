@@ -12,38 +12,33 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	kClientHeight_ = WinApp::kClientHeight;
 	directX_ = directX;
 
-	/*#pragma region Sprite
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4);
-	materialResourceSprite = CreateBufferResource(sizeof(Material) * kMaxSprite);
-	transformationMatrixResourceSprite =CreateBufferResource(sizeof(TransformationMatrix));
-	MakeVertexBufferViewSprite();
-	indexResourceSprite =CreateBufferResource(sizeof(uint32_t)* kMaxSpriteVertex);
-	MakeIndexBufferViewSprite();
-	#pragma endregion スプライト
-	#pragma region Sphere
+	/*#pragma region Sphere
 	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
 	materialResourceSphere = CreateBufferResource(sizeof(Material));
 	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
 	indexResourceSphere = CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
 	MakeIndexBufferViewSphere();
-	#pragma endregion 球
-	#pragma region Box
+	#pragma endregion 球*/
+
+	/*#pragma region Box
 	vertexResourceBox = CreateBufferResource(sizeof(VertexData) * 24);
 	materialResourceBox = CreateBufferResource(sizeof(Material) * kMaxBox);
 	transformationMatrixResourceBox = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewBox();
 	indexResourceBox = CreateBufferResource(sizeof(uint32_t) * kMaxBoxVertex);
 	MakeIndexBufferViewBox();
-#pragma endregion ボックス
-	#pragma region Light
+#pragma endregion ボックス*/
+
+	/*#pragma region Light
 	directionalLightResource = CreateBufferResource(sizeof(DirectionalLight));
 	directionalLightResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&directionalLightData));
 	directionalLightData->color={ 1.0f,1.0f,1.0f,1.0f };
 	directionalLightData->direction = { 0.0f,-1.0f,0.0f };
 	directionalLightData->intensity = 1.0f;
-	#pragma endregion ライト
-	#pragma region obj
+	#pragma endregion ライト*/
+
+	/*#pragma region obj
 	materialResourceObj = CreateBufferResource(sizeof(Material));
 	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
 	#pragma endregion obj*/
@@ -51,24 +46,6 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 }
 void MyEngine::ImGui()
 {
-
-#pragma region SpriteImGui
-	
-	ImGui::Begin("Sprite");
-	float ImGuiScaleSprite[Vector3D] = { transformSprite.scale.x,transformSprite.scale.y ,transformSprite.scale.z };
-	ImGui::SliderFloat3("ScaleSprite", ImGuiScaleSprite, 1, 30, "%.3f");
-	transformSprite.scale = { ImGuiScaleSprite[x],ImGuiScaleSprite[y],ImGuiScaleSprite[z] };
-	float ImGuiRotateSprite[Vector3D] = { transformSprite.rotate.x,transformSprite.rotate.y ,transformSprite.rotate.z };
-	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, -7, 7, "%.3f");
-	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
-	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
-	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
-	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
-	ImGui::DragFloat2("UVTranslate", &uvTranformSprite.translate.x, 0.01f, -10.0f, 10.0f);
-	ImGui::DragFloat2("UVScale", &uvTranformSprite.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("UVRotate", &uvTranformSprite.rotate.z);
-	ImGui::End();
-#pragma endregion
 #pragma region SphereImGui
 	ImGui::Begin("Sphere");
 	float ImGuiScaleSphere[Vector3D] = { transformSphere.scale.x,transformSphere.scale.y ,transformSphere.scale.z };
@@ -110,111 +87,6 @@ void MyEngine::ImGui()
 	ImGui::End();
 #pragma endregion ライト
 }
-
-//#pragma region Sprite
-//void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
-//{
-//#pragma region 
-//	int SpriteIndex = kMaxSpriteVertex + 1;
-//	for (int i = 0; i < kMaxSprite; ++i) {
-//		if (IsusedSpriteIndex[i] == false) {
-//			SpriteIndex = (i * 6);
-//			IsusedSpriteIndex[i] = true;
-//			break;
-//		}
-//	}
-//	if (SpriteIndex < 0) {
-//		//0より少ない
-//		assert(false);
-//	}
-//	if (kMaxSpriteVertex < SpriteIndex) {
-//		//MaxSpriteより多い
-//		assert(false);
-//	}
-//#pragma endregion 位置決め
-//
-//	vertexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
-//	
-//	//左下
-//	vertexDataSprite[0].position = LeftBottom;
-//	vertexDataSprite[0].texcoord={0.0f,1.0f};
-//	//左上
-//	vertexDataSprite[1].position = LeftTop;
-//	vertexDataSprite[1].texcoord={0.0f,0.0f};
-//	//右下
-//	vertexDataSprite[2].position = RightBottom;
-//	vertexDataSprite[2].texcoord={1.0f,1.0f};
-//	//右上
-//	vertexDataSprite[3].position = RightTop;
-//	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
-//	//インデックスリソースにデータを書き込む
-//	indexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
-//
-//	//三角形1枚目
-//	indexDataSprite[SpriteIndex] = 0;
-//	indexDataSprite[SpriteIndex+1] = 1;
-//	indexDataSprite[SpriteIndex+2] = 2;
-//	//三角形2枚目
-//	indexDataSprite[SpriteIndex+3] = 1;
-//	indexDataSprite[SpriteIndex+4] = 3;
-//	indexDataSprite[SpriteIndex+5] = 2;
-//	
-//	
-//	//色の書き込み
-//	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-//	materialDataSprite->color = color;
-//	//ライティングをしない
-//	materialDataSprite->enableLighting = false;
-//	materialDataSprite->uvTransform = MakeIdentity4x4();
-//	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformSprite.scale);
-//	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
-//	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
-//	materialDataSprite->uvTransform = uvTransformMatrix;
-//	//WVPを書き込むためのアドレス取得
-//	transformationMatrixResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-//	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
-//	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-//	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
-//	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
-//	//
-//	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
-//	transformationMatrixDataSprite->World = MakeIdentity4x4();
-//
-//	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-//	
-//	//頂点
-//	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-//	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSprite);
-//	//色用のCBufferの場所を特定
-//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
-//	//WVP用のCBufferの場所を特定
-//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
-//	//テクスチャ
-//	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-//	//Light
-//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
-//
-//	directX_->GetcommandList()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
-//}
-//void MyEngine::MakeVertexBufferViewSprite()
-//{
-//	//リソースの先頭のアドレス
-//	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
-//	//使用する頂点サイズ
-//	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
-//	//1頂点あたりのアドレス
-//	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-//}
-//void MyEngine::MakeIndexBufferViewSprite()
-//{
-//	//リソース先頭アドレス
-//	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
-//	//使用するインデックスサイズ
-//	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t)* kMaxSpriteVertex;
-//	//インデックスはuint32_t
-//	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
-//}
-//#pragma endregion スプライト
 
 //#pragma region Sphere
 //void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)

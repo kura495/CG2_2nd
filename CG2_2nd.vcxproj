@@ -100,6 +100,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Base\DirectXCommon.cpp" />
     <ClCompile Include="Base\Mesh.cpp" />
     <ClCompile Include="Base\MyEngine.cpp" />
+    <ClCompile Include="Base\Sprite.cpp" />
     <ClCompile Include="Base\TextureManager.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -128,6 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\Mesh.h" />
     <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="Base\Sprite.h" />
     <ClInclude Include="Base\TextureManager.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />

@@ -7,6 +7,7 @@
 #include"Audio/XAudio2.h"
 #include"Input/Input.h"
 #include"Base/Mesh.h"
+#include"Base/Sprite.h"
 #include"Base/TextureManager.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include<dinput.h>
@@ -27,9 +28,11 @@ private:
 	Camera* camera_ = nullptr;
 	Mesh* mesh = nullptr;
 	Mesh* mesh2 = nullptr;
+	Sprite* sprite = nullptr;
+	Sprite* sprite2 = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	uint32_t TextureHundle;
-	uint32_t Monster;
+	uint32_t MonsterBall;
 
 	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite

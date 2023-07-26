@@ -14,13 +14,12 @@ public:
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
 
-	//void VertexReset();
-	//void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
-	//void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
-	//void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
-	//void DrawModel(const ModelData& modelData, const Vector3& position, const Matrix4x4& ViewMatrix, const Vector4& color);
-	//ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-	//MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
+	
+	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
+	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
+	void DrawModel(const ModelData& modelData, const Vector3& position, const Matrix4x4& ViewMatrix, const Vector4& color);
+	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
 
 private:
 	const int kSubdivision = 16;
@@ -31,16 +30,6 @@ private:
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
 
-	Transform transformSprite{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-	Transform uvTranformSprite{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f}
-	};
 	Transform transformSphere{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
@@ -55,34 +44,6 @@ private:
 	HRESULT hr;
 	DirectXCommon*directX_=nullptr;
 
-
-	#pragma region sprite
-	static const int kMaxSprite=3;
-	static const int kMaxSpriteVertex= kMaxSprite *6;
-	bool IsusedSpriteIndex[kMaxSprite];
-	//Sprite用頂点データ
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite = nullptr;
-	//Sprite用頂点データ
-	VertexData* vertexDataSprite = nullptr;
-	//Sprite用バーテックスバッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
-	//マテリアルリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite = nullptr;
-	//色データ
-	Material* materialDataSprite = nullptr;
-	//Sprite用WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSprite = nullptr;
-	//Sprite用WVPデータ
-	TransformationMatrix* transformationMatrixDataSprite = nullptr;
-	//Index用
-	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite = nullptr;
-	//Index用頂点データ
-	uint32_t* indexDataSprite = nullptr;
-	//Index用バッファビュー
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-	//void MakeVertexBufferViewSprite();
-	//void MakeIndexBufferViewSprite();
-	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSphere = nullptr;
@@ -156,9 +117,4 @@ private:
 	TransformationMatrix* transformationMatrixDataObj = nullptr; 
 #pragma endregion obj
 
-	
-
-#pragma region ImageLoad
-	
-#pragma endregion 画像読み込み
 };

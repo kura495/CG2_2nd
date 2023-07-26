@@ -1,19 +1,18 @@
 ﻿#pragma once
+#include"Base/DirectXCommon.h"
+#include"Base/TextureManager.h"
 #include"IncludeStruct/Transform.h"
-#include<wrl.h>
 #include"IncludeStruct/VertexData.h"
 #include"IncludeStruct/Material.h"
 #include"IncludeStruct/TransformationMatrix.h"
 #include"Math/MatrixCalc.h"
-#include"Base/DirectXCommon.h"
-#include"Base/TextureManager.h"
-#include<list>
+#include<wrl.h>
 class Mesh
 {
 public:
 	void Initialize();
 	void Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const uint32_t textureHandle);
-	void ImGui(const char* string);
+	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
