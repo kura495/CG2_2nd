@@ -1,7 +1,10 @@
 ﻿#include"Mesh.h"
-
+#include"Scenes/Manager/GameManager.h"
 void Mesh::Initialize()
 {
+	directX_ = DirectXCommon::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
+
 	vertexResource = CreateBufferResource(sizeof(VertexData)*3);
 	materialResource = CreateBufferResource(sizeof(Material));
 	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
@@ -18,7 +21,7 @@ void Mesh::Initialize()
 	vertexData[2].texcoord = { 1.0f,1.0f };
 }
 
-void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
+void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const  uint32_t textureHandle)
 {
 	//色を書き込むアドレスを取得
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
@@ -43,16 +46,16 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Ind
 	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(textureHandle));
 	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
-void Mesh::ImGui()
+void Mesh::ImGui(const char* string)
 {
 #pragma region TriAngleImGui
 	ImGui::ShowDemoWindow();
 
-	ImGui::Begin("TriAngle");
+	ImGui::Begin(string);
 	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
 	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
 	transform.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };
@@ -74,5 +77,24 @@ void Mesh::MakeVertexBufferView()
 	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(VertexData) * 3;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
+}
+
+Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateBufferResource(size_t sizeInBytes)
+{
+	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_RESOURCE_DESC ResourceDesc{};
+	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	ResourceDesc.Width = sizeInBytes;
+	ResourceDesc.Height = 1;
+	ResourceDesc.DepthOrArraySize = 1;
+	ResourceDesc.MipLevels = 1;
+	ResourceDesc.SampleDesc.Count = 1;
+	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//頂点リソースを作る
+	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
+	assert(SUCCEEDED(hr));
+	return Resource;
 }
 

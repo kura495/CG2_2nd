@@ -1,5 +1,5 @@
 #include "MyEngine.h"
-
+#include"Scenes/Manager/GameManager.h"
 MyEngine* MyEngine::GetInstance()
 {
 		static MyEngine instance;
@@ -12,7 +12,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	kClientHeight_ = WinApp::kClientHeight;
 	directX_ = directX;
 
-	#pragma region Sprite
+	/*#pragma region Sprite
 	vertexResourceSprite = CreateBufferResource(sizeof(VertexData)* 4);
 	materialResourceSprite = CreateBufferResource(sizeof(Material) * kMaxSprite);
 	transformationMatrixResourceSprite =CreateBufferResource(sizeof(TransformationMatrix));
@@ -46,7 +46,7 @@ void MyEngine::Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t 
 	#pragma region obj
 	materialResourceObj = CreateBufferResource(sizeof(Material));
 	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
-	#pragma endregion obj
+	#pragma endregion obj*/
 	
 }
 void MyEngine::ImGui()
@@ -110,548 +110,552 @@ void MyEngine::ImGui()
 	ImGui::End();
 #pragma endregion ライト
 }
-#pragma region Sprite
-void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
-{
-#pragma region 
-	int SpriteIndex = kMaxSpriteVertex + 1;
-	for (int i = 0; i < kMaxSprite; ++i) {
-		if (IsusedSpriteIndex[i] == false) {
-			SpriteIndex = (i * 6);
-			IsusedSpriteIndex[i] = true;
-			break;
-		}
-	}
-	if (SpriteIndex < 0) {
-		//0より少ない
-		assert(false);
-	}
-	if (kMaxSpriteVertex < SpriteIndex) {
-		//MaxSpriteより多い
-		assert(false);
-	}
-#pragma endregion 位置決め
 
-	vertexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
-	
-	//左下
-	vertexDataSprite[0].position = LeftBottom;
-	vertexDataSprite[0].texcoord={0.0f,1.0f};
-	//左上
-	vertexDataSprite[1].position = LeftTop;
-	vertexDataSprite[1].texcoord={0.0f,0.0f};
-	//右下
-	vertexDataSprite[2].position = RightBottom;
-	vertexDataSprite[2].texcoord={1.0f,1.0f};
-	//右上
-	vertexDataSprite[3].position = RightTop;
-	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
-	//インデックスリソースにデータを書き込む
-	indexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
+//#pragma region Sprite
+//void MyEngine::DrawSprite(const Vector4&LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index)
+//{
+//#pragma region 
+//	int SpriteIndex = kMaxSpriteVertex + 1;
+//	for (int i = 0; i < kMaxSprite; ++i) {
+//		if (IsusedSpriteIndex[i] == false) {
+//			SpriteIndex = (i * 6);
+//			IsusedSpriteIndex[i] = true;
+//			break;
+//		}
+//	}
+//	if (SpriteIndex < 0) {
+//		//0より少ない
+//		assert(false);
+//	}
+//	if (kMaxSpriteVertex < SpriteIndex) {
+//		//MaxSpriteより多い
+//		assert(false);
+//	}
+//#pragma endregion 位置決め
+//
+//	vertexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSprite));
+//	
+//	//左下
+//	vertexDataSprite[0].position = LeftBottom;
+//	vertexDataSprite[0].texcoord={0.0f,1.0f};
+//	//左上
+//	vertexDataSprite[1].position = LeftTop;
+//	vertexDataSprite[1].texcoord={0.0f,0.0f};
+//	//右下
+//	vertexDataSprite[2].position = RightBottom;
+//	vertexDataSprite[2].texcoord={1.0f,1.0f};
+//	//右上
+//	vertexDataSprite[3].position = RightTop;
+//	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
+//	//インデックスリソースにデータを書き込む
+//	indexResourceSprite.Get()->Map(0,nullptr,reinterpret_cast<void**>(&indexDataSprite));
+//
+//	//三角形1枚目
+//	indexDataSprite[SpriteIndex] = 0;
+//	indexDataSprite[SpriteIndex+1] = 1;
+//	indexDataSprite[SpriteIndex+2] = 2;
+//	//三角形2枚目
+//	indexDataSprite[SpriteIndex+3] = 1;
+//	indexDataSprite[SpriteIndex+4] = 3;
+//	indexDataSprite[SpriteIndex+5] = 2;
+//	
+//	
+//	//色の書き込み
+//	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
+//	materialDataSprite->color = color;
+//	//ライティングをしない
+//	materialDataSprite->enableLighting = false;
+//	materialDataSprite->uvTransform = MakeIdentity4x4();
+//	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformSprite.scale);
+//	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
+//	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
+//	materialDataSprite->uvTransform = uvTransformMatrix;
+//	//WVPを書き込むためのアドレス取得
+//	transformationMatrixResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
+//	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
+//	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
+//	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
+//	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
+//	//
+//	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
+//	transformationMatrixDataSprite->World = MakeIdentity4x4();
+//
+//	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	
+//	//頂点
+//	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
+//	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+//	//色用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
+//	//WVP用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
+//	//テクスチャ
+//	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+//	//Light
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
+//
+//	directX_->GetcommandList()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
+//}
+//void MyEngine::MakeVertexBufferViewSprite()
+//{
+//	//リソースの先頭のアドレス
+//	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
+//	//使用する頂点サイズ
+//	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
+//	//1頂点あたりのアドレス
+//	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+//}
+//void MyEngine::MakeIndexBufferViewSprite()
+//{
+//	//リソース先頭アドレス
+//	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
+//	//使用するインデックスサイズ
+//	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t)* kMaxSpriteVertex;
+//	//インデックスはuint32_t
+//	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
+//}
+//#pragma endregion スプライト
 
-	//三角形1枚目
-	indexDataSprite[SpriteIndex] = 0;
-	indexDataSprite[SpriteIndex+1] = 1;
-	indexDataSprite[SpriteIndex+2] = 2;
-	//三角形2枚目
-	indexDataSprite[SpriteIndex+3] = 1;
-	indexDataSprite[SpriteIndex+4] = 3;
-	indexDataSprite[SpriteIndex+5] = 2;
-	
-	
-	//色の書き込み
-	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-	materialDataSprite->color = color;
-	//ライティングをしない
-	materialDataSprite->enableLighting = false;
-	materialDataSprite->uvTransform = MakeIdentity4x4();
-	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformSprite.scale);
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
-	materialDataSprite->uvTransform = uvTransformMatrix;
-	//WVPを書き込むためのアドレス取得
-	transformationMatrixResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale,transformSprite.rotate,transformSprite.translate);
-	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(kClientWidth_), float(kClientHeight_), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite,Multiply(viewMatrixSprite,ProjectionMatrixSprite));
-	//
-	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
-	transformationMatrixDataSprite->World = MakeIdentity4x4();
+//#pragma region Sphere
+//void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
+//{
+//	vertexResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
+//	indexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
+//	//経度分割の1つ分の角度　φ 横
+//	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
+//	//緯度分割の1つ分の角度　θ 縦
+//	const float kLatEvery = float(std::numbers::pi) / float(kSubdivision);
+//	for (int latIndex = 0; latIndex < kSubdivision;++latIndex) {
+//		float lat = -float(std::numbers::pi) / 2.0f + kLatEvery * latIndex;
+//		float uvLength = 1.0f / kSubdivision;
+//		for (int lonIndex = 0; lonIndex < kSubdivision;++lonIndex) {
+//			uint32_t Vertexstart = (latIndex * kSubdivision + lonIndex) * 4;
+//			uint32_t Indexstart = (latIndex * kSubdivision + lonIndex) * 6;
+//			float lon = lonIndex * kLonEvery;
+//			float u = float(lonIndex) / float(kSubdivision);
+//			float v = 1.0f-float(latIndex) / float(kSubdivision);
+//		#pragma region VertexData
+//			//点A(左下)
+//			vertexDataSphere[Vertexstart].position.x = cos(lat) * cos(lon) + sphere.center.x;
+//			vertexDataSphere[Vertexstart].position.y = sin(lat) + sphere.center.y;
+//			vertexDataSphere[Vertexstart].position.z = cos(lat) * sin(lon) + sphere.center.z;
+//			vertexDataSphere[Vertexstart].position.w = 1.0f;
+//			vertexDataSphere[Vertexstart].texcoord = { u ,v };
+//			vertexDataSphere[Vertexstart].normal.x = vertexDataSphere[Vertexstart].position.x;
+//			vertexDataSphere[Vertexstart].normal.y = vertexDataSphere[Vertexstart].position.y;
+//			vertexDataSphere[Vertexstart].normal.z = vertexDataSphere[Vertexstart].position.z;
+//			//点B(左上)
+//			vertexDataSphere[Vertexstart+1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
+//			vertexDataSphere[Vertexstart+1].position.y = sin(lat + kLatEvery) + sphere.center.y;
+//			vertexDataSphere[Vertexstart+1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
+//			vertexDataSphere[Vertexstart+1].position.w = 1.0f;
+//			vertexDataSphere[Vertexstart+1].texcoord = { u,v - uvLength };
+//			vertexDataSphere[Vertexstart+1].normal.x = vertexDataSphere[Vertexstart+1].position.x;
+//			vertexDataSphere[Vertexstart+1].normal.y = vertexDataSphere[Vertexstart+1].position.y;
+//			vertexDataSphere[Vertexstart+1].normal.z = vertexDataSphere[Vertexstart+1].position.z;
+//			//点C(右下)
+//			vertexDataSphere[Vertexstart+2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
+//			vertexDataSphere[Vertexstart+2].position.y = sin(lat) + sphere.center.y;
+//			vertexDataSphere[Vertexstart+2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
+//			vertexDataSphere[Vertexstart+2].position.w = 1.0f;
+//			vertexDataSphere[Vertexstart+2].texcoord = { u + uvLength,v};
+//			vertexDataSphere[Vertexstart+2].normal.x = vertexDataSphere[Vertexstart+2].position.x;
+//			vertexDataSphere[Vertexstart+2].normal.y = vertexDataSphere[Vertexstart+2].position.y;
+//			vertexDataSphere[Vertexstart+2].normal.z = vertexDataSphere[Vertexstart+2].position.z;
+//			//点D(右上)
+//			vertexDataSphere[Vertexstart+3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery) + sphere.center.x;
+//			vertexDataSphere[Vertexstart+3].position.y = sin(lat + kLatEvery) + sphere.center.y;
+//			vertexDataSphere[Vertexstart+3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
+//			vertexDataSphere[Vertexstart+3].position.w = 1.0f;
+//			vertexDataSphere[Vertexstart+3].texcoord = { u + uvLength,v - uvLength };
+//			vertexDataSphere[Vertexstart+3].normal.x = vertexDataSphere[Vertexstart+3].position.x;
+//			vertexDataSphere[Vertexstart+3].normal.y = vertexDataSphere[Vertexstart+3].position.y;
+//			vertexDataSphere[Vertexstart+3].normal.z = vertexDataSphere[Vertexstart+3].position.z;
+//#pragma endregion 頂点データ
+//			//三角形1枚目
+//			indexDataSphere[Indexstart] = Vertexstart;
+//			indexDataSphere[Indexstart + 1] =Vertexstart+ 1;
+//			indexDataSphere[Indexstart + 2] =Vertexstart+ 2;
+//			//三角形2枚目
+//			indexDataSphere[Indexstart + 3] = Vertexstart+1;
+//			indexDataSphere[Indexstart + 4] = Vertexstart+3;
+//			indexDataSphere[Indexstart + 5] = Vertexstart+2;
+//		}
+//	}
+//	
+//	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
+//	
+//	//ライティングをする
+//	materialDataSphere->color = color;
+//	materialDataSphere->enableLighting = true;
+//	materialDataSphere->uvTransform = MakeIdentity4x4();
+//	//
+//	transformationMatrixResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
+//	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
+//	transformationMatrixDataSphere->WVP = Multiply(worldMatrixSphere, ViewMatrix);
+//	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	transformationMatrixDataSphere->World = MakeIdentity4x4();
+//	
+//	//頂点
+//	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
+//	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSphere);
+//	//色用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere.Get()->GetGPUVirtualAddress());
+//	//WVP
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere.Get()->GetGPUVirtualAddress());
+//	//テクスチャ
+//	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+//	//Light
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
+//
+//	directX_->GetcommandList()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
+//}
+//void MyEngine::MakeVertexBufferViewSphere()
+//{
+//	//リソースの先頭のアドレス
+//	vertexBufferViewSphere.BufferLocation = vertexResourceSphere.Get()->GetGPUVirtualAddress();
+//	//使用する頂点サイズ
+//	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
+//	//1頂点あたりのアドレス
+//	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
+//}
+//void MyEngine::MakeIndexBufferViewSphere()
+//{
+//	//リソース先頭アドレス
+//	indexBufferViewSphere.BufferLocation = indexResourceSphere.Get()->GetGPUVirtualAddress();
+//	//使用するインデックスサイズ
+//	indexBufferViewSphere.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
+//	//インデックスはuint32_t
+//	indexBufferViewSphere.Format = DXGI_FORMAT_R32_UINT;
+//}
+//#pragma endregion 球
 
-	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	
-	//頂点
-	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewSprite);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
-	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
-	//テクスチャ
-	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	//Light
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
+//#pragma region Box
+//void MyEngine::DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index)
+//{
+//#pragma region 
+//	int BoxIndex = kMaxBoxVertex + 1;
+//	for (int i = 0; i < kMaxBox; ++i) {
+//		if (IsusedBoxIndex[i] == false) {
+//			BoxIndex = (i * 36);
+//			IsusedBoxIndex[i] = true;
+//			break;
+//		}
+//	}
+//	if (BoxIndex < 0) {
+//		//0より少ない
+//		assert(false);
+//	}
+//	if (kMaxBoxVertex < BoxIndex) {
+//		//MaxSpriteより多い
+//		assert(false);
+//	}
+//#pragma endregion 位置決め
+//
+//	vertexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataBox));
+//
+//#pragma region flont
+//	//左下
+//	vertexDataBox[0].position = { 0.0f,0.0f,0.0f,1.0f };
+//	vertexDataBox[0].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[1].position = {0.0f,hight,0.0f,1.0f};
+//	vertexDataBox[1].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[2].position = { width ,0.0f,0.0f,1.0f};
+//	vertexDataBox[2].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[3].position = { width ,hight,0.0f,1.0f};
+//	vertexDataBox[3].texcoord = { 1.0f,0.0f };
+//#pragma endregion 正面
+//#pragma region Left
+//	//左下
+//	vertexDataBox[4].position = { width,0.0f,0.0f,1.0f };
+//	vertexDataBox[4].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[5].position = { width,hight,0.0f,1.0f };
+//	vertexDataBox[5].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[6].position = { width ,0.0f,depth,1.0f};
+//	vertexDataBox[6].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[7].position = { width ,hight,depth,1.0f};
+//	vertexDataBox[7].texcoord = { 1.0f,0.0f };
+//#pragma endregion 右面
+//#pragma region back
+//	//左下
+//	vertexDataBox[8].position = { width,0.0f,depth,1.0f };
+//	vertexDataBox[8].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[9].position = { width,hight,depth,1.0f };
+//	vertexDataBox[9].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[10].position = { 0.0f ,0.0f,depth,1.0f};
+//	vertexDataBox[10].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[11].position = { 0.0f ,hight,depth,1.0f};
+//	vertexDataBox[11].texcoord = { 1.0f,0.0f };
+//#pragma endregion 裏面
+//#pragma region right
+//	//左下
+//	vertexDataBox[12].position = { 0.0f,0.0f,depth,1.0f };
+//	vertexDataBox[12].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[13].position = { 0.0f,hight,depth,1.0f };
+//	vertexDataBox[13].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[14].position = { 0.0f ,0.0f,0.0f,1.0f};
+//	vertexDataBox[14].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[15].position = { 0.0f ,hight,0.0f,1.0f};
+//	vertexDataBox[15].texcoord = { 1.0f,0.0f };
+//#pragma endregion 左面
+//#pragma region bottom
+//	//左下
+//	vertexDataBox[16].position = { 0.0f,0.0f,depth,1.0f };
+//	vertexDataBox[16].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[17].position = { 0.0f,0.0f,0.0f,1.0f };
+//	vertexDataBox[17].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[18].position = { width ,0.0f,depth,1.0f};
+//	vertexDataBox[18].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[19].position = { width ,0.0f,0.0f,1.0f};
+//	vertexDataBox[19].texcoord = { 1.0f,0.0f };
+//#pragma endregion 底面
+//#pragma region top
+//	//左下
+//	vertexDataBox[20].position = { 0.0f,hight,0.0f,1.0f };
+//	vertexDataBox[20].texcoord = { 0.0f,1.0f };
+//	//左上
+//	vertexDataBox[21].position = { 0.0f,hight,depth,1.0f };
+//	vertexDataBox[21].texcoord = { 0.0f,0.0f };
+//	//右下
+//	vertexDataBox[22].position = { width ,hight,0.0f,1.0f};
+//	vertexDataBox[22].texcoord = { 1.0f,1.0f };
+//	//右上
+//	vertexDataBox[23].position = { width ,hight,depth,1.0f};
+//	vertexDataBox[23].texcoord = { 1.0f,0.0f };
+//#pragma endregion 上
+//
+//	//インデックスリソースにデータを書き込む
+//	indexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataBox));
+//#pragma region flont
+//	//三角形1枚目
+//	indexDataBox[BoxIndex] = 0;indexDataBox[BoxIndex + 1] = 1;indexDataBox[BoxIndex + 2] = 2;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 3] = 1;indexDataBox[BoxIndex + 4] = 3;indexDataBox[BoxIndex + 5] = 2;
+//#pragma endregion 正面
+//#pragma region Left
+//	//三角形1枚目
+//	indexDataBox[BoxIndex + 6] = 4;indexDataBox[BoxIndex + 7] = 5;indexDataBox[BoxIndex + 8] = 6;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 9] = 5;indexDataBox[BoxIndex + 10] = 7;indexDataBox[BoxIndex + 11] = 6;
+//#pragma endregion 右面
+//#pragma region back
+//	//三角形1枚目
+//	indexDataBox[BoxIndex + 12] = 8;indexDataBox[BoxIndex + 13] = 9;indexDataBox[BoxIndex + 14] = 10;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 15] = 9;indexDataBox[BoxIndex + 16] = 11;indexDataBox[BoxIndex + 17] = 10;
+//#pragma endregion 裏面
+//#pragma region right
+//	//三角形1枚目
+//	indexDataBox[BoxIndex + 18] = 12;indexDataBox[BoxIndex + 19] = 13;indexDataBox[BoxIndex + 20] = 14;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 21] = 13;indexDataBox[BoxIndex + 22] = 15;indexDataBox[BoxIndex + 23] = 14;
+//#pragma endregion 左面
+//#pragma region bottom
+//	//三角形1枚目
+//	indexDataBox[BoxIndex + 24] = 16;indexDataBox[BoxIndex + 25] = 17;indexDataBox[BoxIndex + 26] = 18;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 27] = 17;indexDataBox[BoxIndex + 28] = 19;indexDataBox[BoxIndex + 29] = 18;
+//#pragma endregion 底
+//#pragma region top
+//	//三角形1枚目
+//	indexDataBox[BoxIndex + 30] = 20;indexDataBox[BoxIndex + 31] = 21;indexDataBox[BoxIndex + 32] = 22;
+//	//三角形2枚目
+//	indexDataBox[BoxIndex + 33] = 21;indexDataBox[BoxIndex + 34] = 23;indexDataBox[BoxIndex + 35] = 22;
+//#pragma endregion 上
+//
+//	//色の書き込み
+//	materialResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataBox));
+//	materialDataBox->color = color;
+//	//ライティングをしない
+//	materialDataBox->enableLighting = false;
+//	//WVPを書き込むためのアドレス取得
+//	transformationMatrixResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataBox));
+//	Matrix4x4 worldMatrixBox = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+//	Matrix4x4 worldViewMatrixBox = Multiply(worldMatrixBox, ViewportMatrix);
+//	//
+//	transformationMatrixDataBox->WVP = worldViewMatrixBox;
+//	transformationMatrixDataBox->World = MakeIdentity4x4();
+//
+//	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//
+//	//頂点
+//	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewBox);
+//	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewBox);
+//	//色用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceBox.Get()->GetGPUVirtualAddress());
+//	//WVP用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceBox.Get()->GetGPUVirtualAddress());
+//	//テクスチャ
+//	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+//	//Light
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
+//
+//	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
+//}
+//
+//void MyEngine::MakeVertexBufferViewBox()
+//{
+//	//リソースの先頭のアドレス
+//	vertexBufferViewBox.BufferLocation = vertexResourceBox.Get()->GetGPUVirtualAddress();
+//	//使用する頂点サイズ
+//	vertexBufferViewBox.SizeInBytes = sizeof(VertexData) * 24;
+//	//1頂点あたりのアドレス
+//	vertexBufferViewBox.StrideInBytes = sizeof(VertexData);
+//}
+//void MyEngine::MakeIndexBufferViewBox()
+//{
+//	//リソース先頭アドレス
+//	indexBufferViewBox.BufferLocation = indexResourceBox.Get()->GetGPUVirtualAddress();
+//	//使用するインデックスサイズ
+//	indexBufferViewBox.SizeInBytes = sizeof(uint32_t) * kMaxBoxVertex;
+//	//インデックスはuint32_t
+//	indexBufferViewBox.Format = DXGI_FORMAT_R32_UINT;
+//}
+//#pragma endregion ボックス
+//#pragma region obj
+//void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
+//{
+//	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
+//	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+//
+//	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
+//
+//	//ライティングをしない
+//	materialDataObj->enableLighting = false;
+//	materialDataObj->color = color;
+//	materialDataObj->uvTransform = MakeIdentity4x4();
+//
+//	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
+//	Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
+//	transformationMatrixDataObj->WVP = Multiply(worldMatrixObj, ViewMatrix);
+//	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+//	transformationMatrixDataObj->World = MakeIdentity4x4();
+//
+//	//頂点
+//	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
+//	//色用のCBufferの場所を特定
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceObj.Get()->GetGPUVirtualAddress());
+//	//WVP
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj.Get()->GetGPUVirtualAddress());
+//	//テクスチャ
+//	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[modelData.TextureIndex]);
+//	//Light
+//	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
+//
+//	directX_->GetcommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+//}
 
-	directX_->GetcommandList().Get()->DrawIndexedInstanced(SpriteIndex+6,1,0,0,0);
-}
-void MyEngine::MakeVertexBufferViewSprite()
-{
-	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
-	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData)* 4;
-	//1頂点あたりのアドレス
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
-}
-void MyEngine::MakeIndexBufferViewSprite()
-{
-	//リソース先頭アドレス
-	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
-	//使用するインデックスサイズ
-	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t)* kMaxSpriteVertex;
-	//インデックスはuint32_t
-	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
-}
-#pragma endregion スプライト
-#pragma region Sphere
-void MyEngine::DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index)
-{
-	vertexResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&vertexDataSphere));
-	indexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
-	//経度分割の1つ分の角度　φ 横
-	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
-	//緯度分割の1つ分の角度　θ 縦
-	const float kLatEvery = float(std::numbers::pi) / float(kSubdivision);
-	for (int latIndex = 0; latIndex < kSubdivision;++latIndex) {
-		float lat = -float(std::numbers::pi) / 2.0f + kLatEvery * latIndex;
-		float uvLength = 1.0f / kSubdivision;
-		for (int lonIndex = 0; lonIndex < kSubdivision;++lonIndex) {
-			uint32_t Vertexstart = (latIndex * kSubdivision + lonIndex) * 4;
-			uint32_t Indexstart = (latIndex * kSubdivision + lonIndex) * 6;
-			float lon = lonIndex * kLonEvery;
-			float u = float(lonIndex) / float(kSubdivision);
-			float v = 1.0f-float(latIndex) / float(kSubdivision);
-		#pragma region VertexData
-			//点A(左下)
-			vertexDataSphere[Vertexstart].position.x = cos(lat) * cos(lon) + sphere.center.x;
-			vertexDataSphere[Vertexstart].position.y = sin(lat) + sphere.center.y;
-			vertexDataSphere[Vertexstart].position.z = cos(lat) * sin(lon) + sphere.center.z;
-			vertexDataSphere[Vertexstart].position.w = 1.0f;
-			vertexDataSphere[Vertexstart].texcoord = { u ,v };
-			vertexDataSphere[Vertexstart].normal.x = vertexDataSphere[Vertexstart].position.x;
-			vertexDataSphere[Vertexstart].normal.y = vertexDataSphere[Vertexstart].position.y;
-			vertexDataSphere[Vertexstart].normal.z = vertexDataSphere[Vertexstart].position.z;
-			//点B(左上)
-			vertexDataSphere[Vertexstart+1].position.x = cos(lat + kLatEvery) * cos(lon) + sphere.center.x;
-			vertexDataSphere[Vertexstart+1].position.y = sin(lat + kLatEvery) + sphere.center.y;
-			vertexDataSphere[Vertexstart+1].position.z = cos(lat + kLatEvery) * sin(lon) + sphere.center.z;
-			vertexDataSphere[Vertexstart+1].position.w = 1.0f;
-			vertexDataSphere[Vertexstart+1].texcoord = { u,v - uvLength };
-			vertexDataSphere[Vertexstart+1].normal.x = vertexDataSphere[Vertexstart+1].position.x;
-			vertexDataSphere[Vertexstart+1].normal.y = vertexDataSphere[Vertexstart+1].position.y;
-			vertexDataSphere[Vertexstart+1].normal.z = vertexDataSphere[Vertexstart+1].position.z;
-			//点C(右下)
-			vertexDataSphere[Vertexstart+2].position.x = cos(lat) * cos(lon + kLonEvery) + sphere.center.x;	 
-			vertexDataSphere[Vertexstart+2].position.y = sin(lat) + sphere.center.y;
-			vertexDataSphere[Vertexstart+2].position.z = cos(lat) * sin(lon + kLonEvery) + sphere.center.z;
-			vertexDataSphere[Vertexstart+2].position.w = 1.0f;
-			vertexDataSphere[Vertexstart+2].texcoord = { u + uvLength,v};
-			vertexDataSphere[Vertexstart+2].normal.x = vertexDataSphere[Vertexstart+2].position.x;
-			vertexDataSphere[Vertexstart+2].normal.y = vertexDataSphere[Vertexstart+2].position.y;
-			vertexDataSphere[Vertexstart+2].normal.z = vertexDataSphere[Vertexstart+2].position.z;
-			//点D(右上)
-			vertexDataSphere[Vertexstart+3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery) + sphere.center.x;
-			vertexDataSphere[Vertexstart+3].position.y = sin(lat + kLatEvery) + sphere.center.y;
-			vertexDataSphere[Vertexstart+3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery) + sphere.center.z;
-			vertexDataSphere[Vertexstart+3].position.w = 1.0f;
-			vertexDataSphere[Vertexstart+3].texcoord = { u + uvLength,v - uvLength };
-			vertexDataSphere[Vertexstart+3].normal.x = vertexDataSphere[Vertexstart+3].position.x;
-			vertexDataSphere[Vertexstart+3].normal.y = vertexDataSphere[Vertexstart+3].position.y;
-			vertexDataSphere[Vertexstart+3].normal.z = vertexDataSphere[Vertexstart+3].position.z;
-#pragma endregion 頂点データ
-			//三角形1枚目
-			indexDataSphere[Indexstart] = Vertexstart;
-			indexDataSphere[Indexstart + 1] =Vertexstart+ 1;
-			indexDataSphere[Indexstart + 2] =Vertexstart+ 2;
-			//三角形2枚目
-			indexDataSphere[Indexstart + 3] = Vertexstart+1;
-			indexDataSphere[Indexstart + 4] = Vertexstart+3;
-			indexDataSphere[Indexstart + 5] = Vertexstart+2;
-		}
-	}
-	
-	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
-	
-	//ライティングをする
-	materialDataSphere->color = color;
-	materialDataSphere->enableLighting = true;
-	materialDataSphere->uvTransform = MakeIdentity4x4();
-	//
-	transformationMatrixResourceSphere.Get()->Map(0,nullptr,reinterpret_cast<void**>(&transformationMatrixDataSphere));
-	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
-	transformationMatrixDataSphere->WVP = Multiply(worldMatrixSphere, ViewMatrix);
-	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	transformationMatrixDataSphere->World = MakeIdentity4x4();
-	
-	//頂点
-	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
-	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewSphere);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceSphere.Get()->GetGPUVirtualAddress());
-	//WVP
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere.Get()->GetGPUVirtualAddress());
-	//テクスチャ
-	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	//Light
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
-
-	directX_->GetcommandList().Get()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
-}
-void MyEngine::MakeVertexBufferViewSphere()
-{
-	//リソースの先頭のアドレス
-	vertexBufferViewSphere.BufferLocation = vertexResourceSphere.Get()->GetGPUVirtualAddress();
-	//使用する頂点サイズ
-	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
-	//1頂点あたりのアドレス
-	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
-}
-void MyEngine::MakeIndexBufferViewSphere()
-{
-	//リソース先頭アドレス
-	indexBufferViewSphere.BufferLocation = indexResourceSphere.Get()->GetGPUVirtualAddress();
-	//使用するインデックスサイズ
-	indexBufferViewSphere.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
-	//インデックスはuint32_t
-	indexBufferViewSphere.Format = DXGI_FORMAT_R32_UINT;
-}
-#pragma endregion 球
-#pragma region Box
-void MyEngine::DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index)
-{
-#pragma region 
-	int BoxIndex = kMaxBoxVertex + 1;
-	for (int i = 0; i < kMaxBox; ++i) {
-		if (IsusedBoxIndex[i] == false) {
-			BoxIndex = (i * 36);
-			IsusedBoxIndex[i] = true;
-			break;
-		}
-	}
-	if (BoxIndex < 0) {
-		//0より少ない
-		assert(false);
-	}
-	if (kMaxBoxVertex < BoxIndex) {
-		//MaxSpriteより多い
-		assert(false);
-	}
-#pragma endregion 位置決め
-
-	vertexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataBox));
-
-#pragma region flont
-	//左下
-	vertexDataBox[0].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexDataBox[0].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[1].position = {0.0f,hight,0.0f,1.0f};
-	vertexDataBox[1].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[2].position = { width ,0.0f,0.0f,1.0f};
-	vertexDataBox[2].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[3].position = { width ,hight,0.0f,1.0f};
-	vertexDataBox[3].texcoord = { 1.0f,0.0f };
-#pragma endregion 正面
-#pragma region Left
-	//左下
-	vertexDataBox[4].position = { width,0.0f,0.0f,1.0f };
-	vertexDataBox[4].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[5].position = { width,hight,0.0f,1.0f };
-	vertexDataBox[5].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[6].position = { width ,0.0f,depth,1.0f};
-	vertexDataBox[6].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[7].position = { width ,hight,depth,1.0f};
-	vertexDataBox[7].texcoord = { 1.0f,0.0f };
-#pragma endregion 右面
-#pragma region back
-	//左下
-	vertexDataBox[8].position = { width,0.0f,depth,1.0f };
-	vertexDataBox[8].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[9].position = { width,hight,depth,1.0f };
-	vertexDataBox[9].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[10].position = { 0.0f ,0.0f,depth,1.0f};
-	vertexDataBox[10].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[11].position = { 0.0f ,hight,depth,1.0f};
-	vertexDataBox[11].texcoord = { 1.0f,0.0f };
-#pragma endregion 裏面
-#pragma region right
-	//左下
-	vertexDataBox[12].position = { 0.0f,0.0f,depth,1.0f };
-	vertexDataBox[12].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[13].position = { 0.0f,hight,depth,1.0f };
-	vertexDataBox[13].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[14].position = { 0.0f ,0.0f,0.0f,1.0f};
-	vertexDataBox[14].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[15].position = { 0.0f ,hight,0.0f,1.0f};
-	vertexDataBox[15].texcoord = { 1.0f,0.0f };
-#pragma endregion 左面
-#pragma region bottom
-	//左下
-	vertexDataBox[16].position = { 0.0f,0.0f,depth,1.0f };
-	vertexDataBox[16].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[17].position = { 0.0f,0.0f,0.0f,1.0f };
-	vertexDataBox[17].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[18].position = { width ,0.0f,depth,1.0f};
-	vertexDataBox[18].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[19].position = { width ,0.0f,0.0f,1.0f};
-	vertexDataBox[19].texcoord = { 1.0f,0.0f };
-#pragma endregion 底面
-#pragma region top
-	//左下
-	vertexDataBox[20].position = { 0.0f,hight,0.0f,1.0f };
-	vertexDataBox[20].texcoord = { 0.0f,1.0f };
-	//左上
-	vertexDataBox[21].position = { 0.0f,hight,depth,1.0f };
-	vertexDataBox[21].texcoord = { 0.0f,0.0f };
-	//右下
-	vertexDataBox[22].position = { width ,hight,0.0f,1.0f};
-	vertexDataBox[22].texcoord = { 1.0f,1.0f };
-	//右上
-	vertexDataBox[23].position = { width ,hight,depth,1.0f};
-	vertexDataBox[23].texcoord = { 1.0f,0.0f };
-#pragma endregion 上
-
-	//インデックスリソースにデータを書き込む
-	indexResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataBox));
-#pragma region flont
-	//三角形1枚目
-	indexDataBox[BoxIndex] = 0;indexDataBox[BoxIndex + 1] = 1;indexDataBox[BoxIndex + 2] = 2;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 3] = 1;indexDataBox[BoxIndex + 4] = 3;indexDataBox[BoxIndex + 5] = 2;
-#pragma endregion 正面
-#pragma region Left
-	//三角形1枚目
-	indexDataBox[BoxIndex + 6] = 4;indexDataBox[BoxIndex + 7] = 5;indexDataBox[BoxIndex + 8] = 6;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 9] = 5;indexDataBox[BoxIndex + 10] = 7;indexDataBox[BoxIndex + 11] = 6;
-#pragma endregion 右面
-#pragma region back
-	//三角形1枚目
-	indexDataBox[BoxIndex + 12] = 8;indexDataBox[BoxIndex + 13] = 9;indexDataBox[BoxIndex + 14] = 10;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 15] = 9;indexDataBox[BoxIndex + 16] = 11;indexDataBox[BoxIndex + 17] = 10;
-#pragma endregion 裏面
-#pragma region right
-	//三角形1枚目
-	indexDataBox[BoxIndex + 18] = 12;indexDataBox[BoxIndex + 19] = 13;indexDataBox[BoxIndex + 20] = 14;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 21] = 13;indexDataBox[BoxIndex + 22] = 15;indexDataBox[BoxIndex + 23] = 14;
-#pragma endregion 左面
-#pragma region bottom
-	//三角形1枚目
-	indexDataBox[BoxIndex + 24] = 16;indexDataBox[BoxIndex + 25] = 17;indexDataBox[BoxIndex + 26] = 18;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 27] = 17;indexDataBox[BoxIndex + 28] = 19;indexDataBox[BoxIndex + 29] = 18;
-#pragma endregion 底
-#pragma region top
-	//三角形1枚目
-	indexDataBox[BoxIndex + 30] = 20;indexDataBox[BoxIndex + 31] = 21;indexDataBox[BoxIndex + 32] = 22;
-	//三角形2枚目
-	indexDataBox[BoxIndex + 33] = 21;indexDataBox[BoxIndex + 34] = 23;indexDataBox[BoxIndex + 35] = 22;
-#pragma endregion 上
-
-	//色の書き込み
-	materialResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataBox));
-	materialDataBox->color = color;
-	//ライティングをしない
-	materialDataBox->enableLighting = false;
-	//WVPを書き込むためのアドレス取得
-	transformationMatrixResourceBox.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataBox));
-	Matrix4x4 worldMatrixBox = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	Matrix4x4 worldViewMatrixBox = Multiply(worldMatrixBox, ViewportMatrix);
-	//
-	transformationMatrixDataBox->WVP = worldViewMatrixBox;
-	transformationMatrixDataBox->World = MakeIdentity4x4();
-
-	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//頂点
-	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewBox);
-	directX_->GetcommandList().Get()->IASetIndexBuffer(&indexBufferViewBox);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceBox.Get()->GetGPUVirtualAddress());
-	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceBox.Get()->GetGPUVirtualAddress());
-	//テクスチャ
-	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
-
-	directX_->GetcommandList()->DrawIndexedInstanced(BoxIndex + 36, 1, 0, 0, 0);
-}
-
-void MyEngine::MakeVertexBufferViewBox()
-{
-	//リソースの先頭のアドレス
-	vertexBufferViewBox.BufferLocation = vertexResourceBox.Get()->GetGPUVirtualAddress();
-	//使用する頂点サイズ
-	vertexBufferViewBox.SizeInBytes = sizeof(VertexData) * 24;
-	//1頂点あたりのアドレス
-	vertexBufferViewBox.StrideInBytes = sizeof(VertexData);
-}
-void MyEngine::MakeIndexBufferViewBox()
-{
-	//リソース先頭アドレス
-	indexBufferViewBox.BufferLocation = indexResourceBox.Get()->GetGPUVirtualAddress();
-	//使用するインデックスサイズ
-	indexBufferViewBox.SizeInBytes = sizeof(uint32_t) * kMaxBoxVertex;
-	//インデックスはuint32_t
-	indexBufferViewBox.Format = DXGI_FORMAT_R32_UINT;
-}
-#pragma endregion ボックス
-#pragma region obj
-void MyEngine::DrawModel(const ModelData& modelData, const Vector3& position,const Matrix4x4& ViewMatrix, const Vector4& color)
-{
-	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
-	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
-
-	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
-
-	//ライティングをしない
-	materialDataObj->enableLighting = false;
-	materialDataObj->color = color;
-	materialDataObj->uvTransform = MakeIdentity4x4();
-
-	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
-	Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
-	transformationMatrixDataObj->WVP = Multiply(worldMatrixObj, ViewMatrix);
-	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	transformationMatrixDataObj->World = MakeIdentity4x4();
-
-	//頂点
-	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResourceObj.Get()->GetGPUVirtualAddress());
-	//WVP
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj.Get()->GetGPUVirtualAddress());
-	//テクスチャ
-	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[modelData.TextureIndex]);
-	//Light
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(3, directionalLightResource.Get()->GetGPUVirtualAddress());
-
-	directX_->GetcommandList().Get()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
-}
-ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
-{
-	ModelData modelData;//構築するモデルデータ
-	std::vector<Vector4>positions;//位置　vを保存
-	std::vector<Vector2>texcoords;//テクスチャ座標　vtを保存
-	std::vector<Vector3>normals;//法線　vnを保存
-	std::string line;//ファイルから読んだ一行を格納するもの
-	std::ifstream file(directoryPath + "/" + filename);
-	assert(file.is_open());//開けなかったら止める
-	while (std::getline(file,line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;//先頭の識別子を読む
-		if (identifier == "v") {
-			Vector4 position;
-			s >> position.x >> position.y >> position.z;
-			//右手系から左手系へ
-			position.z *= -1.0f;
-			position.w = 1.0f;
-			positions.push_back(position);
-		}
-		else if (identifier=="vt") {
-			Vector2 texcoord;
-			s >> texcoord.x >> texcoord.y;
-			texcoord.y = 1.0f - texcoord.y;
-			texcoords.push_back(texcoord);
-		}
-		else if (identifier=="vn") {
-			Vector3 normal;
-			s >> normal.x >> normal.y>> normal.z;
-			//右手系から左手系へ
-			normal.z *= -1.0f;
-			normals.push_back(normal);
-		}
-		else if (identifier == "f") {
-			//面は三角形限定
-			VertexData triamgle[3];
-			for (int32_t faceVertex = 0; faceVertex < 3;++faceVertex) {
-				std::string vertexDefinition;
-				s >> vertexDefinition;
-				//頂点の要素へのIndexは「位置/UV/法線」で格納されているので、分解してIndexを取得する
-				std::istringstream v(vertexDefinition);
-				uint32_t elementIndices[3];
-				for (int32_t element = 0; element < 3;++element) {
-					std::string index;
-					std::getline(v, index, '/');// /区切りでインデックスを読んでいく
-					elementIndices[element] = std::stoi(index);
-				}
-				Vector4 position = positions[elementIndices[0] - 1];
-				Vector2 texcoord = texcoords[elementIndices[1] - 1];
-				Vector3 normal = normals[elementIndices[2] - 1];
-				//VertexData vertex = { position,texcoord,normal };
-				//modelData.vertices.push_back(vertex);
-				triamgle[faceVertex] = { position,texcoord,normal };
-				
-			}
-			modelData.vertices.push_back(triamgle[2]);
-			modelData.vertices.push_back(triamgle[1]);
-			modelData.vertices.push_back(triamgle[0]);
-		}
-		else if (identifier == "mtllib") {
-			//materialTemplateLibraryファイルの名前を取得する
-			std::string materialFilename;
-			s >> materialFilename;
-			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
-		}
-	}
-	modelData.TextureIndex = LoadTexture(modelData.material.textureFilePath);
-	//頂点リソースを作る
-	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
-	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
-	return modelData;
-}
-MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
-{
-	MaterialData materialData;//構築するMaterialData
-	std::string line;//ファイルから読んだ1行を格納するもの
-	std::ifstream file(directoryPath+'/'+filename);//ファイルを開く
-	assert(file.is_open());//開けなかったら止める
-	while (std::getline(file, line)) {
-		std::string identifier;
-		std::istringstream s(line);
-		s >> identifier;
-		//identifierに応じた処理
-		if (identifier == "map_Kd") {
-			std::string textureFilename;
-			s >> textureFilename;
-			//連結してファイルパスにする
-			materialData.textureFilePath = directoryPath + "/" + textureFilename;
-		}
-	}
-
-	return materialData;
-}
-#pragma endregion obj読み込み
+//ModelData MyEngine::LoadObjFile(const std::string& directoryPath, const std::string& filename)
+//{
+//	ModelData modelData;//構築するモデルデータ
+//	std::vector<Vector4>positions;//位置　vを保存
+//	std::vector<Vector2>texcoords;//テクスチャ座標　vtを保存
+//	std::vector<Vector3>normals;//法線　vnを保存
+//	std::string line;//ファイルから読んだ一行を格納するもの
+//	std::ifstream file(directoryPath + "/" + filename);
+//	assert(file.is_open());//開けなかったら止める
+//	while (std::getline(file,line)) {
+//		std::string identifier;
+//		std::istringstream s(line);
+//		s >> identifier;//先頭の識別子を読む
+//		if (identifier == "v") {
+//			Vector4 position;
+//			s >> position.x >> position.y >> position.z;
+//			//右手系から左手系へ
+//			position.z *= -1.0f;
+//			position.w = 1.0f;
+//			positions.push_back(position);
+//		}
+//		else if (identifier=="vt") {
+//			Vector2 texcoord;
+//			s >> texcoord.x >> texcoord.y;
+//			texcoord.y = 1.0f - texcoord.y;
+//			texcoords.push_back(texcoord);
+//		}
+//		else if (identifier=="vn") {
+//			Vector3 normal;
+//			s >> normal.x >> normal.y>> normal.z;
+//			//右手系から左手系へ
+//			normal.z *= -1.0f;
+//			normals.push_back(normal);
+//		}
+//		else if (identifier == "f") {
+//			//面は三角形限定
+//			VertexData triamgle[3];
+//			for (int32_t faceVertex = 0; faceVertex < 3;++faceVertex) {
+//				std::string vertexDefinition;
+//				s >> vertexDefinition;
+//				//頂点の要素へのIndexは「位置/UV/法線」で格納されているので、分解してIndexを取得する
+//				std::istringstream v(vertexDefinition);
+//				uint32_t elementIndices[3];
+//				for (int32_t element = 0; element < 3;++element) {
+//					std::string index;
+//					std::getline(v, index, '/');// /区切りでインデックスを読んでいく
+//					elementIndices[element] = std::stoi(index);
+//				}
+//				Vector4 position = positions[elementIndices[0] - 1];
+//				Vector2 texcoord = texcoords[elementIndices[1] - 1];
+//				Vector3 normal = normals[elementIndices[2] - 1];
+//				//VertexData vertex = { position,texcoord,normal };
+//				//modelData.vertices.push_back(vertex);
+//				triamgle[faceVertex] = { position,texcoord,normal };
+//				
+//			}
+//			modelData.vertices.push_back(triamgle[2]);
+//			modelData.vertices.push_back(triamgle[1]);
+//			modelData.vertices.push_back(triamgle[0]);
+//		}
+//		else if (identifier == "mtllib") {
+//			//materialTemplateLibraryファイルの名前を取得する
+//			std::string materialFilename;
+//			s >> materialFilename;
+//			modelData.material = LoadMaterialTemplateFile(directoryPath, materialFilename);
+//		}
+//	}
+//	modelData.TextureIndex = LoadTexture(modelData.material.textureFilePath);
+//	//頂点リソースを作る
+//	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+//	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
+//	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+//	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
+//	return modelData;
+//}
+//MaterialData MyEngine::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
+//{
+//	MaterialData materialData;//構築するMaterialData
+//	std::string line;//ファイルから読んだ1行を格納するもの
+//	std::ifstream file(directoryPath+'/'+filename);//ファイルを開く
+//	assert(file.is_open());//開けなかったら止める
+//	while (std::getline(file, line)) {
+//		std::string identifier;
+//		std::istringstream s(line);
+//		s >> identifier;
+//		//identifierに応じた処理
+//		if (identifier == "map_Kd") {
+//			std::string textureFilename;
+//			s >> textureFilename;
+//			//連結してファイルパスにする
+//			materialData.textureFilePath = directoryPath + "/" + textureFilename;
+//		}
+//	}
+//
+//	return materialData;
+//}
+//#pragma endregion obj読み込み
 
 

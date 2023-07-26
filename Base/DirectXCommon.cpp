@@ -4,9 +4,9 @@ DirectXCommon* DirectXCommon::GetInstance()
 	static DirectXCommon instance;
 	return &instance;
 }
-void DirectXCommon::Initialize()
+void DirectXCommon::Initialize(WinApp*winApp)
 {
-	winApp_ = WinApp::GetInstance();
+	winApp_ = winApp;
 #ifdef _DEBUG
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		//デバッグレイヤ―を有効化

@@ -13,18 +13,21 @@
 
 void GamePlayState::Initialize()
 {
-
+	//インスタンス生成する
 	camera_ = new Camera();
 	camera_->Initialize(1280, 720);
 	myEngine = MyEngine::GetInstance();
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
+	mesh = new Mesh();
+	mesh->Initialize();
+	mesh2 = new Mesh();
+	mesh2->Initialize();
+	textureManager_ = TextureManager::GetInstance();
 	//リソースを作る
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
-	UV = myEngine->LoadTexture("resources/uvChecker.png");
-	Ball = myEngine->LoadTexture("resources/monsterBall.png");
-	modelData = myEngine->LoadObjFile("resources", "Plane.obj");
-	modelData2 = myEngine->LoadObjFile("resources", "Base.obj");
+	TextureHundle = textureManager_->LoadTexture("resources/uvChecker.png");
+	Monster = textureManager_->LoadTexture("resources/monsterBall.png");
 }
 void GamePlayState::Update()
 {
@@ -37,24 +40,23 @@ if (input->IspushKey(DIK_1)) {
 	}
 #endif // _DEBUG
 
+	mesh->ImGui("TriAngle");
+	mesh2->ImGui("TriAngle2");
 	
-
-	camera_->Update();
+	
 	Audio->Play(mokugyo,0.1f,0);
-	myEngine->ImGui();
+
+	camera_->ImGui();
+	camera_->Update();
 }
 void GamePlayState::Draw()
 {
-	myEngine->Draw(Left[0], Top[0], Right[0], Color[0], camera_->GetWorldMatrix(), UV);
-	myEngine->Draw(Left[1], Top[1], Right[1], Color[0], camera_->GetWorldMatrix(), UV);
-	//myEngine->DrawSprite(LeftTop[0], LeftBottom[0], RightTop[0], RightBottom[0], Color[0], UV);
-	//myEngine->DrawSphere(sphere, camera_->GetWorldMatrix(),Color[0], SphereTexture);
-	//myEngine->DrawModel(modelData,{0,0,0}, camera_->GetWorldMatrix(),Color[0]);
-	//myEngine->DrawModel(modelData2,{0,0,0}, camera_->GetWorldMatrix(),Color[0]);
+	mesh->Draw(Color[0],camera_->GetWorldMatrix(), TextureHundle);
+	mesh2->Draw(Color[0],camera_->GetWorldMatrix(), Monster);
+
 	if (input->IspushKey(DIK_0)) {
 		OutputDebugStringA("Hit 0\n");
 	}
 	
 	//描画ここまで
-	myEngine->VertexReset();
 }

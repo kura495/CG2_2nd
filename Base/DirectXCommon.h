@@ -17,8 +17,8 @@
 class DirectXCommon
 {
 public:
-	DirectXCommon* GetInstance();
-	void Initialize();
+	static DirectXCommon* GetInstance();
+	void Initialize(WinApp* winApp);
 
 	void PreView();
 

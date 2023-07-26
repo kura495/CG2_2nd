@@ -9,6 +9,8 @@
 #include"Scenes/State/IgameState.h"
 #include"Audio/XAudio2.h"
 #include"Input/Input.h"
+#include"Base/Mesh.h"
+#include"Base/TextureManager.h"
 class GameManager
 {
 public:
@@ -33,6 +35,8 @@ private:
 	ImGuiManager* imGuiManager = nullptr;
 	Input* input = nullptr;
 	XAudio2* Audio = nullptr;
+	TextureManager* textureManager = nullptr;
+
 	MSG msg{};
 	//State
 	std::unique_ptr<GameState>state[GameStateMax];

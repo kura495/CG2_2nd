@@ -1,19 +1,22 @@
-﻿#include"IncludeStruct\Transform.h"
-#include"DirectXCommon.h"
+﻿#pragma once
+#include"IncludeStruct/Transform.h"
 #include<wrl.h>
-#include"IncludeStruct\VertexData.h"
-#include"IncludeStruct\Material.h"
-#include"IncludeStruct\TransformationMatrix.h"
-#include"Math\MatrixCalc.h"
+#include"IncludeStruct/VertexData.h"
+#include"IncludeStruct/Material.h"
+#include"IncludeStruct/TransformationMatrix.h"
+#include"Math/MatrixCalc.h"
+#include"Base/DirectXCommon.h"
+#include"Base/TextureManager.h"
+#include<list>
 class Mesh
 {
 public:
 	void Initialize();
-	void Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
-	void ImGui();
+	void Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const uint32_t textureHandle);
+	void ImGui(const char* string);
 private:
-	DirectXCommon* directX_;
-
+	DirectXCommon* directX_ = nullptr;
+	TextureManager* textureManager_ = nullptr;
 	Transform transform{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},

@@ -11,12 +11,10 @@ void GameManager::Initialize()
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 	//Window
 	winApp = new WinApp();
-	kClientWidth = 1280;
-	kClientHeight = 720;
-	winApp->Initialize(kClientWidth, kClientHeight);
+	winApp->Initialize();
 	//DirectX
-	directX = new DirectXCommon();
-	directX->Initialize(winApp, kClientWidth, kClientHeight);
+	directX = DirectXCommon::GetInstance();
+	directX->Initialize(winApp);
 	//Engine
 	myEngine = MyEngine::GetInstance();
 	myEngine->Initialize(directX, kClientWidth, kClientHeight);
@@ -29,6 +27,9 @@ void GameManager::Initialize()
 	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
+
+	textureManager = TextureManager::GetInstance();
+	textureManager->Initialize(directX);
 	//State
 	state[TITLE]=std::make_unique<GameTitleState>();
 	state[PLAY]= std::make_unique<GamePlayState>();

@@ -48,7 +48,8 @@ void Camera::ImGui()
 	ImGui::SliderFloat3("Translate", ImGuiTranslate, -10, 10, "%.3f");
 	translation_ = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
 #ifdef _DEBUG
-	ImGui::Text("DebugCamera : 0\n");
+	ImGui::Text("DebugCameraOn : 1\n");
+	ImGui::Text("DebugCameraOff : 2\n");
 	ImGui::Text("Rotate : W A S D\n");
 	ImGui::Text("Translate : ARROWKEY\n");
 #endif // DEBUG

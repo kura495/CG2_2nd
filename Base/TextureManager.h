@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include"DirectXCommon.h"
 #include"externals/DirectXTex/DirectXTex.h"
 #include<wrl.h>
@@ -6,20 +6,20 @@
 class TextureManager
 {
 public:
-	// ƒfƒXƒNƒŠƒvƒ^[‚Ì”
+	// ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿ãƒ¼ã®æ•°
 	static const size_t kMaxTexture = 256;
 
 	/// <summary>
-	/// ƒeƒNƒXƒ`ƒƒ
+	/// ãƒ†ã‚¯ã‚¹ãƒãƒ£
 	/// </summary>
 	struct Texture {
-		// ƒeƒNƒXƒ`ƒƒƒŠƒ\[ƒX
+		// ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒªã‚½ãƒ¼ã‚¹
 		Microsoft::WRL::ComPtr<ID3D12Resource> textureResource;
-		// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(CPU)
 		CD3DX12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU;
-		// ƒVƒF[ƒ_ƒŠƒ\[ƒXƒrƒ…[‚Ìƒnƒ“ƒhƒ‹(CPU)
+		// ã‚·ã‚§ãƒ¼ãƒ€ãƒªã‚½ãƒ¼ã‚¹ãƒ“ãƒ¥ãƒ¼ã®ãƒãƒ³ãƒ‰ãƒ«(CPU)
 		CD3DX12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU;
-		// –¼‘O
+		// åå‰
 		std::string name;
 	};
 
@@ -28,20 +28,20 @@ public:
 	uint32_t LoadTexture(const std::string& filePath);
 
 	/// <summary>
-	/// GPUHandleî•ñæ“¾
+	/// GPUHandleæƒ…å ±å–å¾—
 	/// </summary>
-	/// <param name="textureHandle">ƒeƒNƒXƒ`ƒƒƒnƒ“ƒhƒ‹</param>
-	/// <returns>ƒŠƒ\[ƒXî•ñ</returns>
-	const CD3DX12_GPU_DESCRIPTOR_HANDLE& GetGPUHandle(uint32_t textureHandle);
+	/// <param name="textureHandle">ãƒ†ã‚¯ã‚¹ãƒãƒ£ãƒãƒ³ãƒ‰ãƒ«</param>
+	/// <returns>ãƒªã‚½ãƒ¼ã‚¹æƒ…å ±</returns>
+	const CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t textureHandle);
 private:
 
 	HRESULT hr;
 	
 	bool IsusedTextureIndex[kMaxTexture];
 	DirectXCommon* directX_ = nullptr;
-	// ƒeƒNƒXƒ`ƒƒƒRƒ“ƒeƒi
+	// ãƒ†ã‚¯ã‚¹ãƒãƒ£ã‚³ãƒ³ãƒ†ãƒŠ
 	std::array<Texture, kMaxTexture> textures_;
-	//’†ŠÔƒŠƒ\[ƒX
+	//ä¸­é–“ãƒªã‚½ãƒ¼ã‚¹
 	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource[kMaxTexture];
 	
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
@@ -54,6 +54,6 @@ private:
 	uint32_t descriptorSizeSRV;
 	uint32_t descriptorSizeRTV;
 	uint32_t descriptorSizeDSV;
-#pragma endregion ƒfƒXƒNƒŠƒvƒ^
+#pragma endregion ãƒ‡ã‚¹ã‚¯ãƒªãƒ—ã‚¿
 };
 

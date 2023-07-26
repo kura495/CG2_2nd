@@ -49,12 +49,12 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	textures_.at(SpriteIndex).textureSrvHandleGPU = GetGPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
 	//先頭はImGuiが使っているので次のを使う
 	textures_.at(SpriteIndex).textureSrvHandleCPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textures_.at(SpriteIndex).textureSrvHandleCPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textures_.at(SpriteIndex).textureSrvHandleGPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの作成
 	directX_->GetDevice()->CreateShaderResourceView(textures_.at(SpriteIndex).textureResource.Get(), &srvDesc, textures_.at(SpriteIndex).textureSrvHandleCPU);
 	return SpriteIndex;
 }
-const CD3DX12_GPU_DESCRIPTOR_HANDLE& TextureManager::GetGPUHandle(uint32_t textureHandle)
+const CD3DX12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUHandle(uint32_t textureHandle)
 {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GPUHandle = textures_.at(textureHandle).textureSrvHandleGPU;
 	return GPUHandle;

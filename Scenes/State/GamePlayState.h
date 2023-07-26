@@ -6,6 +6,8 @@
 #include"IncludeStruct/ModelData.h"
 #include"Audio/XAudio2.h"
 #include"Input/Input.h"
+#include"Base/Mesh.h"
+#include"Base/TextureManager.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include<dinput.h>
 #pragma comment(lib,"dinput8.lib")
@@ -23,18 +25,12 @@ private:
 
 	MyEngine* myEngine = nullptr;
 	Camera* camera_ = nullptr;
-	Vector4 Left[3] = {
-	 {-0.5f,-0.5f,0.0f,1.0f}
-	,{-0.5f,-1.5f,0.0f,1.0f}
-	,{1.0f,-0.5f,0.0f,1.0f} };
-	Vector4 Top[3] = {
-	 {0.0f,0.5f,0.0f,1.0f}
-	,{0.0f,-0.5f,0.0f,1.0f}
-	,{1.5f,0.5f,0.0f,1.0f} };
-	Vector4 Right[3] = {
-	 {0.5f,-0.5f,0.0f,1.0f}
-	,{0.5f,-1.5f,0.0f,1.0f}
-	,{2.0f,-0.5f,0.0f,1.0f} };
+	Mesh* mesh = nullptr;
+	Mesh* mesh2 = nullptr;
+	TextureManager* textureManager_ = nullptr;
+	uint32_t TextureHundle;
+	uint32_t Monster;
+
 	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite
 	Vector4 LeftTop[2] = {

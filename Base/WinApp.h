@@ -1,4 +1,4 @@
-#pragma once
+Ôªø#pragma once
 #include<Windows.h>
 #include<cstdint>
 #include"Utility/Log.h"
@@ -15,8 +15,8 @@ public:
 	
 	HWND GetHWND() const { return hwnd_; };
 	HINSTANCE GetHINSTANCE()const { return wc.hInstance; }
-	static const int32_t kClientWidth=1280;//â°ïù
-	static const int32_t kClientHeight=720;//ècïù
+	static const int32_t kClientWidth=1280;//Ê®™ÂπÖ
+	static const int32_t kClientHeight=720;//Á∏¶ÂπÖ
 private:
 	HWND hwnd_=nullptr;
 	WNDCLASS wc{};

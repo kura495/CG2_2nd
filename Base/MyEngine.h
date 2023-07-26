@@ -13,14 +13,14 @@ public:
 	static MyEngine* GetInstance();
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
-	void VertexReset();
-	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
-	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
-	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
-	void DrawModel(const ModelData& modelData, const Vector3& position, const Matrix4x4& ViewMatrix, const Vector4& color);
-	int LoadTexture(const std::string& filePath);
-	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
+
+	//void VertexReset();
+	//void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
+	//void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
+	//void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);
+	//void DrawModel(const ModelData& modelData, const Vector3& position, const Matrix4x4& ViewMatrix, const Vector4& color);
+	//ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	//MaterialData LoadMaterialTemplateFile(const std::string& directoryPath,const std::string&filename);
 
 private:
 	const int kSubdivision = 16;
@@ -80,8 +80,8 @@ private:
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-	void MakeVertexBufferViewSprite();
-	void MakeIndexBufferViewSprite();
+	//void MakeVertexBufferViewSprite();
+	//void MakeIndexBufferViewSprite();
 	#pragma endregion スプライト
 	#pragma region Sphere
 	//Sphere用頂点データ

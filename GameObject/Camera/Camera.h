@@ -26,7 +26,7 @@ private:
 	Matrix4x4 matRot_;
 	Vector3 GetmatRot();
 	// ローカル座標
-	Vector3 translation_ = { 0,5,-50 };
+	Vector3 translation_ = { 0,0,-25 };
 	//　ビュー行列
 	Matrix4x4 ViewMatrix;
 	// 射影行列
