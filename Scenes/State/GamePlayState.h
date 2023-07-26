@@ -18,7 +18,7 @@
 class GamePlayState :public GameState
 {
 public:
-	//GamePlayState();
+
 	void Initialize();
 	void Update();
 	void Draw();
