@@ -1,8 +1,9 @@
-#include"IncludeStruct\Transform.h"
+ï»¿#include"IncludeStruct\Transform.h"
 #include"DirectXCommon.h"
 #include<wrl.h>
 #include"IncludeStruct\VertexData.h"
 #include"IncludeStruct\Material.h"
+#include"IncludeStruct\TransformationMatrix.h"
 #include"Math\MatrixCalc.h"
 class Mesh
 {
@@ -10,7 +11,7 @@ public:
 	void Initialize();
 	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
 	void ImGui();
-
+	void VecrtexReset();
 private:
 	DirectXCommon* directX_;
 
@@ -29,21 +30,27 @@ private:
 	{0.0f,0.0f,0.0f}
 	};
 #pragma region TriAngle
-	//ƒo[ƒeƒbƒNƒXƒŠƒ\[ƒX
+	//ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒªã‚½ãƒ¼ã‚¹
 	Microsoft::WRL::ComPtr<ID3D12Resource>
 		vertexResource = nullptr;
-	//’¸“_ƒf[ƒ^
+	//é ‚ç‚¹ãƒ‡ãƒ¼ã‚¿
 	VertexData* vertexData = nullptr;
-	//ƒo[ƒeƒbƒNƒXƒoƒbƒtƒ@ƒrƒ…[
+	//ãƒãƒ¼ãƒ†ãƒƒã‚¯ã‚¹ãƒãƒƒãƒ•ã‚¡ãƒ“ãƒ¥ãƒ¼
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//ƒ}ƒeƒŠƒAƒ‹ƒŠƒ\[ƒX
+	//ãƒãƒ†ãƒªã‚¢ãƒ«ãƒªã‚½ãƒ¼ã‚¹
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
-	//Fƒf[ƒ^
+	//è‰²ãƒ‡ãƒ¼ã‚¿
 	Material* materialData = nullptr;
-	//WVPƒŠƒ\[ƒX
+	//WVPãƒªã‚½ãƒ¼ã‚¹
 	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = nullptr;
-	//WVPƒf[ƒ^
+	//WVPãƒ‡ãƒ¼ã‚¿
 	Matrix4x4* wvpData = nullptr;
+	static const int kMaxTexture = 10;
+	bool IsusedTextureIndex[kMaxTexture];
+	//descriptorHandle
+	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
 	void MakeVertexBufferView();
-#pragma endregion OŠpŒ`
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+#pragma endregion ä¸‰è§’å½¢
 };

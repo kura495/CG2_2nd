@@ -1,13 +1,7 @@
 #pragma once
 #include"Mesh.h"
-
-
-
-
 #include"IncludeStruct\Sphere.h"
-
 #include"IncludeStruct\ModelData.h"
-#include"IncludeStruct\TransformationMatrix.h"
 #include"IncludeStruct\StructLight.h"
 #include<numbers>
 #include<fstream>
@@ -20,7 +14,6 @@ public:
 	void Initialize(DirectXCommon* directX, int32_t kClientWidth, int32_t kClientHeight);
 	void ImGui();
 	void VertexReset();
-	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
 	void DrawSprite(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom,const Vector4& color, const int Index);
 	void DrawSphere(const Sphere& sphere, const Matrix4x4& ViewMatrix, const Vector4& color, const int Index);
 	void DrawBox(const float& width, const float& hight, const float& depth, const Transform& transform,const Matrix4x4& ViewportMatrix, const Vector4& color, const int Index);

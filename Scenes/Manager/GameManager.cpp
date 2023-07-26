@@ -3,6 +3,7 @@ void GameManager::Run()
 {
 	Initialize();
 	Gameloop();
+	Release();
 }
 void GameManager::Initialize()
 {
@@ -51,12 +52,12 @@ void GameManager::Gameloop()
 			directX->PostView();
 		}
 	}
-	Release();
+	
 }
 
 void GameManager::Release()
 {
 	ImGui_ImplDX12_Shutdown();
 	CoUninitialize();
-	
+	delete this;
 }

@@ -1,5 +1,9 @@
 #include"DirectXCommon.h"
-
+DirectXCommon* DirectXCommon::GetInstance()
+{
+	static DirectXCommon instance;
+	return &instance;
+}
 void DirectXCommon::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
 {
 	winApp_ = winApp;

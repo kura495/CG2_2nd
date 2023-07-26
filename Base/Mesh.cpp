@@ -1,4 +1,4 @@
-#include"Mesh.h"
+ï»¿#include"Mesh.h"
 
 void Mesh::Initialize()
 {
@@ -19,27 +19,27 @@ void Mesh::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Ri
 		}
 	}
 	if (TriAngleIndex < 0) {
-		//0‚æ‚è­‚È‚¢
+		//0ã‚ˆã‚Šå°‘ãªã„
 		assert(false);
 	}
 	if (kMaxVertex < TriAngleIndex) {
-		//MaxSprite‚æ‚è‘½‚¢
+		//MaxSpriteã‚ˆã‚Šå¤šã„
 		assert(false);
 	}
 	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
-	//¶‰º
+	//å·¦ä¸‹
 	vertexData[TriAngleIndex].position = Leftbottom;
 	vertexData[TriAngleIndex].texcoord = { 0.0f,1.0f };
-	//ã
+	//ä¸Š
 	vertexData[TriAngleIndex + 1].position = top;
 	vertexData[TriAngleIndex + 1].texcoord = { 0.5f,0.0f };
-	//‰E‰º
+	//å³ä¸‹
 	vertexData[TriAngleIndex + 2].position = Rightbottom;
 	vertexData[TriAngleIndex + 2].texcoord = { 1.0f,1.0f };
 
-	//F‚ð‘‚«ž‚ÞƒAƒhƒŒƒX‚ðŽæ“¾
+	//è‰²ã‚’æ›¸ãè¾¼ã‚€ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
-	//Fî•ñ‚ð‘‚«ž‚Þ
+	//è‰²æƒ…å ±ã‚’æ›¸ãè¾¼ã‚€
 	materialData->color = color;
 	materialData->enableLighting = false;
 	materialData->uvTransform = MakeIdentity4x4();
@@ -47,19 +47,19 @@ void Mesh::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Ri
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformTriAngle.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformTriAngle.translate));
 	materialData->uvTransform = uvTransformMatrix;
-	//s—ñ‚ðì‚é
+	//è¡Œåˆ—ã‚’ä½œã‚‹
 	Matrix4x4 worldMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
-	//WVP‚ð‘‚«ž‚ÞƒAƒhƒŒƒX‚ðŽæ“¾
+	//WVPã‚’æ›¸ãè¾¼ã‚€ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’å–å¾—
 	wvpResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
-	//’PˆÊs—ñ‚ð‘‚«ž‚Þ
+	//å˜ä½è¡Œåˆ—ã‚’æ›¸ãè¾¼ã‚€
 	*wvpData = Multiply(worldMatrix, ViewMatrix);
 	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	//F—p‚ÌCBuffer‚ÌêŠ‚ð“Á’è
+	//è‰²ç”¨ã®CBufferã®å ´æ‰€ã‚’ç‰¹å®š
 	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
-	//WVP—p‚ÌCBuffer‚ÌêŠ‚ð“Á’è
+	//WVPç”¨ã®CBufferã®å ´æ‰€ã‚’ç‰¹å®š
 	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
-	//SRV‚ÌDescriptorTable‚Ìæ“ª‚ðÝ’è@2‚ÍrootParameter[2]‚Ì2
+	//SRVã®DescriptorTableã®å…ˆé ­ã‚’è¨­å®šã€€2ã¯rootParameter[2]ã®2
 	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
 	directX_->GetcommandList().Get()->DrawInstanced(TriAngleIndex + 3, 1, 0, 0);
 }
@@ -86,9 +86,37 @@ void Mesh::ImGui()
 #pragma endregion
 }
 
+void Mesh::VecrtexReset()
+{
+	for (int i = 0; i < kMaxTriAngle; ++i) {
+		if (IsusedTriAngleIndex[i] == true) {
+			IsusedTriAngleIndex[i] = false;
+		}
+	}
+}
+
 void Mesh::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	vertexBufferView.SizeInBytes = sizeof(VertexData) * kMaxVertex;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
+}
+
+Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateBufferResource(size_t sizeInBytes)
+{
+	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_RESOURCE_DESC ResourceDesc{};
+	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	ResourceDesc.Width = sizeInBytes;
+	ResourceDesc.Height = 1;
+	ResourceDesc.DepthOrArraySize = 1;
+	ResourceDesc.MipLevels = 1;
+	ResourceDesc.SampleDesc.Count = 1;
+	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//é ‚ç‚¹ãƒªã‚½ãƒ¼ã‚¹ã‚’ä½œã‚‹
+	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
+	assert(SUCCEEDED(hr));
+	return Resource;
 }

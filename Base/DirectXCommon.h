@@ -17,7 +17,7 @@
 class DirectXCommon
 {
 public:
-	
+	DirectXCommon* GetInstance();
 	void Initialize(WinApp* Window,int32_t kClientWidth, int32_t kClientHeight);
 
 	void PreView();
