@@ -11,7 +11,7 @@ class Sprite
 {
 public:
 	void Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
-	void DrawSprite(const Vector4& color, const uint32_t TextureIndex);
+	void DrawSprite(const Vector4& color, const uint32_t TextureHandle);
 	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;

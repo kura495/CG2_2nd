@@ -11,6 +11,7 @@
 #include"Input/Input.h"
 #include"Base/Mesh.h"
 #include"Base/TextureManager.h"
+#include"Base/Light.h"
 class GameManager
 {
 public:
@@ -36,6 +37,7 @@ private:
 	Input* input = nullptr;
 	XAudio2* Audio = nullptr;
 	TextureManager* textureManager = nullptr;
+	Light* light = nullptr;
 
 	MSG msg{};
 	//State

@@ -8,6 +8,7 @@ void GamePlayState::Initialize()
 	myEngine = MyEngine::GetInstance();
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
+	light_ = Light::GetInstance();
 	mesh = new Mesh();
 	mesh->Initialize();
 	mesh2 = new Mesh();
@@ -16,6 +17,11 @@ void GamePlayState::Initialize()
 	sprite->Initialize(LeftTop[0],LeftBottom[0],RightTop[0], RightBottom[0]);
 	sprite2 = new Sprite();
 	sprite2->Initialize(LeftTop[1],LeftBottom[1],RightTop[1], RightBottom[1]);
+	sphere = new Sphere();
+	sphere->Initialize();
+	sphere2 = new Sphere();
+	sphere2->Initialize();
+
 	textureManager_ = TextureManager::GetInstance();
 	//リソースを作る
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
@@ -37,7 +43,9 @@ if (input->IspushKey(DIK_1)) {
 	mesh2->ImGui("TriAngle2");
 	sprite->ImGui("Sprite");
 	sprite2->ImGui("Sprite2");
-	
+	sphere->ImGui("Sphere");
+	sphere2->ImGui("Sphere2");
+	light_->ImGui("Light");
 	Audio->Play(mokugyo,0.1f,0);
 
 	camera_->ImGui();
@@ -45,10 +53,12 @@ if (input->IspushKey(DIK_1)) {
 }
 void GamePlayState::Draw()
 {
-	mesh->Draw(Color[0],camera_->GetWorldMatrix(), TextureHundle);
-	mesh2->Draw(Color[0],camera_->GetWorldMatrix(), MonsterBall);
-	sprite->DrawSprite(Color[0],TextureHundle);
-	sprite2->DrawSprite(Color[0], MonsterBall);
+	//mesh->Draw(Color[0],camera_->GetWorldMatrix(), TextureHundle);
+	//mesh2->Draw(Color[0],camera_->GetWorldMatrix(), MonsterBall);
+	//sprite->DrawSprite(Color[0],TextureHundle);
+	//sprite2->DrawSprite(Color[0], MonsterBall);
+	sphere->DrawSphere(Color[0],camera_->GetWorldMatrix(), TextureHundle);
+	sphere2->DrawSphere(Color[0],camera_->GetWorldMatrix(), MonsterBall);
 
 	if (input->IspushKey(DIK_0)) {
 		OutputDebugStringA("Hit 0\n");

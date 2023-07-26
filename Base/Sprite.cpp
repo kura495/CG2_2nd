@@ -38,7 +38,7 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	indexDataSprite[4] = 3;
 	indexDataSprite[5] = 2;
 }
-void Sprite::DrawSprite(const Vector4& color, const uint32_t TextureIndex)
+void Sprite::DrawSprite(const Vector4& color, const uint32_t TextureHandle)
 {
 
 	//色の書き込み
@@ -71,7 +71,7 @@ void Sprite::DrawSprite(const Vector4& color, const uint32_t TextureIndex)
 	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureIndex));
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureHandle));
 
 	directX_->GetcommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }

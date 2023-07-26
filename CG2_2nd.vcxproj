@@ -98,8 +98,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClCompile Include="Audio\XAudio2.cpp" />
     <ClCompile Include="Base\DirectXCommon.cpp" />
+    <ClCompile Include="Base\Light.cpp" />
     <ClCompile Include="Base\Mesh.cpp" />
     <ClCompile Include="Base\MyEngine.cpp" />
+    <ClCompile Include="Base\Sphere.cpp" />
     <ClCompile Include="Base\Sprite.cpp" />
     <ClCompile Include="Base\TextureManager.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
@@ -127,8 +129,10 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
   <ItemGroup>
     <ClInclude Include="Audio\XAudio2.h" />
     <ClInclude Include="Base\DirectXCommon.h" />
+    <ClInclude Include="Base\Light.h" />
     <ClInclude Include="Base\Mesh.h" />
     <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="Base\Sphere.h" />
     <ClInclude Include="Base\Sprite.h" />
     <ClInclude Include="Base\TextureManager.h" />
     <ClInclude Include="Base\WinApp.h" />
@@ -145,7 +149,6 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="includeStruct\Matrix3x3.h" />
     <ClInclude Include="includeStruct\Matrix4x4.h" />
     <ClInclude Include="includeStruct\ModelData.h" />
-    <ClInclude Include="includeStruct\Sphere.h" />
     <ClInclude Include="includeStruct\StructLight.h" />
     <ClInclude Include="includeStruct\Transform.h" />
     <ClInclude Include="includeStruct\TransformationMatrix.h" />

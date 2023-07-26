@@ -27,9 +27,12 @@ void GameManager::Initialize()
 	//ImGui
 	imGuiManager = new ImGuiManager();
 	imGuiManager->Initialize(winApp, directX);
-
+	//TextureManager
 	textureManager = TextureManager::GetInstance();
 	textureManager->Initialize(directX);
+	//Light
+	light = Light::GetInstance();
+	light->Initialize();
 	//State
 	state[TITLE]=std::make_unique<GameTitleState>();
 	state[PLAY]= std::make_unique<GamePlayState>();

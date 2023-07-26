@@ -2,12 +2,13 @@
 #include"IgameState.h"
 #include"Base/MyEngine.h"
 #include"GameObject/Camera/Camera.h"
-#include"IncludeStruct/Sphere.h"
 #include"IncludeStruct/ModelData.h"
 #include"Audio/XAudio2.h"
 #include"Input/Input.h"
 #include"Base/Mesh.h"
 #include"Base/Sprite.h"
+#include"Base/Light.h"
+#include"Base/Sphere.h"
 #include"Base/TextureManager.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include<dinput.h>
@@ -30,6 +31,9 @@ private:
 	Mesh* mesh2 = nullptr;
 	Sprite* sprite = nullptr;
 	Sprite* sprite2 = nullptr;
+	Sphere* sphere = nullptr;
+	Sphere* sphere2 = nullptr;
+	Light* light_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	uint32_t TextureHundle;
 	uint32_t MonsterBall;
@@ -52,10 +56,6 @@ private:
 	Vector4 RightBottom[2] = {
 		{ 640.0f,360.0f,0.0f,1.0f },
 		{ 1280.0f,360.0f,0.0f,1.0f }
-	};
-	Sphere sphere{
-		{0.0f,0.0f,0.0f},
-		16
 	};
 	int UV;
 	int Ball;
