@@ -35,8 +35,8 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	//Textureを読んで転送する
 	DirectX::ScratchImage mipImages = ImageFileOpen(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
-	textureResource[SpriteIndex] = CreateTextureResource(directX_->GetDevice(), metadata);
-	intermediateResource[SpriteIndex] = UploadTextureData(textureResource[SpriteIndex].Get(), mipImages);
+	textures_.at(SpriteIndex).textureResource = CreateTextureResource(directX_->GetDevice(), metadata);
+	intermediateResource[SpriteIndex] = UploadTextureData(textures_.at(SpriteIndex).textureResource, mipImages);
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -45,16 +45,19 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	srvDesc.Texture2D.MipLevels = UINT(metadata.mipLevels);
 
 	//SRVを作成するDescriptorHeapの場所を決める
-	textureSrvHandleCPU[SpriteIndex] = GetCPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
-	textureSrvHandleGPU[SpriteIndex] = GetGPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
+	textures_.at(SpriteIndex).textureSrvHandleCPU = GetCPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
+	textures_.at(SpriteIndex).textureSrvHandleGPU = GetGPUDescriptorHandle(directX_->GetsrvDescriptorHeap(), descriptorSizeSRV, SpriteIndex);
 	//先頭はImGuiが使っているので次のを使う
-	textureSrvHandleCPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
-	textureSrvHandleGPU[SpriteIndex].ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textures_.at(SpriteIndex).textureSrvHandleCPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
+	textures_.at(SpriteIndex).textureSrvHandleCPU.ptr += directX_->GetDevice()->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV);
 	//SRVの作成
-	directX_->GetDevice()->CreateShaderResourceView(textureResource[SpriteIndex].Get(), &srvDesc, textureSrvHandleCPU[SpriteIndex]);
+	directX_->GetDevice()->CreateShaderResourceView(textures_.at(SpriteIndex).textureResource.Get(), &srvDesc, textures_.at(SpriteIndex).textureSrvHandleCPU);
 	return SpriteIndex;
-
-	return 0;
+}
+const CD3DX12_GPU_DESCRIPTOR_HANDLE& TextureManager::GetGPUHandle(uint32_t textureHandle)
+{
+	CD3DX12_GPU_DESCRIPTOR_HANDLE GPUHandle = textures_.at(textureHandle).textureSrvHandleGPU;
+	return GPUHandle;
 }
 DirectX::ScratchImage TextureManager::ImageFileOpen(const std::string& filePath)
 {

@@ -20,8 +20,6 @@ void Mesh::Initialize()
 
 void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
 {
-	
-
 	//色を書き込むアドレスを取得
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
