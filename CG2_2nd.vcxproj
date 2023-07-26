@@ -100,6 +100,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Base\DirectXCommon.cpp" />
     <ClCompile Include="Base\Mesh.cpp" />
     <ClCompile Include="Base\MyEngine.cpp" />
+    <ClCompile Include="Base\TextureManager.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
     <ClCompile Include="externals\imgui\imgui_demo.cpp" />
@@ -117,6 +118,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Scenes\State\GameClearState.cpp" />
     <ClCompile Include="Scenes\State\GamePlayState.cpp" />
     <ClCompile Include="Scenes\State\GameTitleState.cpp" />
+    <ClCompile Include="Utility\CreateBufferResource.cpp" />
     <ClCompile Include="Utility\GlobalVariables.cpp" />
     <ClCompile Include="Utility\ImGuiManager.cpp" />
     <ClCompile Include="Utility\LoadCSV.cpp" />
@@ -127,6 +129,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\Mesh.h" />
     <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="Base\TextureManager.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
     <ClInclude Include="externals\imgui\imgui.h" />
@@ -160,6 +163,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Utility\Collider.h" />
     <ClInclude Include="Utility\CollisionConfig.h" />
     <ClInclude Include="Utility\CollisionManager.h" />
+    <ClInclude Include="Utility\CreateBufferResource.h" />
     <ClInclude Include="Utility\GlobalVariables.h" />
     <ClInclude Include="Utility\ImGuiManager.h" />
     <ClInclude Include="Utility\LoadCSV.h" />

@@ -9,15 +9,10 @@ class Mesh
 {
 public:
 	void Initialize();
-	void Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
+	void Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index);
 	void ImGui();
-	void VecrtexReset();
 private:
 	DirectXCommon* directX_;
-
-	static const int kMaxTriAngle = 3;
-	static const int kMaxVertex = kMaxTriAngle * 3;
-	bool IsusedTriAngleIndex[kMaxTriAngle];
 
 	Transform transform{
 		{1.0f,1.0f,1.0f},

@@ -4,11 +4,9 @@ DirectXCommon* DirectXCommon::GetInstance()
 	static DirectXCommon instance;
 	return &instance;
 }
-void DirectXCommon::Initialize(WinApp* winApp,int32_t kClientWidth, int32_t kClientHeight)
+void DirectXCommon::Initialize()
 {
-	winApp_ = winApp;
-	kClientWidth_ = kClientWidth;
-	kClientHeight_ = kClientHeight;
+	winApp_ = WinApp::GetInstance();
 #ifdef _DEBUG
 	if (SUCCEEDED(D3D12GetDebugInterface(IID_PPV_ARGS(&debugController)))) {
 		//デバッグレイヤ―を有効化
@@ -153,6 +151,25 @@ void DirectXCommon::Release()
 	signatureBlob->Release();
 }
 
+Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(size_t sizeInBytes)
+{
+	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
+	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
+	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
+	D3D12_RESOURCE_DESC ResourceDesc{};
+	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
+	ResourceDesc.Width = sizeInBytes;
+	ResourceDesc.Height = 1;
+	ResourceDesc.DepthOrArraySize = 1;
+	ResourceDesc.MipLevels = 1;
+	ResourceDesc.SampleDesc.Count = 1;
+	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
+	//頂点リソースを作る
+	hr = device.Get()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
+	assert(SUCCEEDED(hr));
+	return Resource;
+}
+
 //プライベート関数
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
 DirectXCommon::CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
@@ -201,6 +218,8 @@ Microsoft::WRL::ComPtr<ID3D12Resource>
 	assert(SUCCEEDED(hr));
 	return resource;
 }
+
+
 
 void DirectXCommon::MakeDXGIFactory()
 {
@@ -275,8 +294,8 @@ void DirectXCommon::MakeSwapChain()
 {
 	//スワップチェーンを作成
 	
-	swapChainDesc.Width = kClientWidth_;
-	swapChainDesc.Height = kClientHeight_;
+	swapChainDesc.Width = WinApp::kClientWidth;
+	swapChainDesc.Height = WinApp::kClientHeight;
 	swapChainDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	swapChainDesc.SampleDesc.Count = 1;
 	swapChainDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
@@ -314,7 +333,7 @@ void DirectXCommon::MakeDescriptorHeap()
 	rtvHandles[1].ptr = rtvHandles[0].ptr + device->GetDescriptorHandleIncrementSize(D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
 	device->CreateRenderTargetView(swapChainResources[1].Get(), &rtvDesc, rtvHandles[1]);
 	//DSVDescriptorHeap
-	depthStencilResource =CreateDepthStencilTextureResource(kClientWidth_, kClientHeight_);
+	depthStencilResource =CreateDepthStencilTextureResource(WinApp::kClientWidth, WinApp::kClientHeight);
 	//DSV用のヒープでディスクリプタの数は1　DSVはShader内で触るものではないのでShaderVisibleはfalse
 	dsvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 	//DSVの設定
@@ -523,8 +542,8 @@ void DirectXCommon::MakePipelineStateObject()
 
 void DirectXCommon::MakeViewport()
 {
-	viewport.Width = (float)kClientWidth_;
-	viewport.Height = (float)kClientHeight_;
+	viewport.Width = (float)WinApp::kClientWidth;
+	viewport.Height = (float)WinApp::kClientHeight;
 	viewport.TopLeftX = 0;
 	viewport.TopLeftY = 0;
 	viewport.MinDepth = 0.0f;
@@ -534,9 +553,9 @@ void DirectXCommon::MakeViewport()
 void DirectXCommon::MakeScissor()
 {
 	scissorRect.left = 0;
-	scissorRect.right = kClientWidth_;
+	scissorRect.right = WinApp::kClientWidth;
 	scissorRect.top = 0;
-	scissorRect.bottom = kClientHeight_;
+	scissorRect.bottom = WinApp::kClientHeight;
 }
 
 

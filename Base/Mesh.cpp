@@ -2,40 +2,24 @@
 
 void Mesh::Initialize()
 {
-	vertexResource = CreateBufferResource(sizeof(VertexData) * kMaxVertex);
-	materialResource = CreateBufferResource(sizeof(Material) * kMaxTriAngle);
+	vertexResource = CreateBufferResource(sizeof(VertexData)*3);
+	materialResource = CreateBufferResource(sizeof(Material));
 	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 }
 
-void Mesh::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Rightbottom, const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
+void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
 {
-	int TriAngleIndex = kMaxVertex + 1;
-	for (int i = 0; i < kMaxTriAngle; ++i) {
-		if (IsusedTriAngleIndex[i] == false) {
-			TriAngleIndex = i * 3;
-			IsusedTriAngleIndex[i] = true;
-			break;
-		}
-	}
-	if (TriAngleIndex < 0) {
-		//0より少ない
-		assert(false);
-	}
-	if (kMaxVertex < TriAngleIndex) {
-		//MaxSpriteより多い
-		assert(false);
-	}
 	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
-	vertexData[TriAngleIndex].position = Leftbottom;
-	vertexData[TriAngleIndex].texcoord = { 0.0f,1.0f };
+	vertexData[0].position = { -0.5f,0.0f,0.0f,1.0f };
+	vertexData[0].texcoord = { 0.0f,1.0f };
 	//上
-	vertexData[TriAngleIndex + 1].position = top;
-	vertexData[TriAngleIndex + 1].texcoord = { 0.5f,0.0f };
+	vertexData[1].position = { 0.0f,1.0f,0.0f,1.0f };
+	vertexData[1].texcoord = { 0.5f,0.0f };
 	//右下
-	vertexData[TriAngleIndex + 2].position = Rightbottom;
-	vertexData[TriAngleIndex + 2].texcoord = { 1.0f,1.0f };
+	vertexData[2].position = { 0.5f,0.0f,0.0f,1.0f };
+	vertexData[2].texcoord = { 1.0f,1.0f };
 
 	//色を書き込むアドレスを取得
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
@@ -61,7 +45,7 @@ void Mesh::Draw(const Vector4& Leftbottom, const Vector4& top, const Vector4& Ri
 	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
 	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	directX_->GetcommandList().Get()->DrawInstanced(TriAngleIndex + 3, 1, 0, 0);
+	directX_->GetcommandList().Get()->DrawInstanced(3, 1, 0, 0);
 }
 
 void Mesh::ImGui()
@@ -86,37 +70,10 @@ void Mesh::ImGui()
 #pragma endregion
 }
 
-void Mesh::VecrtexReset()
-{
-	for (int i = 0; i < kMaxTriAngle; ++i) {
-		if (IsusedTriAngleIndex[i] == true) {
-			IsusedTriAngleIndex[i] = false;
-		}
-	}
-}
-
 void Mesh::MakeVertexBufferView()
 {
 	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
-	vertexBufferView.SizeInBytes = sizeof(VertexData) * kMaxVertex;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 3;
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateBufferResource(size_t sizeInBytes)
-{
-	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC ResourceDesc{};
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = sizeInBytes;
-	ResourceDesc.Height = 1;
-	ResourceDesc.DepthOrArraySize = 1;
-	ResourceDesc.MipLevels = 1;
-	ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
-}

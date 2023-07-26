@@ -18,27 +18,27 @@ class DirectXCommon
 {
 public:
 	DirectXCommon* GetInstance();
-	void Initialize(WinApp* Window,int32_t kClientWidth, int32_t kClientHeight);
+	void Initialize();
 
 	void PreView();
 
 	void PostView();
 
 	void Release();
-	Microsoft::WRL::ComPtr<ID3D12GraphicsCommandList>
-	 GetcommandList()const { return commandList.Get(); }
-	Microsoft::WRL::ComPtr<ID3D12Device>
-	 GetDevice()const { return device.Get(); }
+	
+	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+
+	ID3D12GraphicsCommandList*GetcommandList()const { return commandList.Get(); }
+	ID3D12Device* GetDevice()const { return device.Get(); }
 
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc; }
 	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
 	 GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
-	
 private:
 	WinApp* winApp_;
-	int32_t kClientWidth_;
-	int32_t kClientHeight_;
+	/*int32_t kClientWidth_;
+	int32_t kClientHeight_;*/
 	HRESULT hr;
 	//TransitionBarrier
 	D3D12_RESOURCE_BARRIER barrier{};

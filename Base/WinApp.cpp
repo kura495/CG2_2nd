@@ -1,5 +1,11 @@
 #include"WinApp.h"
 
+WinApp* WinApp::GetInstance()
+{
+	static WinApp instance;
+	return &instance;
+}
+
 LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 {
 	if (ImGui_ImplWin32_WndProcHandler(hwnd, msg, wparam, lparam)) {
@@ -14,14 +20,13 @@ LRESULT WinApp::WindowProc(HWND hwnd, UINT msg, WPARAM wparam, LPARAM lparam)
 	return DefWindowProc(hwnd, msg, wparam, lparam);
 }
 
-void WinApp::Initialize(int32_t kClientWidth, int32_t kClientHeight){
+void WinApp::Initialize(){
 
 	wc.lpfnWndProc = WindowProc;
 	wc.lpszClassName = L"CG2WindowClass";
 	wc.hInstance = GetModuleHandle(nullptr);
 	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	RegisterClass(&wc);
-
 	RECT wrc = { 0,0,kClientWidth,kClientHeight };
 
 	AdjustWindowRect(&wrc,WS_OVERLAPPEDWINDOW,false);
