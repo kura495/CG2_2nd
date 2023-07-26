@@ -159,9 +159,6 @@
     <ClCompile Include="Base\TextureManager.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Utility\CreateBufferResource.cpp">
-      <Filter>ソース ファイル\Utility</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -289,9 +286,6 @@
     </ClInclude>
     <ClInclude Include="Base\TextureManager.h">
       <Filter>ヘッダー ファイル\Base</Filter>
-    </ClInclude>
-    <ClInclude Include="Utility\CreateBufferResource.h">
-      <Filter>ヘッダー ファイル\Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

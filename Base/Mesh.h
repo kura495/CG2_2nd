@@ -43,8 +43,8 @@ private:
 	static const int kMaxTexture = 10;
 	bool IsusedTextureIndex[kMaxTexture];
 	//descriptorHandle
-	D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
-	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];
+	/*D3D12_CPU_DESCRIPTOR_HANDLE textureSrvHandleCPU[kMaxTexture];
+	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];*/
 	void MakeVertexBufferView();
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 #pragma endregion 三角形

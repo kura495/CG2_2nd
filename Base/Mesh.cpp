@@ -6,10 +6,6 @@ void Mesh::Initialize()
 	materialResource = CreateBufferResource(sizeof(Material));
 	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
-}
-
-void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
-{
 	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
 	vertexData[0].position = { -0.5f,0.0f,0.0f,1.0f };
@@ -20,6 +16,11 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Ind
 	//右下
 	vertexData[2].position = { 0.5f,0.0f,0.0f,1.0f };
 	vertexData[2].texcoord = { 1.0f,1.0f };
+}
+
+void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Index)
+{
+	
 
 	//色を書き込むアドレスを取得
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
@@ -37,15 +38,15 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const int Ind
 	wvpResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&wvpData));
 	//単位行列を書き込む
 	*wvpData = Multiply(worldMatrix, ViewMatrix);
-	directX_->GetcommandList().Get()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	directX_->GetcommandList().Get()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList().Get()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, wvpResource.Get()->GetGPUVirtualAddress());
 	//SRVのDescriptorTableの先頭を設定　2はrootParameter[2]の2
-	directX_->GetcommandList().Get()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
-	directX_->GetcommandList().Get()->DrawInstanced(3, 1, 0, 0);
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureSrvHandleGPU[Index]);
+	directX_->GetcommandList()->DrawInstanced(3, 1, 0, 0);
 }
 
 void Mesh::ImGui()
