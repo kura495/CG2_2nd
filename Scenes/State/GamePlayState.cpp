@@ -9,6 +9,8 @@ void GamePlayState::Initialize()
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
 	light_ = Light::GetInstance();
+	model = new Model();
+	model->Initialize();
 	mesh = new Mesh();
 	mesh->Initialize();
 	mesh2 = new Mesh();
@@ -21,12 +23,16 @@ void GamePlayState::Initialize()
 	sphere->Initialize();
 	sphere2 = new Sphere();
 	sphere2->Initialize();
+	modelData = new Model();
+	modelData2 = new Model();
 
 	textureManager_ = TextureManager::GetInstance();
 	//リソースを作る
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	TextureHundle = textureManager_->LoadTexture("resources/uvChecker.png");
 	MonsterBall = textureManager_->LoadTexture("resources/monsterBall.png");
+	modelData = model->LoadObjFile("resources","axis.obj");
+	modelData2 = model->LoadObjFile("resources","Plane.obj");
 }
 void GamePlayState::Update()
 {
@@ -39,13 +45,15 @@ if (input->IspushKey(DIK_1)) {
 	}
 #endif // _DEBUG
 
-	mesh->ImGui("TriAngle");
-	mesh2->ImGui("TriAngle2");
-	sprite->ImGui("Sprite");
-	sprite2->ImGui("Sprite2");
-	sphere->ImGui("Sphere");
-	sphere2->ImGui("Sphere2");
-	light_->ImGui("Light");
+	//mesh->ImGui("TriAngle");
+	//mesh2->ImGui("TriAngle2");
+	//sprite->ImGui("Sprite");
+	//sprite2->ImGui("Sprite2");
+	//sphere->ImGui("Sphere");
+	//sphere2->ImGui("Sphere2");
+	//light_->ImGui("Light");
+	modelData->ImGui("Model");
+	modelData2->ImGui("Model2");
 	Audio->Play(mokugyo,0.1f,0);
 
 	camera_->ImGui();
@@ -57,8 +65,10 @@ void GamePlayState::Draw()
 	//mesh2->Draw(Color[0],camera_->GetWorldMatrix(), MonsterBall);
 	//sprite->DrawSprite(Color[0],TextureHundle);
 	//sprite2->DrawSprite(Color[0], MonsterBall);
-	sphere->DrawSphere(Color[0],camera_->GetWorldMatrix(), TextureHundle);
-	sphere2->DrawSphere(Color[0],camera_->GetWorldMatrix(), MonsterBall);
+	//sphere->DrawSphere(Color[0],camera_->GetWorldMatrix(), TextureHundle);
+	//sphere2->DrawSphere(Color[0],camera_->GetWorldMatrix(), MonsterBall);
+	modelData->DrawModel(camera_->GetWorldMatrix(),Color[0]);
+	modelData2->DrawModel( camera_->GetWorldMatrix(),Color[0]);
 
 	if (input->IspushKey(DIK_0)) {
 		OutputDebugStringA("Hit 0\n");

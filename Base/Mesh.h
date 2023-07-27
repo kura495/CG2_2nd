@@ -26,10 +26,9 @@ private:
 	{0.0f,0.0f,0.0f},
 	{0.0f,0.0f,0.0f}
 	};
-#pragma region TriAngle
+
 	//バーテックスリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>
-		vertexResource = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource = nullptr;
 	//頂点データ
 	VertexData* vertexData = nullptr;
 	//バーテックスバッファビュー
@@ -49,5 +48,4 @@ private:
 	D3D12_GPU_DESCRIPTOR_HANDLE textureSrvHandleGPU[kMaxTexture];*/
 	void MakeVertexBufferView();
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
-#pragma endregion 三角形
 };

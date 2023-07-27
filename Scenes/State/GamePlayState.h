@@ -10,6 +10,7 @@
 #include"Base/Light.h"
 #include"Base/Sphere.h"
 #include"Base/TextureManager.h"
+#include"Base/Model.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include<dinput.h>
 #pragma comment(lib,"dinput8.lib")
@@ -34,7 +35,11 @@ private:
 	Sphere* sphere = nullptr;
 	Sphere* sphere2 = nullptr;
 	Light* light_ = nullptr;
+	Model* modelData;
+	Model* modelData2;
+
 	TextureManager* textureManager_ = nullptr;
+	Model* model = nullptr;
 	uint32_t TextureHundle;
 	uint32_t MonsterBall;
 
@@ -73,8 +78,7 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,10.0f},
 	};
-	ModelData modelData;
-	ModelData modelData2;
+	
 
 	Input* input = nullptr;
 	std::array<BYTE, 256> keys;
