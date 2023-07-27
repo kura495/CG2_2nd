@@ -110,6 +110,15 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 		0.0f,0.0f,0.0f,1.0f };
 	return result;
 }
+
+Matrix4x4 MakeRotateMatrix(Vector3 rotation)
+{
+	Matrix4x4 result;
+	result = MakeIdentity4x4();	
+	result = Multiply(MakeRotateXMatrix(rotation.x),Multiply(MakeRotateYMatrix(rotation.y),MakeRotateZMatrix(rotation.z)));
+	return result;
+}
+
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	Matrix4x4 result = {
 		1.0f, 0.0f, 0.0f, 0.0f,

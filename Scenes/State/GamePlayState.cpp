@@ -31,8 +31,8 @@ void GamePlayState::Initialize()
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	TextureHundle = textureManager_->LoadTexture("resources/uvChecker.png");
 	MonsterBall = textureManager_->LoadTexture("resources/monsterBall.png");
-	modelData = model->LoadObjFile("resources","axis.obj");
-	modelData2 = model->LoadObjFile("resources","Plane.obj");
+	modelData = model->LoadObjFile("resources","teapot.obj");
+	modelData2 = model->LoadObjFile("resources","bunny.obj");
 }
 void GamePlayState::Update()
 {

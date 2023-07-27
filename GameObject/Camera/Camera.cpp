@@ -30,6 +30,10 @@ void Camera::Update()
 	/*Matrix4x4 cameraMatrix = MakeAffineMatrix({ 1,1,1 }, {0,0,0}, translation_);*/
 	Matrix4x4 cameraMatrix = MakeIdentity4x4();
 	cameraMatrix = Multiply(cameraMatrix,matRot_);
+	//rotate後で消す！！
+	Matrix4x4 rotate = MakeRotateMatrix(rotation_);
+	cameraMatrix = Multiply(cameraMatrix, rotate);
+	//rotate後で消す！！
 	Matrix4x4 Move = MakeTranslateMatrix(translation_);
 	cameraMatrix = Multiply(cameraMatrix, Move);
 	ViewMatrix = Inverse(cameraMatrix);
