@@ -78,7 +78,6 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,10.0f},
 	};
-	
 
 	Input* input = nullptr;
 	std::array<BYTE, 256> keys;
