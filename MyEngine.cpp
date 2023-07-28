@@ -95,7 +95,7 @@ void MyEngine::ImGui()
 	directionalLightData->color.y = ImGuidirectionalLightColor[y];
 	directionalLightData->color.z = ImGuidirectionalLightColor[z];
 	float ImGuidirectionalLightdirection[Vector3D] = { directionalLightData->direction.x,directionalLightData->direction.y,directionalLightData->direction.z };
-	ImGui::SliderFloat3("Lightpotision", ImGuidirectionalLightdirection, -10, 10, "%.3f");
+	ImGui::SliderFloat3("Lightpotision", ImGuidirectionalLightdirection, -1, 1, "%.3f");
 	directionalLightData->direction.x = ImGuidirectionalLightdirection[x];
 	directionalLightData->direction.y = ImGuidirectionalLightdirection[y];
 	directionalLightData->direction.z = ImGuidirectionalLightdirection[z];
