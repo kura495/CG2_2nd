@@ -16,7 +16,6 @@
 class Model
 {
 public:
-	Model();
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 	void ImGui(const char* Title);
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
