@@ -50,13 +50,13 @@ if (input->IspushKey(DIK_1)) {
 
 	//mesh->ImGui("TriAngle");
 	//mesh2->ImGui("TriAngle2");
-	//sprite->ImGui("Sprite");
-	//sprite2->ImGui("Sprite2");
+	sprite->ImGui("Sprite");
+	sprite2->ImGui("Sprite2");
 	//sphere->ImGui("Sphere");
 	//sphere2->ImGui("Sphere2");
 	//light_->ImGui("Light");
-	modelData->ImGui("Model");
-	modelData2->ImGui("Model2");
+	//modelData->ImGui("Model");
+	//modelData2->ImGui("Model2");
 	Audio->Play(mokugyo,0.1f,0);
 
 	camera_->ImGui();
@@ -66,16 +66,12 @@ void GamePlayState::Draw()
 {
 	//mesh->Draw(Color[0],camera_->GetWorldMatrix(), TextureHundle);
 	//mesh2->Draw(Color[0],camera_->GetWorldMatrix(), MonsterBall);
-	//sprite->DrawSprite(Color[0],TextureHundle);
-	//sprite2->DrawSprite(Color[0], MonsterBall);
+	sprite->DrawSprite(Color[0],TextureHundle);
+	sprite2->DrawSprite(Color[0], MonsterBall);
 	//sphere->DrawSphere(Color[0],camera_->GetWorldMatrix(), TextureHundle);
 	//sphere2->DrawSphere(Color[0],camera_->GetWorldMatrix(), MonsterBall);
-	modelData->DrawModel(camera_->GetWorldMatrix(),Color[0]);
-	modelData2->DrawModel( camera_->GetWorldMatrix(),Color[0]);
-
-	if (input->IspushKey(DIK_0)) {
-		OutputDebugStringA("Hit 0\n");
-	}
+	//modelData->DrawModel(camera_->GetWorldMatrix(),Color[0]);
+	//modelData2->DrawModel( camera_->GetWorldMatrix(),Color[0]);
 	
 	//描画ここまで
 }
