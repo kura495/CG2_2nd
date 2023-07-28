@@ -52,8 +52,6 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const  uint32
 
 void Mesh::ImGui(const char* Title)
 {
-#pragma region TriAngleImGui
-	ImGui::ShowDemoWindow();
 
 	ImGui::Begin(Title);
 	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
@@ -69,7 +67,6 @@ void Mesh::ImGui(const char* Title)
 	ImGui::DragFloat2("UVScale", &uvTranformTriAngle.scale.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("UVRotate", &uvTranformTriAngle.rotate.z);
 	ImGui::End();
-#pragma endregion
 }
 
 void Mesh::MakeVertexBufferView()

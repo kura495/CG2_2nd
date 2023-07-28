@@ -42,9 +42,9 @@ void Camera::Update()
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
 }
-void Camera::ImGui()
+void Camera::ImGui(const char* Title)
 {
-	ImGui::Begin("Camera");
+	ImGui::Begin(Title);
 	float ImGuiRotate[Vector3D] = { rotation_.x,rotation_.y ,rotation_.z };
 	ImGui::SliderFloat3("Rotate", ImGuiRotate, 0, 5, "%.3f");
 	rotation_ = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
@@ -57,7 +57,6 @@ void Camera::ImGui()
 	ImGui::Text("Rotate : W A S D\n");
 	ImGui::Text("Translate : ARROWKEY\n");
 #endif // DEBUG
-
 	ImGui::End();
 }
 Vector3 Camera::GetmatRot()

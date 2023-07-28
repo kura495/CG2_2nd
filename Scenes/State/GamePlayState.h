@@ -35,15 +35,16 @@ private:
 	//
 	//3Dオブジェクトたち
 	Mesh* mesh = nullptr;
-	Mesh* mesh2 = nullptr;
 	Sphere* sphere = nullptr;
-	Sphere* sphere2 = nullptr;
-	Model* modelData = nullptr;
-	Model* modelData2 = nullptr;
+	Model* plane = nullptr;
+	Model* teapot = nullptr;
+	Model* bunny = nullptr;
+	Model* multiMesh = nullptr;
+	Model* multiMaterial = nullptr;
+	Model* Suzanne = nullptr;
 	//
 	//2Dオブジェクトたち
 	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
 	//
 	//テクスチャハンドルたち
 	uint32_t TextureHundle;
@@ -51,6 +52,21 @@ private:
 	//
 	//サウンドハンドルたち
 	uint32_t mokugyo;
+	//
+
+	//ImGui用フラッグ
+	bool IsMeshFlag = false;
+	bool IsSpriteFlag = false;
+	bool IsSphereFlag = false;
+	bool IsPlaneFlag = false;
+	bool IsTeapotFlag = false;
+	bool IsBunnyFlag = false;
+	bool IsMultiMeshFlag = false;
+	bool IsMultiMaterialFlag = false;
+	bool IsSuzanneFlag = false;
+
+	bool IsLightFlag = false;
+	bool IsCameraFlag = false;
 	//
 
 	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };

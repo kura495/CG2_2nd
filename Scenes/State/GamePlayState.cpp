@@ -14,20 +14,18 @@ void GamePlayState::Initialize()
 	//3Dオブジェクト生成
 	mesh = new Mesh();
 	mesh->Initialize();
-	mesh2 = new Mesh();
-	mesh2->Initialize();
 	sphere = new Sphere();
 	sphere->Initialize();
-	sphere2 = new Sphere();
-	sphere2->Initialize();
-	modelData=Model::CreateModelFromObj("resources", "teapot.obj");
-	modelData2 = Model::CreateModelFromObj("resources", "bunny.obj");
+	plane=Model::CreateModelFromObj("resources", "plane.obj");
+	teapot = Model::CreateModelFromObj("resources", "teapot.obj");
+	bunny = Model::CreateModelFromObj("resources", "bunny.obj");
+	multiMesh = Model::CreateModelFromObj("resources", "multiMesh.obj");
+	multiMaterial = Model::CreateModelFromObj("resources", "multiMaterial.obj");
+	//Suzanne = Model::CreateModelFromObj("resources", "suzanne.obj");
 	//
 	//2Dオブジェクト作成
 	sprite = new Sprite();
-	sprite->Initialize(LeftTop[0],LeftBottom[0],RightTop[0], RightBottom[0]);
-	sprite2 = new Sprite();
-	sprite2->Initialize(LeftTop[1],LeftBottom[1],RightTop[1], RightBottom[1]);
+	sprite->Initialize({0.0f,0.0f,0.0f,1.0f},{0.0f,360.0f,0.0f,1.0f},{640.0f,0.0f,0.0f,1.0f},{640.0f,360.0f,0.0f,1.0f});
 	//
 	//リソースを作る
 	//テクスチャ
@@ -47,31 +45,154 @@ if (input->IspushKey(DIK_1)) {
 	camera_->DebugCamera(false);
 	}
 #endif // _DEBUG
+	ImGui::Begin("Button");
+	if (ImGui::Button("Mesh")) {
+		if (IsMeshFlag) {
+			IsMeshFlag = false;
+		}
+		else {
+			IsMeshFlag = true;
+		}
+	}
+	if (ImGui::Button("Sprite")) {
+		if (IsSpriteFlag) {
+			IsSpriteFlag = false;
+		}
+		else {
+			IsSpriteFlag = true;
+		}
+	}
+	if (ImGui::Button("Sphere")) {
+		if (IsSphereFlag) {
+			IsSphereFlag = false;
+		}
+		else {
+			IsSphereFlag = true;
+		}
+	}
+	if (ImGui::Button("Plane")) {
+		if (IsPlaneFlag) {
+			IsPlaneFlag = false;
+		}
+		else {
+			IsPlaneFlag = true;
+		}
+	}
+	if (ImGui::Button("Teapot")) {
+		if (IsTeapotFlag) {
+			IsTeapotFlag = false;
+		}
+		else {
+			IsTeapotFlag = true;
+		}
+	}
+	if (ImGui::Button("bunny")) {
+		if (IsBunnyFlag) {
+			IsBunnyFlag = false;
+		}
+		else {
+			IsBunnyFlag = true;
+		}
+	}
+	if (ImGui::Button("multiMesh")) {
+		if (IsMultiMeshFlag) {
+			IsMultiMeshFlag = false;
+		}
+		else {
+			IsMultiMeshFlag = true;
+		}
+	}
+	if (ImGui::Button("multiMaterial")) {
+		if (IsMultiMaterialFlag) {
+			IsMultiMaterialFlag = false;
+		}
+		else {
+			IsMultiMaterialFlag = true;
+		}
+	}
+	if (ImGui::Button("Light")) {
+		if (IsLightFlag) {
+			IsLightFlag = false;
+		}
+		else {
+			IsLightFlag = true;
+		}
+	}
+	if (ImGui::Button("Camera")) {
+		if (IsCameraFlag) {
+			IsCameraFlag = false;
+		}
+		else {
+			IsCameraFlag = true;
+		}
+	}
 
-	//mesh->ImGui("TriAngle");
-	//mesh2->ImGui("TriAngle2");
-	sprite->ImGui("Sprite");
-	sprite2->ImGui("Sprite2");
-	//sphere->ImGui("Sphere");
-	//sphere2->ImGui("Sphere2");
-	//light_->ImGui("Light");
-	//modelData->ImGui("Model");
-	//modelData2->ImGui("Model2");
-	Audio->Play(mokugyo,0.1f,0);
+	if (IsMeshFlag) {
+		mesh->ImGui("TriAngle");
+	}
+	if (IsSpriteFlag) {
+		sprite->ImGui("Sprite");
+	}
+	if (IsSphereFlag) {
+		sphere->ImGui("Sphere");
+	}
+	if (IsPlaneFlag) {
+		plane->ImGui("Plane");
+	}
+	if (IsTeapotFlag) {
+		teapot->ImGui("teapot");
+	}
+	if (IsBunnyFlag) {
+		bunny->ImGui("bunny");
+	}
+	if (IsMultiMeshFlag) {
+		multiMesh->ImGui("multiMesh");
+	}
+	if (IsMultiMaterialFlag) {
+		multiMaterial->ImGui("multiMaterial");
+	}
 
-	camera_->ImGui();
+	if (IsLightFlag) {
+		light_->ImGui("Light");
+	}
+	if (IsCameraFlag) {
+		camera_->ImGui("camera");
+	}
+	ImGui::End();
+
+	//Audio->Play(mokugyo,0.1f,0);
 	camera_->Update();
+	
+	
 }
 void GamePlayState::Draw()
 {
-	//mesh->Draw(Color[0],camera_->GetWorldMatrix(), TextureHundle);
-	//mesh2->Draw(Color[0],camera_->GetWorldMatrix(), MonsterBall);
-	sprite->DrawSprite(Color[0],TextureHundle);
-	sprite2->DrawSprite(Color[0], MonsterBall);
-	//sphere->DrawSphere(Color[0],camera_->GetWorldMatrix(), TextureHundle);
-	//sphere2->DrawSphere(Color[0],camera_->GetWorldMatrix(), MonsterBall);
-	//modelData->DrawModel(camera_->GetWorldMatrix(),Color[0]);
-	//modelData2->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+	
+	if (IsMeshFlag){
+		mesh->Draw(Color[0], camera_->GetWorldMatrix(),TextureHundle);
+	}
+	if (IsSpriteFlag){
+		sprite->DrawSprite(Color[0], TextureHundle);
+	}
+	if (IsSphereFlag) {
+		sphere->DrawSphere(Color[0], camera_->GetWorldMatrix(), TextureHundle);
+	}
+	if (IsPlaneFlag) {
+		plane->DrawModel(camera_->GetWorldMatrix(),Color[0]);
+	}
+	if (IsTeapotFlag) {
+		teapot->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+	}
+	if (IsBunnyFlag) {
+		bunny->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+	}
+	if (IsMultiMeshFlag) {
+		multiMesh->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+	}
+	if (IsMultiMaterialFlag) {
+		multiMaterial->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+	}
+	
 	
 	//描画ここまで
 }
