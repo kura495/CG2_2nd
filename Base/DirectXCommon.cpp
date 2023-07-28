@@ -148,7 +148,7 @@ void DirectXCommon::Release()
 	debugController->Release();
 #endif
 	CloseWindow(winApp_->GetHWND());
-	signatureBlob->Release();
+	//signatureBlob->Release();
 }
 
 Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(size_t sizeInBytes)

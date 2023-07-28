@@ -63,5 +63,5 @@ void GameManager::Release()
 {
 	ImGui_ImplDX12_Shutdown();
 	CoUninitialize();
-	delete this;
+	//delete this;
 }

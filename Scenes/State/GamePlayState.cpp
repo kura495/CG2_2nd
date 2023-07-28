@@ -9,8 +9,6 @@ void GamePlayState::Initialize()
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
 	light_ = Light::GetInstance();
-	model = new Model();
-	model->Initialize();
 	mesh = new Mesh();
 	mesh->Initialize();
 	mesh2 = new Mesh();
@@ -23,16 +21,15 @@ void GamePlayState::Initialize()
 	sphere->Initialize();
 	sphere2 = new Sphere();
 	sphere2->Initialize();
-	modelData = new Model();
-	modelData2 = new Model();
-
+	modelData=Model::CreateModelFromObj("resources", "teapot.obj");
+	modelData2 = Model::CreateModelFromObj("resources", "bunny.obj");
 	textureManager_ = TextureManager::GetInstance();
 	//リソースを作る
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	TextureHundle = textureManager_->LoadTexture("resources/uvChecker.png");
 	MonsterBall = textureManager_->LoadTexture("resources/monsterBall.png");
-	modelData = model->LoadObjFile("resources","multiMaterial.obj");
-	modelData2 = model->LoadObjFile("resources","teapot.obj");
+	//modelData = model->LoadObjFile("resources","multiMaterial.obj");
+	//modelData2 = model->LoadObjFile();
 }
 void GamePlayState::Update()
 {

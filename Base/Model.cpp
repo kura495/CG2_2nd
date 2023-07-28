@@ -1,13 +1,19 @@
 ﻿#include"Base/Model.h"
 
-void Model::Initialize()
+Model::Model()
+{
+	
+}
+
+void Model::Initialize(const std::string& directoryPath, const std::string& filename)
 {
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
-
 	materialResourceObj = CreateBufferResource(sizeof(Material));
 	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
+
+	modelData_ = LoadObjFile(directoryPath,filename);
 }
 
 void Model::ImGui(const char* Title)
@@ -25,10 +31,17 @@ void Model::ImGui(const char* Title)
 	ImGui::End();
 }
 
+Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::string& filename)
+{
+	Model* model=new Model();
+	model->Initialize(directoryPath,filename);
+	return model;
+}
+
 void Model::DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color)
 {
 	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
-	std::memcpy(vertexDataObj, modelData.vertices.data(), sizeof(VertexData) * modelData.vertices.size());
+	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
 
@@ -50,17 +63,17 @@ void Model::DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color)
 	//WVP
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj->GetGPUVirtualAddress());
 	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData.TextureIndex));
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
 	//Light
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, light_->GetDirectionalLight()->GetGPUVirtualAddress());
 
-	directX_->GetcommandList()->DrawInstanced(UINT(modelData.vertices.size()), 1, 0, 0);
+	directX_->GetcommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
 
 
-Model* Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
+ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
-	modelData;//構築するモデルデータ
+	ModelData modelData;//構築するモデルデータ
 	std::vector<Vector4>positions;//位置　vを保存
 	std::vector<Vector2>texcoords;//テクスチャ座標　vtを保存
 	std::vector<Vector3>normals;//法線　vnを保存
@@ -131,7 +144,7 @@ Model* Model::LoadObjFile(const std::string& directoryPath, const std::string& f
 	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
 	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
-	return this;
+	return modelData;
 }
 
 MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)

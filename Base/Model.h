@@ -16,9 +16,11 @@
 class Model
 {
 public:
-	void Initialize();
+	Model();
+	void Initialize(const std::string& directoryPath, const std::string& filename);
 	void ImGui(const char* Title);
-	Model* LoadObjFile(const std::string& directoryPath, const std::string& filename);
+	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
+	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	void DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color);
 private:
 
@@ -31,7 +33,7 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
-	ModelData modelData;
+	ModelData modelData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceObj = nullptr;
 	//Obj用頂点データ
 	VertexData* vertexDataObj = nullptr;
