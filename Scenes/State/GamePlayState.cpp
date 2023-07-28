@@ -151,7 +151,6 @@ if (input->IspushKey(DIK_1)) {
 	if (IsMultiMaterialFlag) {
 		multiMaterial->ImGui("multiMaterial");
 	}
-
 	if (IsLightFlag) {
 		light_->ImGui("Light");
 	}
