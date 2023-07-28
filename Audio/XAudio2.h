@@ -32,7 +32,7 @@ class XAudio2 {
 public:
 	static XAudio2* GetInstance();
 	void Initialize();
-	int LoadAudio(const wchar_t* filePath);
+	uint32_t LoadAudio(const wchar_t* filePath);
 	void Release();
 	void Play(int AudioInDex, float AudioVolume, int pan);
 

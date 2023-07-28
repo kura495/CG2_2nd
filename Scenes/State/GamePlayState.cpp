@@ -2,34 +2,40 @@
 
 void GamePlayState::Initialize()
 {
-	//インスタンス生成する
+	//基本機能生成
 	camera_ = new Camera();
 	camera_->Initialize(1280, 720);
 	myEngine = MyEngine::GetInstance();
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
+	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
+	//
+	//3Dオブジェクト生成
 	mesh = new Mesh();
 	mesh->Initialize();
 	mesh2 = new Mesh();
 	mesh2->Initialize();
-	sprite = new Sprite();
-	sprite->Initialize(LeftTop[0],LeftBottom[0],RightTop[0], RightBottom[0]);
-	sprite2 = new Sprite();
-	sprite2->Initialize(LeftTop[1],LeftBottom[1],RightTop[1], RightBottom[1]);
 	sphere = new Sphere();
 	sphere->Initialize();
 	sphere2 = new Sphere();
 	sphere2->Initialize();
 	modelData=Model::CreateModelFromObj("resources", "teapot.obj");
 	modelData2 = Model::CreateModelFromObj("resources", "bunny.obj");
-	textureManager_ = TextureManager::GetInstance();
+	//
+	//2Dオブジェクト作成
+	sprite = new Sprite();
+	sprite->Initialize(LeftTop[0],LeftBottom[0],RightTop[0], RightBottom[0]);
+	sprite2 = new Sprite();
+	sprite2->Initialize(LeftTop[1],LeftBottom[1],RightTop[1], RightBottom[1]);
+	//
 	//リソースを作る
-	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
+	//テクスチャ
 	TextureHundle = textureManager_->LoadTexture("resources/uvChecker.png");
 	MonsterBall = textureManager_->LoadTexture("resources/monsterBall.png");
-	//modelData = model->LoadObjFile("resources","multiMaterial.obj");
-	//modelData2 = model->LoadObjFile();
+	//サウンド
+	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
+	//
 }
 void GamePlayState::Update()
 {

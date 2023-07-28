@@ -51,10 +51,10 @@ void XAudio2::Initialize() {
 	// Assuming pVoice sends to pMasteringVoice
 }
 
-int XAudio2::LoadAudio(const wchar_t* filePath) {
+uint32_t XAudio2::LoadAudio(const wchar_t* filePath) {
 	//位置決め
 #pragma region Index
-	int AudioIndex = kMaxAudio + 1;
+	uint32_t AudioIndex = kMaxAudio + 1;
 	    for (int i = 0; i < kMaxAudio; ++i) {
 		if (IsusedAudioIndex[i] == false) {
 			AudioIndex = i;

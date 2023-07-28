@@ -25,26 +25,36 @@ public:
 	void Draw();
 
 private:
-
+	//基本機能ズ
 	MyEngine* myEngine = nullptr;
 	Camera* camera_ = nullptr;
+	TextureManager* textureManager_ = nullptr;	
+	Input* input = nullptr;
+	XAudio2* Audio=nullptr;
+	Light* light_ = nullptr;
+	//
+	//3Dオブジェクトたち
 	Mesh* mesh = nullptr;
 	Mesh* mesh2 = nullptr;
-	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
 	Sphere* sphere = nullptr;
 	Sphere* sphere2 = nullptr;
-	Light* light_ = nullptr;
-	Model* modelData;
-	Model* modelData2;
-
-	TextureManager* textureManager_ = nullptr;
-	Model* model = nullptr;
+	Model* modelData = nullptr;
+	Model* modelData2 = nullptr;
+	//
+	//2Dオブジェクトたち
+	Sprite* sprite = nullptr;
+	Sprite* sprite2 = nullptr;
+	//
+	//テクスチャハンドルたち
 	uint32_t TextureHundle;
 	uint32_t MonsterBall;
+	//
+	//サウンドハンドルたち
+	uint32_t mokugyo;
+	//
 
 	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };
-	//Sprite
+	//Sprite用の位置
 	Vector4 LeftTop[2] = {
 		{ 0.0f,0.0f,0.0f,1.0f },
 		{ 640.0f,0.0f,0.0f,1.0f }
@@ -62,26 +72,6 @@ private:
 		{ 640.0f,360.0f,0.0f,1.0f },
 		{ 1280.0f,360.0f,0.0f,1.0f }
 	};
-	int UV;
-	int Ball;
-	int Base;
-	int Max;
-	bool useMonsterBall = true;
-	int SphereTexture = 0;
-	Transform Box = {
-		{2.0f,2.0f,2.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-	Transform Box2 = {
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,10.0f},
-	};
 
-	Input* input = nullptr;
-	std::array<BYTE, 256> keys;
-	std::array<BYTE, 256> preKeys;
-	XAudio2* Audio=nullptr;
-	int mokugyo;
+
 };

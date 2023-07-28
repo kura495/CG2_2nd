@@ -9,6 +9,8 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
 
 	modelData_ = LoadObjFile(directoryPath,filename);
+	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
+	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 }
 
 void Model::ImGui(const char* Title)
@@ -35,8 +37,6 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 
 void Model::DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color)
 {
-	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
-	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
 
