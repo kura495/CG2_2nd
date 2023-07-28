@@ -1,10 +1,5 @@
 ﻿#include"Base/Model.h"
 
-Model::Model()
-{
-	
-}
-
 void Model::Initialize(const std::string& directoryPath, const std::string& filename)
 {
 	directX_ = DirectXCommon::GetInstance();
