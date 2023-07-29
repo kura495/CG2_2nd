@@ -13,7 +13,7 @@ void Camera::Initialize(int32_t kClientWidth, int32_t kClientHeight)
 	cameraMatrix = Multiply(cameraMatrix, Move);
 	ViewMatrix = Inverse(cameraMatrix);
 	ViewMatrix = Multiply(ViewMatrix, matRot_);
-	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
+	ProjectionMatrix = MakePerspectiveFovMatrix(FOV, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix,Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
 	input = Input::GetInstance();
@@ -38,19 +38,18 @@ void Camera::Update()
 	cameraMatrix = Multiply(cameraMatrix, Move);
 	ViewMatrix = Inverse(cameraMatrix);
 	
-	ProjectionMatrix = MakePerspectiveFovMatrix(0.45f, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
+	ProjectionMatrix = MakePerspectiveFovMatrix(/*0.45f*/FOV, float(kClientWidth_) / float(kClientHeight_), 0.1f, 100.0f);
 	Matrix4x4 worldViewProjectionMatrix = Multiply(worldMatrix, Multiply(ViewMatrix, ProjectionMatrix));
 	transformationMatrixData = worldViewProjectionMatrix;
 }
 void Camera::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
-	float ImGuiRotate[Vector3D] = { rotation_.x,rotation_.y ,rotation_.z };
-	ImGui::SliderFloat3("Rotate", ImGuiRotate, 0, 5, "%.3f");
-	rotation_ = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
-	float ImGuiTranslate[Vector3D] = { translation_.x,translation_.y ,translation_.z };
-	ImGui::SliderFloat3("Translate", ImGuiTranslate, -10, 10, "%.3f");
-	translation_ = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
+	//回転
+	ImGui::SliderFloat3("Rotate", &rotation_.x, 0, 5, "%.3f");
+	//移動
+	ImGui::SliderFloat3("Translate", &translation_.x, -25, 10, "%.3f");
+	ImGui::SliderFloat("FOV", &FOV,45.0f,104.0f);
 #ifdef _DEBUG
 	ImGui::Text("DebugCameraOn : 1\n");
 	ImGui::Text("DebugCameraOff : 2\n");

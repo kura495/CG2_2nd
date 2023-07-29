@@ -110,7 +110,6 @@ Matrix4x4 MakeRotateZMatrix(float radian) {
 		0.0f,0.0f,0.0f,1.0f };
 	return result;
 }
-
 Matrix4x4 MakeRotateMatrix(Vector3 rotation)
 {
 	Matrix4x4 result;
@@ -118,7 +117,6 @@ Matrix4x4 MakeRotateMatrix(Vector3 rotation)
 	result = Multiply(MakeRotateXMatrix(rotation.x),Multiply(MakeRotateYMatrix(rotation.y),MakeRotateZMatrix(rotation.z)));
 	return result;
 }
-
 Matrix4x4 MakeTranslateMatrix(const Vector3& translate) {
 	Matrix4x4 result = {
 		1.0f, 0.0f, 0.0f, 0.0f,
@@ -208,6 +206,8 @@ Matrix4x4 Inverse(const Matrix4x4& m)
 }
 Matrix4x4 MakePerspectiveFovMatrix(float FovY, float aspectRatio, float nearClip, float farClip)
 {
+	FovY = FovY * (float)std::numbers::pi / 180;
+	//シン・PerspectiveFov
 	Matrix4x4 result = {
 	(1 / aspectRatio) * cot(FovY / 2),0,0,0,
 	0,cot(FovY / 2),0,0,
@@ -215,6 +215,14 @@ Matrix4x4 MakePerspectiveFovMatrix(float FovY, float aspectRatio, float nearClip
 	0,0,(-nearClip * farClip) / (farClip - nearClip),0
 	};
 	return result;
+	//旧
+	/*Matrix4x4 result = {
+	(1 / aspectRatio) * cot(FovY / 2),0,0,0,
+	0,cot(FovY / 2),0,0,
+	0,0,farClip / (farClip - nearClip),1,
+	0,0,(-nearClip * farClip) / (farClip - nearClip),0
+	};
+	return result;*/
 }
 Matrix4x4 MakeViewportMatrix(float left, float top, float width, float height, float minDepth, float maxDepth)
 {

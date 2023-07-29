@@ -29,7 +29,9 @@ private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
-
+	//フラグたち
+	int32_t lightFlag = Lighting::NotDo;
+	//
 	Transform transformObj{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},

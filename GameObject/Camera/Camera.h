@@ -26,13 +26,15 @@ private:
 	Matrix4x4 matRot_;
 	Vector3 GetmatRot();
 	// ローカル座標
-	Vector3 translation_ = { 0,0,-25 };
+	Vector3 translation_ = { 0,0,-10 };
 	//　ビュー行列
 	Matrix4x4 ViewMatrix;
 	// 射影行列
 	Matrix4x4 ProjectionMatrix;
 	Matrix4x4 worldMatrix;
 	Input* input = nullptr;
+	//FOVY
+	float FOV = 45.0f;
 	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;

@@ -16,10 +16,24 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 void Model::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
+	//拡大
 	ImGui::SliderFloat3("ScaleObj", &transformObj.scale.x, 1, 30, "%.3f");
+	//回転
 	ImGui::SliderFloat3("RotateObj", &transformObj.rotate.x, -7, 7, "%.3f");
+	//移動
 	ImGui::SliderFloat3("TranslateObj", &transformObj.translate.x, -10, 10, "%.3f");
+	//色変更
 	ImGui::ColorPicker4("Color", &color_.x);
+	//ライティングのラジオボタン
+	if (ImGui::RadioButton("NotDo", lightFlag == Lighting::NotDo)) {
+		lightFlag = Lighting::NotDo;
+	}
+	else if (ImGui::RadioButton("harfLambert", lightFlag == Lighting::harfLambert)) {
+		lightFlag = Lighting::harfLambert;
+	}
+	else if (ImGui::RadioButton("Lambert", lightFlag == Lighting::Lambert)) {
+		lightFlag = Lighting::Lambert;
+	}
 	ImGui::End();
 }
 
@@ -35,8 +49,7 @@ void Model::DrawModel(const Matrix4x4& ViewMatrix)
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
 
-	//ライティングをしない
-	materialDataObj->enableLighting = false;
+	materialDataObj->enableLighting = lightFlag;
 	materialDataObj->color = color_;
 	materialDataObj->uvTransform = MakeIdentity4x4();
 
