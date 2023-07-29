@@ -21,6 +21,7 @@ void GamePlayState::Initialize()
 	bunny = Model::CreateModelFromObj("resources", "bunny.obj");
 	multiMesh = Model::CreateModelFromObj("resources", "multiMesh.obj");
 	multiMaterial = Model::CreateModelFromObj("resources", "multiMaterial.obj");
+	Base = Model::CreateModelFromObj("resources", "Base.obj");
 	//Suzanne = Model::CreateModelFromObj("resources", "suzanne.obj");
 	//
 	//2Dオブジェクト作成
@@ -110,6 +111,15 @@ if (input->IspushKey(DIK_1)) {
 			IsMultiMaterialFlag = true;
 		}
 	}
+	if (ImGui::Button("Base")) {
+		if (IsBaseFlag) {
+			IsBaseFlag = false;
+		}
+		else {
+			IsBaseFlag = true;
+		}
+	}
+
 	if (ImGui::Button("Light")) {
 		if (IsLightFlag) {
 			IsLightFlag = false;
@@ -151,6 +161,9 @@ if (input->IspushKey(DIK_1)) {
 	if (IsMultiMaterialFlag) {
 		multiMaterial->ImGui("multiMaterial");
 	}
+	if (IsBaseFlag) {
+		Base->ImGui("Base");
+	}
 	if (IsLightFlag) {
 		light_->ImGui("Light");
 	}
@@ -190,6 +203,9 @@ void GamePlayState::Draw()
 	}
 	if (IsMultiMaterialFlag) {
 		multiMaterial->DrawModel( camera_->GetWorldMatrix());
+	}
+	if (IsBaseFlag) {
+		Base->DrawModel( camera_->GetWorldMatrix());
 	}
 	
 	

@@ -49,7 +49,7 @@ void Camera::ImGui(const char* Title)
 	ImGui::SliderFloat3("Rotate", &rotation_.x, 0, 5, "%.3f");
 	//移動
 	ImGui::SliderFloat3("Translate", &translation_.x, -25, 10, "%.3f");
-	ImGui::SliderFloat("FOV", &FOV,45.0f,104.0f);
+	ImGui::SliderFloat(/*"FOV"*/"???", &FOV, 45.0f, 104.0f);
 #ifdef _DEBUG
 	ImGui::Text("DebugCameraOn : 1\n");
 	ImGui::Text("DebugCameraOff : 2\n");

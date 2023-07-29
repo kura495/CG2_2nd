@@ -42,6 +42,7 @@ private:
 	Model* multiMesh = nullptr;
 	Model* multiMaterial = nullptr;
 	Model* Suzanne = nullptr;
+	Model* Base = nullptr;
 	//
 	//2Dオブジェクトたち
 	Sprite* sprite = nullptr;
@@ -64,6 +65,7 @@ private:
 	bool IsMultiMeshFlag = false;
 	bool IsMultiMaterialFlag = false;
 	bool IsSuzanneFlag = false;
+	bool IsBaseFlag = false;
 
 	bool IsLightFlag = false;
 	bool IsCameraFlag = false;

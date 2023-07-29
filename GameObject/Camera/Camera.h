@@ -21,12 +21,12 @@ public:
 
 private:
 	// X,Y,Z軸回りのローカル回転角
-	Vector3 rotation_ = { 0,0,0 };
+	Vector3 rotation_ = { 0.5,0,0 };
 	// 累積回転行列
 	Matrix4x4 matRot_;
 	Vector3 GetmatRot();
 	// ローカル座標
-	Vector3 translation_ = { 0,0,-10 };
+	Vector3 translation_ = { 0,2,-5 };
 	//　ビュー行列
 	Matrix4x4 ViewMatrix;
 	// 射影行列
@@ -34,7 +34,7 @@ private:
 	Matrix4x4 worldMatrix;
 	Input* input = nullptr;
 	//FOVY
-	float FOV = 45.0f;
+	float FOV = 90.0f;
 	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
