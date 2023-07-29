@@ -21,9 +21,12 @@ private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
-
+	//分割数
 	const int kSubdivision = 16;
-
+	//
+	//フラグたち
+	int32_t lightFlag = Lighting::NotDo;
+	//
 	//Sphere用頂点データ
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSphere = nullptr;
 	//Sphere用頂点データ
@@ -45,12 +48,18 @@ private:
 	uint32_t* indexDataSphere = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSphere{};
+
 	Transform transformSphere{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
+
+Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+
+	//イニシャライズで呼び出す
 	void MakeVertexBufferViewSphere();
 	void MakeIndexBufferViewSphere();
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+	//
+	
 };

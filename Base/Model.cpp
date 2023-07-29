@@ -20,7 +20,6 @@ void Model::ImGui(const char* Title)
 	ImGui::SliderFloat3("RotateObj", &transformObj.rotate.x, -7, 7, "%.3f");
 	ImGui::SliderFloat3("TranslateObj", &transformObj.translate.x, -10, 10, "%.3f");
 	ImGui::ColorPicker4("Color", &color_.x);
-
 	ImGui::End();
 }
 
@@ -60,7 +59,6 @@ void Model::DrawModel(const Matrix4x4& ViewMatrix)
 
 	directX_->GetcommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
 }
-
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {

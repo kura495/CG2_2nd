@@ -8,7 +8,6 @@ Light* Light::GetInstance()
 
 void Light::Initialize()
 {
-
 	directX_ = DirectXCommon::GetInstance();
 
 	directionalLightResource = CreateBufferResource(sizeof(DirectionalLight));
@@ -21,16 +20,8 @@ void Light::Initialize()
 void Light::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
-	float ImGuidirectionalLightColor[Vector3D] = { directionalLightData->color.x,directionalLightData->color.y ,directionalLightData->color.z };
-	ImGui::SliderFloat3("LightColor", ImGuidirectionalLightColor, 0, 1, "%.3f");
-	directionalLightData->color.x = ImGuidirectionalLightColor[x];
-	directionalLightData->color.y = ImGuidirectionalLightColor[y];
-	directionalLightData->color.z = ImGuidirectionalLightColor[z];
-	float ImGuidirectionalLightdirection[Vector3D] = { directionalLightData->direction.x,directionalLightData->direction.y,directionalLightData->direction.z };
-	ImGui::SliderFloat3("Lightpotision", ImGuidirectionalLightdirection, -10, 10, "%.3f");
-	directionalLightData->direction.x = ImGuidirectionalLightdirection[x];
-	directionalLightData->direction.y = ImGuidirectionalLightdirection[y];
-	directionalLightData->direction.z = ImGuidirectionalLightdirection[z];
+	ImGui::SliderFloat3("LightColor", &directionalLightData->color.x, 0, 1, "%.3f");
+	ImGui::SliderFloat3("Lightpotision", &directionalLightData->direction.x, -10, 10, "%.3f");
 	ImGui::End();
 }
 Microsoft::WRL::ComPtr<ID3D12Resource> Light::CreateBufferResource(size_t sizeInBytes)

@@ -1,7 +1,7 @@
 #pragma once
 #include"Mesh.h"
 #include"IncludeStruct\ModelData.h"
-#include"IncludeStruct\StructLight.h"
+#include"Base/Light.h"
 #include<numbers>
 #include<fstream>
 

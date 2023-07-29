@@ -209,9 +209,6 @@
     <ClInclude Include="includeStruct\Transform.h">
       <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
-    <ClInclude Include="includeStruct\StructLight.h">
-      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
-    </ClInclude>
     <ClInclude Include="includeStruct\Vector2.h">
       <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
@@ -229,9 +226,6 @@
     </ClInclude>
     <ClInclude Include="Utility\ImGuiManager.h">
       <Filter>ヘッダー ファイル\Utility</Filter>
-    </ClInclude>
-    <ClInclude Include="includeStruct\ModelData.h">
-      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Camera\Camera.h">
       <Filter>ヘッダー ファイル\GameObject\Camera</Filter>
@@ -307,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="Base\Model.h">
       <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="includeStruct\ModelData.h">
+      <Filter>ヘッダー ファイル\IncludeStruct</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

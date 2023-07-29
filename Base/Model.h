@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include"IncludeStruct/Material.h"
-#include"IncludeStruct/ModelData.h"
 #include"IncludeStruct/Transform.h"
 #include"IncludeStruct/TransformationMatrix.h"
+#include"IncludeStruct/VertexData.h"
+#include"IncludeStruct/ModelData.h"
 #include"Base/TextureManager.h"
 #include"Base/Light.h"
 #include"Utility/ImGuiManager.h"
@@ -13,9 +14,11 @@
 #include<fstream>
 #include<sstream>
 #include<wrl.h>
+
 class Model
 {
 public:
+	
 	void Initialize(const std::string& directoryPath, const std::string& filename);
 	void ImGui(const char* Title);
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
