@@ -15,15 +15,12 @@ class Sphere
 public:
 
 	void Initialize();
-	void DrawSphere(const Vector4& color,const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle);
+	void DrawSphere(const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle);
 	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
-
-	Vector3 center;//中心点
-	float radius;//半径
 
 	const int kSubdivision = 16;
 
@@ -37,6 +34,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSphere = nullptr;
 	//色データ
 	Material* materialDataSphere = nullptr;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Sphere用WVPリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSphere = nullptr;
 	//Sphere用WVPデータ

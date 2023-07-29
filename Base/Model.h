@@ -20,7 +20,7 @@ public:
 	void ImGui(const char* Title);
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-	void DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color);
+	void DrawModel(const Matrix4x4& ViewMatrix);
 private:
 
 	DirectXCommon* directX_ = nullptr;
@@ -41,6 +41,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceObj = nullptr;
 	//色データ
 	Material* materialDataObj = nullptr;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite用WVPリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceObj = nullptr;
 	//Sprite用WVPデータ

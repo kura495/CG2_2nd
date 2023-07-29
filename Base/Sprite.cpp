@@ -38,12 +38,12 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	indexDataSprite[4] = 3;
 	indexDataSprite[5] = 2;
 }
-void Sprite::DrawSprite(const Vector4& color, const uint32_t TextureHandle)
+void Sprite::DrawSprite(const uint32_t TextureHandle)
 {
 
 	//色の書き込み
 	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-	materialDataSprite->color = color;
+	materialDataSprite->color = color_;
 	//ライティングをしない
 	materialDataSprite->enableLighting = false;
 	materialDataSprite->uvTransform = MakeIdentity4x4();
@@ -78,18 +78,13 @@ void Sprite::DrawSprite(const Vector4& color, const uint32_t TextureHandle)
 void Sprite::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
-	float ImGuiScaleSprite[Vector3D] = { transformSprite.scale.x,transformSprite.scale.y ,transformSprite.scale.z };
-	ImGui::SliderFloat3("ScaleSprite", ImGuiScaleSprite, 1, 30, "%.3f");
-	transformSprite.scale = { ImGuiScaleSprite[x],ImGuiScaleSprite[y],ImGuiScaleSprite[z] };
-	float ImGuiRotateSprite[Vector3D] = { transformSprite.rotate.x,transformSprite.rotate.y ,transformSprite.rotate.z };
-	ImGui::SliderFloat3("RotateSprite", ImGuiRotateSprite, -7, 7, "%.3f");
-	transformSprite.rotate = { ImGuiRotateSprite[x],ImGuiRotateSprite[y],ImGuiRotateSprite[z] };
-	float ImGuiTranslateSprite[Vector3D] = { transformSprite.translate.x,transformSprite.translate.y ,transformSprite.translate.z };
-	ImGui::SliderFloat3("TranslateSprite", ImGuiTranslateSprite, -640, 640, "%.3f");
-	transformSprite.translate = { ImGuiTranslateSprite[x],ImGuiTranslateSprite[y],ImGuiTranslateSprite[z] };
+	ImGui::SliderFloat3("ScaleSprite", &transformSprite.scale.x, 1, 30, "%.3f");
+	ImGui::SliderFloat3("RotateSprite", &transformSprite.rotate.x, -7, 7, "%.3f");
+	ImGui::SliderFloat3("TranslateSprite", &transformSprite.translate.x, -640, 640, "%.3f");
 	ImGui::DragFloat2("UVTranslate", &uvTranformSprite.translate.x, 0.01f, -10.0f, 10.0f);
 	ImGui::DragFloat2("UVScale", &uvTranformSprite.scale.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("UVRotate", &uvTranformSprite.rotate.z);
+	ImGui::ColorPicker4("Color", &color_.x);
 	ImGui::End();
 }
 void Sprite::MakeVertexBufferViewSprite()

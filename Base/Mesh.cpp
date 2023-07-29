@@ -21,12 +21,12 @@ void Mesh::Initialize()
 	vertexData[2].texcoord = { 1.0f,1.0f };
 }
 
-void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const  uint32_t textureHandle)
+void Mesh::Draw(const Matrix4x4& ViewMatrix, const  uint32_t textureHandle)
 {
 	//色を書き込むアドレスを取得
 	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 	//色情報を書き込む
-	materialData->color = color;
+	materialData->color = color_;
 	materialData->enableLighting = false;
 	materialData->uvTransform = MakeIdentity4x4();
 	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformTriAngle.scale);
@@ -52,20 +52,14 @@ void Mesh::Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const  uint32
 
 void Mesh::ImGui(const char* Title)
 {
-
 	ImGui::Begin(Title);
-	float ImGuiScale[Vector3D] = { transform.scale.x,transform.scale.y ,transform.scale.z };
-	ImGui::SliderFloat3("Scale", ImGuiScale, 1, 30, "%.3f");
-	transform.scale = { ImGuiScale[x],ImGuiScale[y],ImGuiScale[z] };
-	float ImGuiRotate[Vector3D] = { transform.rotate.x,transform.rotate.y ,transform.rotate.z };
-	ImGui::SliderFloat3("Rotate", ImGuiRotate, -7, 7, "%.3f");
-	transform.rotate = { ImGuiRotate[x],ImGuiRotate[y],ImGuiRotate[z] };
-	float ImGuiTranslate[Vector3D] = { transform.translate.x,transform.translate.y ,transform.translate.z };
-	ImGui::SliderFloat3("Translate", ImGuiTranslate, -2, 2, "%.3f");
-	transform.translate = { ImGuiTranslate[x],ImGuiTranslate[y],ImGuiTranslate[z] };
+	ImGui::SliderFloat3("Scale", &transform.scale.x, 1, 30, "%.3f");
+	ImGui::SliderFloat3("Rotate", &transform.rotate.x, -7, 7, "%.3f");
+	ImGui::SliderFloat3("Translate", &transform.translate.x, -2, 2, "%.3f");
 	ImGui::DragFloat2("UVTranslate", &uvTranformTriAngle.translate.x, 0.01f, -10.0f, 10.0f);
 	ImGui::DragFloat2("UVScale", &uvTranformTriAngle.scale.x, 0.01f, -10.0f, 10.0f);
 	ImGui::SliderAngle("UVRotate", &uvTranformTriAngle.rotate.z);
+	ImGui::ColorPicker4("Color", &color_.x);
 	ImGui::End();
 }
 

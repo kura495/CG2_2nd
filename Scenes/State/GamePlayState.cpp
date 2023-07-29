@@ -168,28 +168,28 @@ void GamePlayState::Draw()
 {
 	
 	if (IsMeshFlag){
-		mesh->Draw(Color[0], camera_->GetWorldMatrix(),TextureHundle);
+		mesh->Draw(camera_->GetWorldMatrix(),TextureHundle);
 	}
 	if (IsSpriteFlag){
-		sprite->DrawSprite(Color[0], TextureHundle);
+		sprite->DrawSprite(TextureHundle);
 	}
 	if (IsSphereFlag) {
-		sphere->DrawSphere(Color[0], camera_->GetWorldMatrix(), TextureHundle);
+		sphere->DrawSphere(camera_->GetWorldMatrix(), TextureHundle);
 	}
 	if (IsPlaneFlag) {
-		plane->DrawModel(camera_->GetWorldMatrix(),Color[0]);
+		plane->DrawModel(camera_->GetWorldMatrix());
 	}
 	if (IsTeapotFlag) {
-		teapot->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+		teapot->DrawModel( camera_->GetWorldMatrix());
 	}
 	if (IsBunnyFlag) {
-		bunny->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+		bunny->DrawModel( camera_->GetWorldMatrix());
 	}
 	if (IsMultiMeshFlag) {
-		multiMesh->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+		multiMesh->DrawModel( camera_->GetWorldMatrix());
 	}
 	if (IsMultiMaterialFlag) {
-		multiMaterial->DrawModel( camera_->GetWorldMatrix(),Color[0]);
+		multiMaterial->DrawModel( camera_->GetWorldMatrix());
 	}
 	
 	

@@ -16,15 +16,11 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 void Model::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
-	float ImGuiScaleObj[Vector3D] = { transformObj.scale.x,transformObj.scale.y ,transformObj.scale.z };
-	ImGui::SliderFloat3("ScaleObj", ImGuiScaleObj, 1, 30, "%.3f");
-	transformObj.scale = { ImGuiScaleObj[x],ImGuiScaleObj[y],ImGuiScaleObj[z] };
-	float ImGuiRotateObj[Vector3D] = { transformObj.rotate.x,transformObj.rotate.y ,transformObj.rotate.z };
-	ImGui::SliderFloat3("RotateObj", ImGuiRotateObj, -7, 7, "%.3f");
-	transformObj.rotate = { ImGuiRotateObj[x],ImGuiRotateObj[y],ImGuiRotateObj[z] };
-	float ImGuiTranslateObj[Vector3D] = { transformObj.translate.x,transformObj.translate.y ,transformObj.translate.z };
-	ImGui::SliderFloat3("TranslateObj", ImGuiTranslateObj, -10, 10, "%.3f");
-	transformObj.translate = { ImGuiTranslateObj[x],ImGuiTranslateObj[y],ImGuiTranslateObj[z] };
+	ImGui::SliderFloat3("ScaleObj", &transformObj.scale.x, 1, 30, "%.3f");
+	ImGui::SliderFloat3("RotateObj", &transformObj.rotate.x, -7, 7, "%.3f");
+	ImGui::SliderFloat3("TranslateObj", &transformObj.translate.x, -10, 10, "%.3f");
+	ImGui::ColorPicker4("Color", &color_.x);
+
 	ImGui::End();
 }
 
@@ -35,14 +31,14 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-void Model::DrawModel(const Matrix4x4& ViewMatrix, const Vector4& color)
+void Model::DrawModel(const Matrix4x4& ViewMatrix)
 {
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
 
 	//ライティングをしない
 	materialDataObj->enableLighting = false;
-	materialDataObj->color = color;
+	materialDataObj->color = color_;
 	materialDataObj->uvTransform = MakeIdentity4x4();
 
 	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));

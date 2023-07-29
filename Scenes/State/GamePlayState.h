@@ -68,8 +68,6 @@ private:
 	bool IsLightFlag = false;
 	bool IsCameraFlag = false;
 	//
-
-	Vector4 Color[2] = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite用の位置
 	Vector4 LeftTop[2] = {
 		{ 0.0f,0.0f,0.0f,1.0f },

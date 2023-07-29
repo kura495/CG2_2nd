@@ -11,7 +11,7 @@ class Sprite
 {
 public:
 	void Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
-	void DrawSprite(const Vector4& color, const uint32_t TextureHandle);
+	void DrawSprite(const uint32_t TextureHandle);
 	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;
@@ -26,6 +26,7 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite = nullptr;
 	//色データ
 	Material* materialDataSprite = nullptr;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	//Sprite用WVPリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSprite = nullptr;
 	//Sprite用WVPデータ

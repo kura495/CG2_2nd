@@ -78,13 +78,13 @@ void Sphere::Initialize()
 	}
 }
 
-void Sphere::DrawSphere(const Vector4& color, const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle)
+void Sphere::DrawSphere(const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle)
 {
 	
 	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
 
 	//ライティングをする
-	materialDataSphere->color = color;
+	materialDataSphere->color = color_;
 	materialDataSphere->enableLighting = true;
 	materialDataSphere->uvTransform = MakeIdentity4x4();
 	//
@@ -111,15 +111,10 @@ void Sphere::DrawSphere(const Vector4& color, const Matrix4x4& ViewMatrix, const
 void Sphere::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
-	float ImGuiScaleSphere[Vector3D] = { transformSphere.scale.x,transformSphere.scale.y ,transformSphere.scale.z };
-	ImGui::SliderFloat3("ScaleSphere", ImGuiScaleSphere, 1, 30, "%.3f");
-	transformSphere.scale = { ImGuiScaleSphere[x],ImGuiScaleSphere[y],ImGuiScaleSphere[z] };
-	float ImGuiRotateSphere[Vector3D] = { transformSphere.rotate.x,transformSphere.rotate.y ,transformSphere.rotate.z };
-	ImGui::SliderFloat3("RotateSphere", ImGuiRotateSphere, -7, 7, "%.3f");
-	transformSphere.rotate = { ImGuiRotateSphere[x],ImGuiRotateSphere[y],ImGuiRotateSphere[z] };
-	float ImGuiTranslateSphere[Vector3D] = { transformSphere.translate.x,transformSphere.translate.y ,transformSphere.translate.z };
-	ImGui::SliderFloat3("TranslateSphere", ImGuiTranslateSphere, -10, 10, "%.3f");
-	transformSphere.translate = { ImGuiTranslateSphere[x],ImGuiTranslateSphere[y],ImGuiTranslateSphere[z] };
+	ImGui::SliderFloat3("ScaleSphere", &transformSphere.scale.x, 1, 30, "%.3f");
+	ImGui::SliderFloat3("RotateSphere", &transformSphere.rotate.x, -7, 7, "%.3f");
+	ImGui::SliderFloat3("TranslateSphere",&transformSphere.translate.x, -10, 10, "%.3f");
+	ImGui::ColorPicker4("Color",&color_.x);
 	ImGui::End();
 }
 void Sphere::MakeVertexBufferViewSphere()

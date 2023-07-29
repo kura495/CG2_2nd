@@ -11,9 +11,10 @@ class Mesh
 {
 public:
 	void Initialize();
-	void Draw(const Vector4& color, const Matrix4x4& ViewMatrix, const uint32_t textureHandle);
+	void Draw(const Matrix4x4& ViewMatrix, const uint32_t textureHandle);
 	void ImGui(const char* Title);
 private:
+	Vector4 color_ = {1.0f,1.0f,1.0f,1.0f};
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Transform transform{
