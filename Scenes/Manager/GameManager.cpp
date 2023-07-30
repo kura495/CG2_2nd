@@ -33,8 +33,6 @@ void GameManager::Initialize()
 	//Light
 	light = Light::GetInstance();
 	light->Initialize();
-	postprosess = new Postprosess();
-	postprosess->Initialize(WinApp::kClientWidth, WinApp::kClientHeight, directX);
 
 	//State
 	state[TITLE]=std::make_unique<GameTitleState>();

@@ -54,6 +54,10 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	directX_->GetDevice()->CreateShaderResourceView(textures_.at(SpriteIndex).textureResource.Get(), &srvDesc, textures_.at(SpriteIndex).textureSrvHandleCPU);
 	return SpriteIndex;
 }
+void TextureManager::ScreenConvertTexture(ID3D12Resource* ShaderResource)
+{
+
+}
 const CD3DX12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUHandle(uint32_t textureHandle)
 {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GPUHandle = textures_.at(textureHandle).textureSrvHandleGPU;

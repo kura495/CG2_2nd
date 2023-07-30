@@ -42,9 +42,22 @@ public:
 		CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
 	Microsoft::WRL::ComPtr<ID3D12Resource>
 		CreateDepthStencilTextureResource(int32_t width, int32_t height);
+	void PostProsessRootSignature();
+	void PostProsessPipelineStateObject();
+	void PostProsessInPutLayout();
+	/*void PostprosessInitialize();*/
 	//
 
 private:
+	//ポストプロセス
+	IDxcBlob* PostProsessBlob=nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>PostProsessgraphicsPipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>PostProsessrootSignature = nullptr;
+	ID3DBlob* PostProsesssignatureBlob = nullptr;
+	ID3DBlob* PostProsesserrorBlob = nullptr;
+	D3D12_INPUT_ELEMENT_DESC PostProsessinputElementDescs[3] = {};
+	D3D12_INPUT_LAYOUT_DESC PostProsessinputLayoutDesc{};
+	//
 	WinApp* winApp_;
 	/*int32_t kClientWidth_;
 	int32_t kClientHeight_;*/

@@ -27,6 +27,7 @@ public:
 	void Initialize(DirectXCommon* directX);
 	uint32_t LoadTexture(const std::string& filePath);
 
+	void ScreenConvertTexture(ID3D12Resource * ShaderResource);
 	/// <summary>
 	/// GPUHandle情報取得
 	/// </summary>
