@@ -32,9 +32,16 @@ public:
 	ID3D12Device* GetDevice()const { return device.Get(); }
 
 	DXGI_SWAP_CHAIN_DESC1 GetSwapChainDesc()const { return swapChainDesc; }
+
 	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
 	 GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
+	Microsoft::WRL::ComPtr<ID3D12Resource> GetswapChainResources(){ return swapChainResources[0].Get(); }
+
+	//ポストプロセス
+	
+	//
+
 private:
 	WinApp* winApp_;
 	/*int32_t kClientWidth_;

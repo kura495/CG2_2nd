@@ -171,6 +171,9 @@
     <ClCompile Include="Base\Model.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
+    <ClCompile Include="Base\Postprosess.cpp">
+      <Filter>ソース ファイル\Base</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="externals\imgui\imconfig.h">
@@ -304,6 +307,9 @@
     </ClInclude>
     <ClInclude Include="includeStruct\ModelData.h">
       <Filter>ヘッダー ファイル\IncludeStruct</Filter>
+    </ClInclude>
+    <ClInclude Include="Base\Postprosess.h">
+      <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

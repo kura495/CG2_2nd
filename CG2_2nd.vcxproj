@@ -102,6 +102,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Base\Mesh.cpp" />
     <ClCompile Include="Base\Model.cpp" />
     <ClCompile Include="Base\MyEngine.cpp" />
+    <ClCompile Include="Base\Postprosess.cpp" />
     <ClCompile Include="Base\Sphere.cpp" />
     <ClCompile Include="Base\Sprite.cpp" />
     <ClCompile Include="Base\TextureManager.cpp" />
@@ -134,6 +135,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Base\Mesh.h" />
     <ClInclude Include="Base\Model.h" />
     <ClInclude Include="Base\MyEngine.h" />
+    <ClInclude Include="Base\Postprosess.h" />
     <ClInclude Include="Base\Sphere.h" />
     <ClInclude Include="Base\Sprite.h" />
     <ClInclude Include="Base\TextureManager.h" />
