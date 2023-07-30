@@ -117,11 +117,11 @@ void DirectXCommon::PreView()
 	commandList->RSSetScissorRects(1, &scissorRect);
 	commandList->SetGraphicsRootSignature(rootSignature.Get());
 	commandList->SetPipelineState(graphicsPipelineState.Get());
-	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
 }
 
 void DirectXCommon::PostView()
 {
+	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
 	//実際のCommandListのImGuiの描画コマンドを進む
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(),commandList.Get());
 	//RenderTargetからPresentにする

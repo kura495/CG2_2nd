@@ -20,7 +20,6 @@ struct PixelShaderOutput
     float32_t4 color : SV_TARGET0;
 };
 
- 
 PixelShaderOutput main(VertexShaderOutput input)
 {
     PixelShaderOutput output;
@@ -28,20 +27,12 @@ PixelShaderOutput main(VertexShaderOutput input)
     float32_t4 textureColor = gTexture.Sample(gSampler, transformedUV.xy);
 	//ライティング
     if (gMaterial.enableLighting != 0)
-    { //Lightingする場合
-        if (gMaterial.enableLighting == harfLambert)
-        {
-            output.color = gMaterial.color * textureColor;
-        }
-        else if (gMaterial.enableLighting == Lambert)
-        {
-            output.color = gMaterial.color * textureColor;
-        }
+    { 
           
     }
     else
     { //Lightingしない場合
-        output.color = gMaterial.color * textureColor;
+        output.color = 0;
     }
 	
     return output;
