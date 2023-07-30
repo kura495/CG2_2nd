@@ -6,7 +6,7 @@ class Postprosess
 {
 public:
 	void Initialize(int width,int height,DirectXCommon*directX);
-
+	void SetRenderTarget(Vector4& clearColor);
 private:
 	DirectXCommon* directX_ = nullptr;
 	D3D12_RECT	scissorRect;

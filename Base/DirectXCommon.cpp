@@ -219,8 +219,6 @@ Microsoft::WRL::ComPtr<ID3D12Resource>
 	return resource;
 }
 
-
-
 void DirectXCommon::MakeDXGIFactory()
 {
 	//DXGIファクトリーを作成

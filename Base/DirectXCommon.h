@@ -36,10 +36,12 @@ public:
 	D3D12_RENDER_TARGET_VIEW_DESC GetrtvDesc()const { return rtvDesc; }
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
 	 GetsrvDescriptorHeap()const { return srvDescriptorHeap.Get(); }
-	Microsoft::WRL::ComPtr<ID3D12Resource> GetswapChainResources(){ return swapChainResources[0].Get(); }
 
 	//ポストプロセス
-	
+	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
+		CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
+	Microsoft::WRL::ComPtr<ID3D12Resource>
+		CreateDepthStencilTextureResource(int32_t width, int32_t height);
 	//
 
 private:
@@ -115,10 +117,7 @@ private:
 #endif
 
 //プライベート関数
-	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
-	 CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible);
-	Microsoft::WRL::ComPtr<ID3D12Resource>
-	 CreateDepthStencilTextureResource(int32_t width, int32_t height);
+
 	void MakeDXGIFactory();
 	void MakeD3D12Device();
 	void MakeCommandQueue();
