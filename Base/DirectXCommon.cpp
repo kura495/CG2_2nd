@@ -73,6 +73,8 @@ void DirectXCommon::Initialize(WinApp*winApp)
 	MakeViewport();
 
 	MakeScissor();
+
+	
 }
 
 void DirectXCommon::PreView()

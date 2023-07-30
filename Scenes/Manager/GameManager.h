@@ -12,6 +12,7 @@
 #include"Base/Mesh.h"
 #include"Base/TextureManager.h"
 #include"Base/Light.h"
+#include"Base/Postprosess.h"
 class GameManager
 {
 public:
@@ -30,6 +31,7 @@ private:
 	WinApp* winApp = nullptr;
 	DirectXCommon* directX = nullptr;
 	MyEngine* myEngine = nullptr;
+	Postprosess* postprosess = nullptr;
 	//ウィンドウサイズ
 	int32_t kClientWidth;
 	int32_t kClientHeight;
@@ -42,7 +44,7 @@ private:
 	MSG msg{};
 	//State
 	std::unique_ptr<GameState>state[GameStateMax];
-
+	Vector4 ClearColor{ 0.1f,0.25f,0.5f,1.0f };
 
 	void Release();
 };
