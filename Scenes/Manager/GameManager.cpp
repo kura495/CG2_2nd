@@ -57,8 +57,6 @@ void GameManager::Gameloop()
 			state[GameState::StateNo]->Draw();
 			imGuiManager->EndFrame();
 			directX->PostView();
-			postprosess->SetRenderTarget(ClearColor);
-			
 		}
 	}
 	
