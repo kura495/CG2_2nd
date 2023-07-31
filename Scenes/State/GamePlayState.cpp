@@ -249,8 +249,11 @@ if (input->IspushKey(DIK_1)) {
 	}
 
 	ImGui::End();
-	
-	Audio->Play(mokugyo,0.1f,-1);
+	ImGui::Begin("Sound");
+	ImGui::SliderInt("Pan", &Pan, 1, -1);
+	ImGui::SliderFloat("Volume",&Volume,0.0f,1.0f);
+	Audio->Play(mokugyo, Volume, Pan);
+	ImGui::End();
 	camera_->Update();
 	
 	

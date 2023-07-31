@@ -60,7 +60,8 @@ private:
 	//サウンドハンドルたち
 	uint32_t mokugyo;
 	//
-
+	int Pan = 0;
+	float Volume = 0.1f;
 	//ImGui用フラッグ
 	bool IsMeshFlag = false;
 	bool IsSpriteFlag = false;
