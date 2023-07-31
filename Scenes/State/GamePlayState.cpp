@@ -250,7 +250,7 @@ if (input->IspushKey(DIK_1)) {
 
 	ImGui::End();
 	
-	//Audio->Play(mokugyo,0.1f,0);
+	Audio->Play(mokugyo,0.1f,-1);
 	camera_->Update();
 	
 	
