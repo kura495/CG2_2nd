@@ -336,6 +336,11 @@ void DirectXCommon::PostProsessInPutLayout()
 	PostProsessinputLayoutDesc.NumElements = _countof(PostProsessinputElementDescs);
 }
 
+void DirectXCommon::PostProsessDraw()
+{
+	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
+}
+
 //void DirectXCommon::PostprosessInitialize()
 //{
 //	//RTVDescriptorHeapを作る

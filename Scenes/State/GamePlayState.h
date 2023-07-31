@@ -23,7 +23,6 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
-
 private:
 	//基本機能ズ
 	MyEngine* myEngine = nullptr;
@@ -32,6 +31,7 @@ private:
 	Input* input = nullptr;
 	XAudio2* Audio=nullptr;
 	Light* light_ = nullptr;
+	DirectXCommon* DirectX_ = nullptr;
 	//
 	//3Dオブジェクトたち
 	Mesh* mesh = nullptr;
@@ -43,6 +43,11 @@ private:
 	Model* multiMaterial = nullptr;
 	Model* Suzanne = nullptr;
 	Model* Base = nullptr;
+	//2こめ
+	Mesh* mesh2 = nullptr;
+	Sphere* sphere2 = nullptr;
+	Model* plane2 = nullptr;
+	Model* bunny2 = nullptr;
 	//
 	//2Dオブジェクトたち
 	Sprite* sprite = nullptr;
@@ -67,6 +72,7 @@ private:
 	bool IsSuzanneFlag = false;
 	bool IsBaseFlag = false;
 
+	bool IsChengePipeline = false;
 	bool IsLightFlag = false;
 	bool IsCameraFlag = false;
 	//

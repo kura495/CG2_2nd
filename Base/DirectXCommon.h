@@ -45,6 +45,7 @@ public:
 	void PostProsessRootSignature();
 	void PostProsessPipelineStateObject();
 	void PostProsessInPutLayout();
+	void PostProsessDraw();
 	/*void PostprosessInitialize();*/
 	//
 

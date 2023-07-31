@@ -10,6 +10,7 @@ void GamePlayState::Initialize()
 	Audio = XAudio2::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
+	DirectX_ = DirectXCommon::GetInstance();
 	//
 	//3Dオブジェクト生成
 	mesh = new Mesh();
@@ -22,6 +23,7 @@ void GamePlayState::Initialize()
 	multiMesh = Model::CreateModelFromObj("resources", "multiMesh.obj");
 	multiMaterial = Model::CreateModelFromObj("resources", "multiMaterial.obj");
 	Base = Model::CreateModelFromObj("resources", "Base.obj");
+	bunny2= Model::CreateModelFromObj("resources", "bunny.obj");
 	//Suzanne = Model::CreateModelFromObj("resources", "suzanne.obj");
 	//
 	//2Dオブジェクト作成
@@ -119,6 +121,14 @@ if (input->IspushKey(DIK_1)) {
 			IsBaseFlag = true;
 		}
 	}
+	if (ImGui::Button("ChengePipeline")) {
+		if (IsChengePipeline) {
+			IsChengePipeline = false;
+		}
+		else {
+			IsChengePipeline = true;
+		}
+	}
 
 	if (ImGui::Button("Light")) {
 		if (IsLightFlag) {
@@ -171,7 +181,7 @@ if (input->IspushKey(DIK_1)) {
 		camera_->ImGui("camera");
 	}
 	ImGui::End();
-
+	bunny2->ImGui("bunny2");
 	//Audio->Play(mokugyo,0.1f,0);
 	camera_->Update();
 	
@@ -207,6 +217,11 @@ void GamePlayState::Draw()
 	if (IsBaseFlag) {
 		Base->DrawModel( camera_->GetWorldMatrix());
 	}
+	if (IsChengePipeline) {
+		DirectX_->PostProsessDraw();
+	}
+	
+	bunny2->DrawModel(camera_->GetWorldMatrix());
 	
 	
 	//描画ここまで

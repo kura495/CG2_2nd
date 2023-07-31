@@ -34,7 +34,7 @@ private:
 	Matrix4x4 worldMatrix;
 	Input* input = nullptr;
 	//FOVY
-	float FOV = 90.0f;
+	float FOV = 45.0f;
 	
 	int32_t kClientWidth_;
 	int32_t kClientHeight_;
