@@ -1,4 +1,5 @@
 #include"Object3d.hlsli"
+
 struct Material {
 	float32_t4 color;//元の色
 	int32_t enableLighting;//ライトのフラグ

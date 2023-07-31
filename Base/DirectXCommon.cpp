@@ -287,7 +287,7 @@ void DirectXCommon::PostProsessPipelineStateObject()
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 		graphicsPipelineStateDesc.pRootSignature = PostProsessrootSignature.Get();
 		graphicsPipelineStateDesc.InputLayout = PostProsessinputLayoutDesc;
-		graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
+		//graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.PS = { PostProsessBlob->GetBufferPointer(),PostProsessBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.BlendState = blendDesc;
 		graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
