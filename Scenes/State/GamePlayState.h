@@ -46,11 +46,12 @@ private:
 	//2こめ
 	Mesh* mesh2 = nullptr;
 	Sphere* sphere2 = nullptr;
-	Model* plane2 = nullptr;
 	Model* bunny2 = nullptr;
+	Model* teapot2 = nullptr;
 	//
 	//2Dオブジェクトたち
 	Sprite* sprite = nullptr;
+	Sprite* sprite2 = nullptr;
 	//
 	//テクスチャハンドルたち
 	uint32_t TextureHundle;
@@ -71,10 +72,15 @@ private:
 	bool IsMultiMaterialFlag = false;
 	bool IsSuzanneFlag = false;
 	bool IsBaseFlag = false;
-
-	bool IsChengePipeline = false;
 	bool IsLightFlag = false;
 	bool IsCameraFlag = false;
+	//２こめ
+	bool IsChengePipeline = false;
+	bool IsMesh2Flag = false;
+	bool IsSprite2Flag = false;
+	bool IsSphere2Flag = false;
+	bool IsBunny2Flag = false;
+	bool IsTeapot2Flag = false;
 	//
 	//Sprite用の位置
 	Vector4 LeftTop[2] = {

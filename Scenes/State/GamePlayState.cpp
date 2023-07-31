@@ -17,6 +17,10 @@ void GamePlayState::Initialize()
 	mesh->Initialize();
 	sphere = new Sphere();
 	sphere->Initialize();
+	mesh2 = new Mesh();
+	mesh2->Initialize();
+	sphere2 = new Sphere();
+	sphere2->Initialize();
 	plane=Model::CreateModelFromObj("resources", "plane.obj");
 	teapot = Model::CreateModelFromObj("resources", "teapot.obj");
 	bunny = Model::CreateModelFromObj("resources", "bunny.obj");
@@ -24,11 +28,14 @@ void GamePlayState::Initialize()
 	multiMaterial = Model::CreateModelFromObj("resources", "multiMaterial.obj");
 	Base = Model::CreateModelFromObj("resources", "Base.obj");
 	bunny2= Model::CreateModelFromObj("resources", "bunny.obj");
+	teapot2 = Model::CreateModelFromObj("resources", "teapot.obj");
 	//Suzanne = Model::CreateModelFromObj("resources", "suzanne.obj");
 	//
 	//2Dオブジェクト作成
 	sprite = new Sprite();
 	sprite->Initialize({0.0f,0.0f,0.0f,1.0f},{0.0f,360.0f,0.0f,1.0f},{640.0f,0.0f,0.0f,1.0f},{640.0f,360.0f,0.0f,1.0f});
+	sprite2 = new Sprite();
+	sprite2->Initialize({0.0f,0.0f,0.0f,1.0f},{0.0f,360.0f,0.0f,1.0f},{640.0f,0.0f,0.0f,1.0f},{640.0f,360.0f,0.0f,1.0f});
 	//
 	//リソースを作る
 	//テクスチャ
@@ -121,15 +128,7 @@ if (input->IspushKey(DIK_1)) {
 			IsBaseFlag = true;
 		}
 	}
-	if (ImGui::Button("ChengePipeline")) {
-		if (IsChengePipeline) {
-			IsChengePipeline = false;
-		}
-		else {
-			IsChengePipeline = true;
-		}
-	}
-
+	
 	if (ImGui::Button("Light")) {
 		if (IsLightFlag) {
 			IsLightFlag = false;
@@ -181,7 +180,76 @@ if (input->IspushKey(DIK_1)) {
 		camera_->ImGui("camera");
 	}
 	ImGui::End();
-	bunny2->ImGui("bunny2");
+	ImGui::Begin("add");
+	if (ImGui::Button("ChengePipeline")) {
+		if (IsChengePipeline) {
+			IsChengePipeline = false;
+		}
+		else {
+			IsChengePipeline = true;
+		}
+	}
+	if (ImGui::Button("Mesh2")) {
+		if (IsMesh2Flag) {
+			IsMesh2Flag = false;
+		}
+		else {
+			IsMesh2Flag = true;
+		}
+	}
+	if (ImGui::Button("sprite2")) {
+		if (IsSprite2Flag) {
+			IsSprite2Flag = false;
+		}
+		else {
+			IsSprite2Flag = true;
+		}
+	}
+	if (ImGui::Button("Sphere2")) {
+		if (IsSphere2Flag) {
+			IsSphere2Flag = false;
+		}
+		else {
+			IsSphere2Flag = true;
+		}
+	}
+	if (ImGui::Button("bunny2")) {
+		if (IsBunny2Flag) {
+			IsBunny2Flag = false;
+		}
+		else {
+			IsBunny2Flag = true;
+		}
+	}
+	if (ImGui::Button("teapot2")) {
+		if (IsTeapot2Flag) {
+			IsTeapot2Flag = false;
+		}
+		else {
+			IsTeapot2Flag = true;
+		}
+	}
+	if (IsChengePipeline) {
+		ImGui::Text("ChengePipeline");
+	}
+	if (IsMesh2Flag) {
+		mesh2->ImGui("TriAngle2");
+	}
+	if (IsSprite2Flag) {
+		sprite2->ImGui("Sprite2");
+	}
+	if (IsSphere2Flag) {
+		sphere2->ImGui("Sphere2");
+	}
+	if (IsBunny2Flag) {
+		bunny2->ImGui("bunny2");
+	}
+	if (IsTeapot2Flag) {
+		teapot2->ImGui("bunny2");
+	}
+
+	ImGui::End();
+	
 	//Audio->Play(mokugyo,0.1f,0);
 	camera_->Update();
 	
@@ -220,8 +288,22 @@ void GamePlayState::Draw()
 	if (IsChengePipeline) {
 		DirectX_->PostProsessDraw();
 	}
+	if (IsMesh2Flag) {
+		mesh2->Draw(camera_->GetWorldMatrix(), TextureHundle);
+	}
+	if (IsSprite2Flag) {
+		sprite2->DrawSprite(TextureHundle);
+	}
+	if (IsSphere2Flag) {
+		sphere2->DrawSphere(camera_->GetWorldMatrix(), TextureHundle);
+	}
+	if (IsBunny2Flag) {
+		bunny2->DrawModel(camera_->GetWorldMatrix());
+	}
+	if (IsTeapot2Flag) {
+		teapot2->DrawModel(camera_->GetWorldMatrix());
+	}
 	
-	bunny2->DrawModel(camera_->GetWorldMatrix());
 	
 	
 	//描画ここまで
