@@ -245,7 +245,7 @@ if (input->IspushKey(DIK_1)) {
 		bunny2->ImGui("bunny2");
 	}
 	if (IsTeapot2Flag) {
-		teapot2->ImGui("bunny2");
+		teapot2->ImGui("teapot2");
 	}
 
 	ImGui::End();
@@ -282,17 +282,18 @@ void GamePlayState::Draw()
 	if (IsMultiMaterialFlag) {
 		multiMaterial->DrawModel( camera_->GetWorldMatrix());
 	}
-	if (IsBaseFlag) {
-		Base->DrawModel( camera_->GetWorldMatrix());
-	}
-	if (IsChengePipeline) {
-		DirectX_->PostProsessDraw();
-	}
+	
 	if (IsMesh2Flag) {
 		mesh2->Draw(camera_->GetWorldMatrix(), TextureHundle);
 	}
 	if (IsSprite2Flag) {
 		sprite2->DrawSprite(TextureHundle);
+	}
+	if (IsBaseFlag) {
+		Base->DrawModel( camera_->GetWorldMatrix());
+	}
+	if (IsChengePipeline) {
+		DirectX_->PostProsessDraw();
 	}
 	if (IsSphere2Flag) {
 		sphere2->DrawSphere(camera_->GetWorldMatrix(), TextureHundle);

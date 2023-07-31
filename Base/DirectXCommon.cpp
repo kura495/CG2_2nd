@@ -121,7 +121,6 @@ void DirectXCommon::PreView()
 
 void DirectXCommon::PostView()
 {
-	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
 	//実際のCommandListのImGuiの描画コマンドを進む
 	ImGui_ImplDX12_RenderDrawData(ImGui::GetDrawData(),commandList.Get());
 	//RenderTargetからPresentにする
@@ -287,7 +286,7 @@ void DirectXCommon::PostProsessPipelineStateObject()
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 		graphicsPipelineStateDesc.pRootSignature = PostProsessrootSignature.Get();
 		graphicsPipelineStateDesc.InputLayout = PostProsessinputLayoutDesc;
-		//graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
+		graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.PS = { PostProsessBlob->GetBufferPointer(),PostProsessBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.BlendState = blendDesc;
 		graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
