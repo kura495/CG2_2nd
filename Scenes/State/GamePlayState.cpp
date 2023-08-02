@@ -285,25 +285,48 @@ void GamePlayState::Draw()
 	if (IsMultiMaterialFlag) {
 		multiMaterial->DrawModel( camera_->GetWorldMatrix());
 	}
-	
+
+	//1. ビット演算を取り回しの良いUtilityクラスにする
+	//2. 三項演算子をつかって、構造がわかりやすいようにする
+	//piplineStatus->GetIsMesh2() ? mesh2->Draw() : ;
+	//piplineStatus->GetIsSprite() ? sprite->Draw() : ;
+
+	//piplineStatus->SetAllFlags();
+
+	//void PipelineStatu::SetAllFlags() {
+	//	bit = 0x111111111111.....;
+	//}
+
+	//void PipelineStatus::ResetAllFlags() {
+		//Ethna
+	//	bit = 0;
+	//}
+
+
 	if (IsMesh2Flag) {
 		mesh2->Draw(camera_->GetWorldMatrix(), TextureHundle);
 	}
+
 	if (IsSprite2Flag) {
 		sprite2->DrawSprite(TextureHundle);
 	}
+	
 	if (IsBaseFlag) {
 		Base->DrawModel( camera_->GetWorldMatrix());
 	}
+	
 	if (IsChengePipeline) {
 		DirectX_->PostProsessDraw();
 	}
+	
 	if (IsSphere2Flag) {
 		sphere2->DrawSphere(camera_->GetWorldMatrix(), TextureHundle);
 	}
+	
 	if (IsBunny2Flag) {
 		bunny2->DrawModel(camera_->GetWorldMatrix());
 	}
+	
 	if (IsTeapot2Flag) {
 		teapot2->DrawModel(camera_->GetWorldMatrix());
 	}
