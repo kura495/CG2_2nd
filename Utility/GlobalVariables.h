@@ -1,10 +1,10 @@
-#pragma once
+﻿#pragma once
 #include"IncludeStruct/Vector3.h"
 #include<variant>
 #include<map>
 #include<string>
 struct Item {
-	//���ڂ̒l
+	//項目の値
 	std::variant<int32_t, float, Vector3> value;
 };
 struct Group {
@@ -16,12 +16,20 @@ class GlobalVariables
 public:
 	static GlobalVariables* GetInstance();
 	void CreateGroup(const std::string& groupName);
+	//毎フレーム処理
+	void Update();
+	//値のセット(int)
+	void SetValue(const std::string& groupName, const std:: string& key, int32_t value);
+	//値のセット(float)
+	void SetValue(const std::string& groupName, const std:: string& key, float value);
+	//値のセット(Vector3)
+	void SetValue(const std::string& groupName, const std:: string& key, const Vector3& value);
 private:
 	GlobalVariables()=default;
 	~GlobalVariables()=default;
 	GlobalVariables(const GlobalVariables& ch) = delete;
 	GlobalVariables& operator=(const GlobalVariables& ch) = delete;
-	//�S�f�[�^
+	//全データ
 	std::map<std::string, Group> datas_;
 };
 

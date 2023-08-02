@@ -7,6 +7,7 @@
 #include"Base/TextureManager.h"
 #include"Base/Light.h"
 #include"Utility/ImGuiManager.h"
+#include"Utility/GlobalVariables.h"
 #include"Math/MatrixCalc.h"
 #include<d3d12.h>
 #include<string>

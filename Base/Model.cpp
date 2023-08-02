@@ -11,6 +11,16 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	modelData_ = LoadObjFile(directoryPath,filename);
 	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
 	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+
+	//テスト
+	GlobalVariables* globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Model";
+	//グループに追加
+	GlobalVariables::GetInstance()->CreateGroup(groupName);
+	globalVariables->SetValue(groupName, "Test", 90);
+	globalVariables->SetValue(groupName, "float", 1.5f);
+	globalVariables->SetValue(groupName, "Vector3", {1.5f,1.0f,2.0f});
+	globalVariables->SetValue(groupName, "int", 12);
 }
 
 void Model::ImGui(const char* Title)
