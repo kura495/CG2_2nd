@@ -123,6 +123,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Scenes\State\GameClearState.cpp" />
     <ClCompile Include="Scenes\State\GamePlayState.cpp" />
     <ClCompile Include="Scenes\State\GameTitleState.cpp" />
+    <ClCompile Include="Utility\CollisionManager.cpp" />
     <ClCompile Include="Utility\GlobalVariables.cpp" />
     <ClCompile Include="Utility\ImGuiManager.cpp" />
     <ClCompile Include="Utility\LoadCSV.cpp" />
