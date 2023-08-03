@@ -12,6 +12,19 @@ void GlobalVariables::CreateGroup(const std::string& groupName)
 }
 void GlobalVariables::Update()
 {
+	if (!ImGui::Begin("GlobalVariables", nullptr, ImGuiWindowFlags_MenuBar)) {
+		ImGui::End();
+		return;
+	}
+	if (!ImGui::BeginMenuBar())return;
+
+	for (std::map<std::string, Group>::iterator itGroup = datas_.begin(); itGroup != datas_.end(); ++itGroup) {
+		//グループ名を取得
+		const std::string& groupName = itGroup->first;
+		//グループの参照を取得
+		Group& group = itGroup->second;
+
+	}
 
 }
 #pragma region SetValue

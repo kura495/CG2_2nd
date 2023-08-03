@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include"IncludeStruct/Vector3.h"
+#include"Utility/ImGuiManager.h"
 #include<variant>
 #include<map>
 #include<string>
