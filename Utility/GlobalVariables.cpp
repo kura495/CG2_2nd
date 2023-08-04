@@ -55,8 +55,14 @@ void GlobalVariables::Update()
 					assert(false);
 				}
 		}
+		//改行をする
+		ImGui::Text("\n");
+		//ボタンを押すとフォルダの中にファイルができる(もとからあるときは上書き)
+		//メッセージも出る
 		if (ImGui::Button("Save")) {
 			SaveFile(groupName);
+			std::string message = std::format("{}.json saved.", groupName);
+			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
 		}
 		ImGui::EndMenu();
 	}
