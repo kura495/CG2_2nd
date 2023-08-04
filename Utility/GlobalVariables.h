@@ -28,7 +28,7 @@ public:
 	//値のセット(Vector3)
 	void SetValue(const std::string& groupName, const std:: string& key, const Vector3& value);
 	//ファイルにデータを保存
-	void SabeFile(const std::string& groupName);
+	void SaveFile(const std::string& groupName);
 private:
 	GlobalVariables()=default;
 	~GlobalVariables()=default;

@@ -55,6 +55,9 @@ void GlobalVariables::Update()
 					assert(false);
 				}
 		}
+		if (ImGui::Button("Save")) {
+			SaveFile(groupName);
+		}
 		ImGui::EndMenu();
 	}
 	ImGui::EndMenuBar();
@@ -92,7 +95,7 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group.items[key] = newItem;
 }
 #pragma endregion  SetValue
-void GlobalVariables::SabeFile(const std::string& groupName)
+void GlobalVariables::SaveFile(const std::string& groupName)
 {
 	//グループを検索する
 	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
@@ -139,5 +142,16 @@ void GlobalVariables::SabeFile(const std::string& groupName)
 		std::ofstream ofs;
 		//ファイルを書き込み用に開く
 		ofs.open(filePath);
+		//ファイルオープン失敗の可能性あり
+		if (ofs.fail()) {
+			std::string message = "Failed open data file for write.";
+			MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+			assert(0);
+			return;
+		}
+		//ファイルにjson文字列を書き込む(インデント幅4)
+		ofs << std::setw(4) << root << std::endl;
+		//ファイルを閉じる
+		ofs.close();
 	}
 }
