@@ -25,11 +25,17 @@ public:
 	/// <returns></returns>
 	bool IspushKey(uint8_t keyNumber);
 	/// <summary>
+	/// 離している間
+	/// </summary>
+	/// <param name="keyNumber"></param>
+	/// <returns></returns>
+	bool TreggerKey(uint8_t keyNumber);
+	/// <summary>
 	/// 離した瞬間
 	/// </summary>
 	/// <param name="keyNumber"></param>
 	/// <returns></returns>
-	bool Key(uint8_t keyNumber);
+	bool IsTreggerKey(uint8_t keyNumber);
 
 private:
 	HRESULT hr;

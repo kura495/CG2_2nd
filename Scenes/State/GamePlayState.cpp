@@ -44,6 +44,15 @@ void GamePlayState::Initialize()
 	//サウンド
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	//
+	//テスト
+	globalVariables = GlobalVariables::GetInstance();
+	const char* groupName = "Test1111";
+	//グループに追加
+	GlobalVariables::GetInstance()->CreateGroup(groupName);
+	GlobalVariables::GetInstance()->SetValue(groupName, "Test", 90);
+	GlobalVariables::GetInstance()->SetValue(groupName, "float", 1.5f);
+	GlobalVariables::GetInstance()->SetValue(groupName, "Vector3", { 1.5f,1.0f,2.0f });
+	GlobalVariables::GetInstance()->SetValue(groupName, "int", 12);
 }
 void GamePlayState::Update()
 {
@@ -54,7 +63,11 @@ if (input->IspushKey(DIK_1)) {
 	if (input->IspushKey(DIK_2)) {
 	camera_->DebugCamera(false);
 	}
+	if (input->IsTreggerKey(DIK_0)) {
+		Log("IsTreggerKey 0\n");
+	}
 #endif // _DEBUG
+	GlobalVariables::GetInstance()->Update();
 	ImGui::Begin("Button");
 	if (ImGui::Button("Mesh")) {
 		if (IsMeshFlag) {

@@ -46,3 +46,19 @@ bool Input::IspushKey(uint8_t keyNumber)
 	}
 return false;
 }
+
+bool Input::TreggerKey(uint8_t keyNumber)
+{
+	if (preKey[keyNumber] == 0) {
+		return true;
+	}
+	return false;
+}
+
+bool Input::IsTreggerKey(uint8_t keyNumber)
+{
+	if (key[keyNumber] == 0 && preKey[keyNumber] != 0) {
+		return true;
+	}
+	return false;
+}

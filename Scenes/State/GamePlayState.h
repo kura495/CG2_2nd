@@ -32,6 +32,7 @@ private:
 	XAudio2* Audio=nullptr;
 	Light* light_ = nullptr;
 	DirectXCommon* DirectX_ = nullptr;
+	GlobalVariables* globalVariables = nullptr;
 	//
 	//3Dオブジェクトたち
 	Mesh* mesh = nullptr;

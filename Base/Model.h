@@ -9,6 +9,7 @@
 #include"Utility/ImGuiManager.h"
 #include"Utility/GlobalVariables.h"
 #include"Math/MatrixCalc.h"
+#include"Utility/GlobalVariables.h"
 #include<d3d12.h>
 #include<string>
 #include<cassert>
@@ -26,7 +27,7 @@ public:
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
 	void DrawModel(const Matrix4x4& ViewMatrix);
 private:
-
+	GlobalVariables* globalVariables = nullptr;
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
