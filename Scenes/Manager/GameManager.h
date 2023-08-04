@@ -12,6 +12,7 @@
 #include"Base/Mesh.h"
 #include"Base/TextureManager.h"
 #include"Base/Light.h"
+#include"Utility/GlobalVariables.h"
 class GameManager
 {
 public:

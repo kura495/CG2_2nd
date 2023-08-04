@@ -26,14 +26,14 @@ void GlobalVariables::Update()
 		//グループのメニューを追加する処理
 		if (!ImGui::BeginMenu(groupName.c_str()))continue;
 
-		//各グループの各項目ごとに行う処理をfor文でやる
+		//各グループの各アイテムごとに行う処理をfor文でやる
 		for (std::map<std::string, Item>::iterator itItem = group.items.begin(); itItem != group.items.end(); ++itItem) {
-			//項目名を取得(floatやVector3などの名前)
+			//アイテム名を取得(floatやVector3などの名前)
 			const std::string& itemName = itItem->first;
-			//項目の値を取得
+			//アイテムの値を取得
 			Item& item = itItem->second;
 
-			//項目名によって分岐する
+			//アイテム名によって分岐する
 			//int32_t型の値を所持していたら
 			if (std::holds_alternative<int32_t>(item.value)) {
 					int32_t* ptr = std::get_if<int32_t>(&item.value);
@@ -112,13 +112,13 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 	root = json::object();
 	//jsonオブジェクト登録する
 	root[groupName] = json::object();
-	//各グループの各項目ごとに行う処理をfor文でやる
+	//各グループの各アイテムごとに行う処理をfor文でやる
 	for (std::map<std::string, Item>::iterator itItem = itGroup->second.items.begin(); itItem != itGroup->second.items.end(); ++itItem) {
-		//項目名を取得(floatやVector3などの名前)
+		//アイテム名を取得(floatやVector3などの名前)
 		const std::string& itemName = itItem->first;
-		//項目の値を取得
+		//アイテムの値を取得
 		Item& item = itItem->second;
-		//項目名によって分岐する
+		//アイテム名によって分岐する
 		//int32_t型の値を所持していたら
 		if (std::holds_alternative<int32_t>(item.value)) {
 			//int32_t型の値を登録
@@ -162,5 +162,92 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 }
 void GlobalVariables::LoadFiles()
 {
+	//保存先ディレクトリのパスをローカル変数で宣言する
+	std::filesystem::path dir(kDirectoryPath);
+	//ディレクトリがなければスキップする
+	if (!std::filesystem::exists(dir)) {
+		return;
+	}
+	//ディレクトリのイテレーターを作る(多分フォルダを丸ごとイテレータ―にする感じ)
+	std::filesystem::directory_iterator dir_it(kDirectoryPath);
+	//イテレータ―からファイルをfor文でひとつずつ見ていく
+	for (const std::filesystem::directory_entry& entry : dir_it) {
+		//ファイルパスを取得
+		const std::filesystem::path& filePath = entry.path();
+		// extensionはファイルの拡張子のみを取得できる
+		std::string extension = filePath.extension().string();
+		// .json以外はスキップ
+		if (extension.compare(".json") != 0) {
+			// continueを使ってスキップする
+			continue;
+		}
+		//ファイル読み込み関数
+		// stemはファイルの拡張子を除いたファイル名のみを取得できる
+		LoadFile(filePath.stem().string());
+	}
+}
 
+void GlobalVariables::LoadFile(const std::string& groupName)
+{
+	//読み込むjsonファイルのフルパスを合成
+	std::string filePath = kDirectoryPath + groupName + ".json";
+	//読み込み用ファイルストリーム
+	std::ifstream ifs;
+	//ファイルを読み込み用に聞く
+	ifs.open(filePath);
+	//ファイルオープン失敗の可能性あり
+	if (ifs.fail()) {
+		std::string message = "Failed open data file for read.";
+		MessageBoxA(nullptr, message.c_str(), "GlobalVariables", 0);
+		assert(0);
+	}
+	json root;
+	//json文字列をjsonのデータ構造に展開
+	ifs >> root;
+	//ファイルを閉じる
+	ifs.close();
+	//グループを検索
+	json::iterator itGroup = root.find(groupName);
+	//未登録チェック
+	assert(itGroup != root.end());
+	//各アイテムを探す
+	for (json::iterator itItem = itGroup->begin(); itItem != itGroup->end(); ++itItem) {
+		//アイテム名を取得
+		const std::string& itemName = itItem.key();
+		//アイテム名によって分岐する
+		//int32_t型の値を所持していたら
+		if (itItem->is_number_integer()) {
+			//int型の値を登録
+			int32_t value = itItem->get<int32_t>();
+			SetValue(groupName, itemName, value);
+		}
+		//float型の値を所持していたら
+		else if (itItem->is_number_float()) {
+			//float型の値を登録
+			double value = itItem->get<double>();
+			//jsonオブジェクトはdouble型しかないので、キャストする
+			SetValue(groupName, itemName,static_cast<float>(value));
+		}
+		//要素数3の配列であれば(つまりVector3)
+		else if (itItem->is_array() && itItem->size() == 3) {
+			//float型のjson配列登録
+			Vector3 value = { itItem->at(0), itItem->at(1), itItem->at(2) };
+			SetValue(groupName, itemName, value);
+		}
+	}
+
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
+{
+	//アイテムが未登録なら
+	if()
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value)
+{
+}
+
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value)
+{
 }

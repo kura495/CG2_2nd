@@ -29,6 +29,12 @@ public:
 	void SetValue(const std::string& groupName, const std:: string& key, const Vector3& value);
 	//ファイルにデータを保存
 	void SaveFile(const std::string& groupName);
+	//アイテムの追加(int)(アイテムが追加済みなら何もしない)
+	void AddItem(const std::string& groupName, const std::string& key, int32_t value);
+	//アイテムの追加(float)(アイテムが追加済みなら何もしない)
+	void AddItem(const std::string& groupName, const std::string& key, float value);
+	//アイテムの追加(Vector3)(アイテムが追加済みなら何もしない)
+	void AddItem(const std::string& groupName, const std::string& key, const Vector3& value);
 	//ディレクトリの全ファイルを読み込む
 	void LoadFiles();
 private:
@@ -36,6 +42,8 @@ private:
 	~GlobalVariables()=default;
 	GlobalVariables(const GlobalVariables& ch) = delete;
 	GlobalVariables& operator=(const GlobalVariables& ch) = delete;
+	void LoadFile(const std::string& groupName);
+	
 	//全データ
 	std::map<std::string, Group> datas_;
 	//jsonファイルの保存先のパス
