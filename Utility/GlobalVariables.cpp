@@ -92,3 +92,52 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group.items[key] = newItem;
 }
 #pragma endregion  SetValue
+void GlobalVariables::SabeFile(const std::string& groupName)
+{
+	//グループを検索する
+	std::map<std::string, Group>::iterator itGroup = datas_.find(groupName);
+	//グループが存在するかどうかチェック
+	assert(itGroup != datas_.end());
+	//変数
+	json root;
+	//json::objectはstd::mapみたいなもの
+	root = json::object();
+	//jsonオブジェクト登録する
+	root[groupName] = json::object();
+	//各グループの各項目ごとに行う処理をfor文でやる
+	for (std::map<std::string, Item>::iterator itItem = itGroup->second.items.begin(); itItem != itGroup->second.items.end(); ++itItem) {
+		//項目名を取得(floatやVector3などの名前)
+		const std::string& itemName = itItem->first;
+		//項目の値を取得
+		Item& item = itItem->second;
+		//項目名によって分岐する
+		//int32_t型の値を所持していたら
+		if (std::holds_alternative<int32_t>(item.value)) {
+			//int32_t型の値を登録
+			root[groupName][itemName] = std::get<int32_t>(item.value);
+		}
+		//float型の値を所持していたら
+		else if (std::holds_alternative<float>(item.value)) {
+			//float型の値を登録
+			root[groupName][itemName] = std::get<float>(item.value);
+		}
+		//Vector3型の値を所持していたら
+		else if (std::holds_alternative<Vector3>(item.value)) {
+			//float型のjson配列登録をする
+			Vector3 value = std::get<Vector3>(item.value);
+			root[groupName][itemName] = json::array({ value.x, value.y, value.z });
+		}
+		//ディレクトリのパス
+		std::filesystem::path dir(kDirectoryPath);
+		//ディレクトリがなければ作成する
+		if (!std::filesystem::exists(dir)) {
+			std::filesystem::create_directory(dir);
+		}
+		//書き込むjsonファイルのフルパスを合成する
+		std::string filePath = kDirectoryPath + groupName + ".json";
+		//書き込み用ファイルストリーム
+		std::ofstream ofs;
+		//ファイルを書き込み用に開く
+		ofs.open(filePath);
+	}
+}
