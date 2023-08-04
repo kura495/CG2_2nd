@@ -29,6 +29,8 @@ public:
 	void SetValue(const std::string& groupName, const std:: string& key, const Vector3& value);
 	//ファイルにデータを保存
 	void SaveFile(const std::string& groupName);
+	//ディレクトリの全ファイルを読み込む
+	void LoadFiles();
 private:
 	GlobalVariables()=default;
 	~GlobalVariables()=default;

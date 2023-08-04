@@ -4,7 +4,6 @@ GlobalVariables* GlobalVariables::GetInstance()
 	static GlobalVariables instance;
 	return &instance;
 }
-
 void GlobalVariables::CreateGroup(const std::string& groupName)
 {
 	//指定名のオブジェクトがなければ追加する
@@ -160,4 +159,8 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 		//ファイルを閉じる
 		ofs.close();
 	}
+}
+void GlobalVariables::LoadFiles()
+{
+
 }
