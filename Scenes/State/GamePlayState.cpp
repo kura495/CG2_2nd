@@ -14,8 +14,8 @@ void GamePlayState::Initialize()
 	//model = Model::GetI
 	//
 	//3Dオブジェクト生成
-	model = Model::CreateModelFromObj("resources","plane.obj");
-	player->Initialize(model);
+	player = new Player();
+	player->Initialize();
 	//
 	//2Dオブジェクト作成
 
@@ -26,13 +26,6 @@ void GamePlayState::Initialize()
 	//サウンド
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	//
-	//テスト
-	globalVariables = GlobalVariables::GetInstance();
-	const char* groupName = "Model";
-	//グループに追加
-	GlobalVariables::GetInstance()->CreateGroup(groupName);
-
-	GlobalVariables::GetInstance()->AddItem(groupName, "Translate", {1.0f,2.0f,2.0f});
 }
 void GamePlayState::Update()
 {
