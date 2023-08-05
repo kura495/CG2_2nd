@@ -1,7 +1,6 @@
 ﻿#pragma once
 #include"IgameState.h"
 #include"Base/MyEngine.h"
-#include"GameObject/Camera/Camera.h"
 #include"IncludeStruct/ModelData.h"
 #include"Audio/XAudio2.h"
 #include"Input/Input.h"
@@ -15,6 +14,8 @@
 #include<dinput.h>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
+#include"GameObject/Camera/Camera.h"
+#include"GameObject/Player/Player.h"
 
 class GamePlayState :public GameState
 {
@@ -33,30 +34,20 @@ private:
 	Light* light_ = nullptr;
 	DirectXCommon* DirectX_ = nullptr;
 	GlobalVariables* globalVariables = nullptr;
+	Model* model = nullptr;
 	//
 	//3Dオブジェクトたち
-	Mesh* mesh = nullptr;
-	Sphere* sphere = nullptr;
-	Model* plane = nullptr;
-	Model* teapot = nullptr;
-	Model* bunny = nullptr;
-	Model* multiMesh = nullptr;
-	Model* multiMaterial = nullptr;
-	Model* Suzanne = nullptr;
-	Model* Base = nullptr;
-	//2こめ
-	Mesh* mesh2 = nullptr;
-	Sphere* sphere2 = nullptr;
-	Model* bunny2 = nullptr;
-	Model* teapot2 = nullptr;
-	//
+	Player* player = nullptr;
+	Transform transform{
+		{1.0f,1.0f,1.0f},
+		{0.0f,0.0f,0.0f},
+		{0.0f,0.0f,0.0f},
+	};
 	//2Dオブジェクトたち
-	Sprite* sprite = nullptr;
-	Sprite* sprite2 = nullptr;
+	
 	//
 	//テクスチャハンドルたち
-	uint32_t TextureHundle;
-	uint32_t MonsterBall;
+	
 	//
 	//サウンドハンドルたち
 	uint32_t mokugyo;

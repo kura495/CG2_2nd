@@ -4,11 +4,13 @@ GlobalVariables* GlobalVariables::GetInstance()
 	static GlobalVariables instance;
 	return &instance;
 }
+
 void GlobalVariables::CreateGroup(const std::string& groupName)
 {
 	//指定名のオブジェクトがなければ追加する
 	datas_[groupName];
 }
+
 void GlobalVariables::Update()
 {
 	//メニューバーを作る
@@ -68,6 +70,38 @@ void GlobalVariables::Update()
 	ImGui::EndMenuBar();
 	ImGui::End();
 }
+
+//値がなければ、SetValueを呼ぶ関数たち(すでに値があるときは呼ばない)
+#pragma region AddItem
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
+{
+	//グループの参照を取得
+	Group& group = datas_[groupName];
+	//アイテムが未登録なら
+	if (!group.items.contains(key)) {
+		SetValue(groupName, key, value);
+	}
+}
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value)
+{
+	//グループの参照を取得
+	Group& group = datas_[groupName];
+	//アイテムが未登録なら
+	if (!group.items.contains(key)) {
+		SetValue(groupName, key, value);
+	}
+}
+void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value)
+{
+	//グループの参照を取得
+	Group& group = datas_[groupName];
+	//アイテムが未登録なら
+	if (!group.items.contains(key)) {
+		SetValue(groupName, key, value);
+	}
+}
+#pragma endregion AddItem
+//実際に値を入れる関数たち
 #pragma region SetValue
 void GlobalVariables::SetValue(const std::string& groupName, const std::string& key, int32_t value)
 {
@@ -100,6 +134,43 @@ void GlobalVariables::SetValue(const std::string& groupName, const std::string& 
 	group.items[key] = newItem;
 }
 #pragma endregion  SetValue
+
+#pragma region Getter
+int32_t GlobalVariables::GetIntValue(const std::string& groupName, const std::string& key) const
+{
+	//グループがあるか見てみる　なければアサ―ト
+	assert(datas_.contains(groupName));
+	//グループの参照を取得
+	const Group& group = datas_.at(groupName);
+	//指定したグループに指定したキーが存在する
+	assert(group.items.contains(key));
+
+	return std::get<int32_t>(group.items.at(key).value);
+}
+float GlobalVariables::GetfloatValue(const std::string& groupName, const std::string& key) const
+{
+	//グループがあるか見てみる　なければアサ―ト
+	assert(datas_.contains(groupName));
+	//グループの参照を取得
+	const Group& group = datas_.at(groupName);
+	//指定したグループに指定したキーが存在する
+	assert(group.items.contains(key));
+
+	return std::get<float>(group.items.at(key).value);
+}
+Vector3 GlobalVariables::GetVector3Value(const std::string& groupName, const std::string& key) const
+{
+	//グループがあるか見てみる　なければアサ―ト
+	assert(datas_.contains(groupName));
+	//グループの参照を取得
+	const Group& group = datas_.at(groupName);
+	//指定したグループに指定したキーが存在する
+	assert(group.items.contains(key));
+
+	return std::get<Vector3>(group.items.at(key).value);
+}
+#pragma endregion Getter
+
 void GlobalVariables::SaveFile(const std::string& groupName)
 {
 	//グループを検索する
@@ -160,6 +231,7 @@ void GlobalVariables::SaveFile(const std::string& groupName)
 		ofs.close();
 	}
 }
+
 void GlobalVariables::LoadFiles()
 {
 	//保存先ディレクトリのパスをローカル変数で宣言する
@@ -186,7 +258,6 @@ void GlobalVariables::LoadFiles()
 		LoadFile(filePath.stem().string());
 	}
 }
-
 void GlobalVariables::LoadFile(const std::string& groupName)
 {
 	//読み込むjsonファイルのフルパスを合成
@@ -238,16 +309,4 @@ void GlobalVariables::LoadFile(const std::string& groupName)
 
 }
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, int32_t value)
-{
-	//アイテムが未登録なら
-	if()
-}
 
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, float value)
-{
-}
-
-void GlobalVariables::AddItem(const std::string& groupName, const std::string& key, const Vector3& value)
-{
-}

@@ -79,6 +79,12 @@
     <Filter Include="ソース ファイル\Input">
       <UniqueIdentifier>{49b3ff11-b79f-4001-b77a-a6324b522fc0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\GameObject\Player">
+      <UniqueIdentifier>{868ac8c4-51f7-4e4d-84d2-a593551c37fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ヘッダー ファイル\GameObject\Player">
+      <UniqueIdentifier>{712ff644-f87c-45a2-a0ae-3747445e0699}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -176,6 +182,9 @@
     </ClCompile>
     <ClCompile Include="Utility\CollisionManager.cpp">
       <Filter>ソース ファイル\Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject\Player\Player.cpp">
+      <Filter>ソース ファイル\GameObject\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -313,6 +322,9 @@
     </ClInclude>
     <ClInclude Include="Base\Postprosess.h">
       <Filter>ヘッダー ファイル\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject\Player\Player.h">
+      <Filter>ヘッダー ファイル\GameObject\Player</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

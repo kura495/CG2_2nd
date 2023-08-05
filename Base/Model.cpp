@@ -9,6 +9,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
 
 	modelData_ = LoadObjFile(directoryPath,filename);
+	//バッファリソースはLoadObjFileの中で作ってるよ
 	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
 	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 }
@@ -17,11 +18,11 @@ void Model::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
 	//拡大
-	ImGui::SliderFloat3("ScaleObj", &transformObj.scale.x, 1, 30, "%.3f");
+	//ImGui::SliderFloat3("ScaleObj", &transformObj.scale.x, 1, 30, "%.3f");
 	//回転
-	ImGui::SliderFloat3("RotateObj", &transformObj.rotate.x, -7, 7, "%.3f");
+	//ImGui::SliderFloat3("RotateObj", &transformObj.rotate.x, -7, 7, "%.3f");
 	//移動
-	ImGui::SliderFloat3("TranslateObj", &transformObj.translate.x, -10, 10, "%.3f");
+	//ImGui::SliderFloat3("TranslateObj", &transformObj.translate.x, -10, 10, "%.3f");
 	//色変更
 	ImGui::ColorPicker4("Color", &color_.x);
 	//ライティングのラジオボタン
@@ -44,7 +45,7 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-void Model::DrawModel(const Matrix4x4& ViewMatrix)
+void Model::DrawModel(const Matrix4x4& transform, const Matrix4x4& ViewMatrix)
 {
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
@@ -54,8 +55,8 @@ void Model::DrawModel(const Matrix4x4& ViewMatrix)
 	materialDataObj->uvTransform = MakeIdentity4x4();
 
 	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
-	Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
-	transformationMatrixDataObj->WVP = Multiply(worldMatrixObj, ViewMatrix);
+	//Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
+	transformationMatrixDataObj->WVP = Multiply(transform, ViewMatrix);
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	transformationMatrixDataObj->World = MakeIdentity4x4();
 
