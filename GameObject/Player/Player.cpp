@@ -5,7 +5,8 @@ void Player::Initialize()
 	input = Input::GetInstance();
 	model = Model::CreateModelFromObj("resources","bunny.obj");
 	const char* groupName = "Player";
-	GlobalVariables::GetInstance()->CreateGroup(groupName);
+
+	//GlobalVariables::GetInstance()->CreateGroup(groupName);
 	GlobalVariables::GetInstance()->AddItem(groupName,"speed",speed);
 }
 
