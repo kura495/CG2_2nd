@@ -50,6 +50,10 @@ public:
 	//
 
 private:
+	DirectXCommon() = default;
+	~DirectXCommon() = default;
+	DirectXCommon(const DirectXCommon& obj) = delete;
+	DirectXCommon& operator=(const DirectXCommon& obj) = delete;
 	//ポストプロセス
 	IDxcBlob* PostProsessBlob=nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>PostProsessgraphicsPipelineState = nullptr;

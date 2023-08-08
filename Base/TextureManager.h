@@ -35,6 +35,10 @@ public:
 	/// <returns>リソース情報</returns>
 	const CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t textureHandle);
 private:
+	TextureManager() = default;
+	~TextureManager() = default;
+	TextureManager(const TextureManager& obj) = delete;
+	TextureManager& operator=(const TextureManager& obj) = delete;
 
 	HRESULT hr;
 	

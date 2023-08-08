@@ -38,6 +38,10 @@ public:
 	bool IsTreggerKey(uint8_t keyNumber);
 
 private:
+	Input() = default;
+	~Input() = default;
+	Input(const Input& obj) = delete;
+	Input& operator=(const Input& obj) = delete;
 	HRESULT hr;
 	Microsoft::WRL::ComPtr<IDirectInput8>directInput = nullptr;
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard = nullptr;
