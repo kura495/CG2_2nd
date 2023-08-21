@@ -4,11 +4,11 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
-	vertexResourceSprite = CreateBufferResource(sizeof(VertexData) * 4);
-	materialResourceSprite = CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceSprite = CreateBufferResource(sizeof(TransformationMatrix));
+	vertexResourceSprite = directX_->CreateBufferResource(sizeof(VertexData) * 4);
+	materialResourceSprite = directX_->CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceSprite = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSprite();
-	indexResourceSprite = CreateBufferResource(sizeof(uint32_t) * 6);
+	indexResourceSprite = directX_->CreateBufferResource(sizeof(uint32_t) * 6);
 	MakeIndexBufferViewSprite();
 
 	vertexResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
@@ -104,22 +104,4 @@ void Sprite::MakeIndexBufferViewSprite()
 	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t) * 6;
 	//インデックスはuint32_t
 	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
-}
-Microsoft::WRL::ComPtr<ID3D12Resource> Sprite::CreateBufferResource(size_t sizeInBytes)
-{
-	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC ResourceDesc{};
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = sizeInBytes;
-	ResourceDesc.Height = 1;
-	ResourceDesc.DepthOrArraySize = 1;
-	ResourceDesc.MipLevels = 1;
-	ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
 }

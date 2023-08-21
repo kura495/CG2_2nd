@@ -6,11 +6,11 @@ void Sphere::Initialize()
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
 
-	vertexResourceSphere = CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
-	materialResourceSphere = CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceSphere = CreateBufferResource(sizeof(TransformationMatrix));
+	vertexResourceSphere = directX_->CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
+	materialResourceSphere = directX_->CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceSphere = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
-	indexResourceSphere = CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
+	indexResourceSphere = directX_->CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
 	MakeIndexBufferViewSphere();
 
 	vertexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSphere));
@@ -148,22 +148,4 @@ void Sphere::MakeIndexBufferViewSphere()
 	indexBufferViewSphere.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
 	//インデックスはuint32_t
 	indexBufferViewSphere.Format = DXGI_FORMAT_R32_UINT;
-}
-Microsoft::WRL::ComPtr<ID3D12Resource> Sphere::CreateBufferResource(size_t sizeInBytes)
-{
-	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC ResourceDesc{};
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = sizeInBytes;
-	ResourceDesc.Height = 1;
-	ResourceDesc.DepthOrArraySize = 1;
-	ResourceDesc.MipLevels = 1;
-	ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
 }

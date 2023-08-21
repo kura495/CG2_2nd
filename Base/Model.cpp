@@ -1,12 +1,12 @@
-﻿#include"Base/Model.h"
+﻿#include"Model.h"
 
 void Model::Initialize(const std::string& directoryPath, const std::string& filename)
 {
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
-	materialResourceObj = CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceObj = CreateBufferResource(sizeof(TransformationMatrix));
+	materialResourceObj = directX_->CreateBufferResource(sizeof(Material));
+	transformationMatrixResourceObj = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 
 	modelData_ = LoadObjFile(directoryPath,filename);
 	//バッファリソースはLoadObjFileの中で作ってるよ
@@ -45,7 +45,7 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-void Model::DrawModel(const Matrix4x4& transform, const Matrix4x4& ViewMatrix)
+void Model::Draw(const Matrix4x4& transform, const Matrix4x4& ViewMatrix)
 {
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
@@ -143,7 +143,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	}
 	modelData.TextureIndex = textureManager_->LoadTexture(modelData.material.textureFilePath);
 	//頂点リソースを作る
-	vertexResourceObj = CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	vertexResourceObj = directX_->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
 	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
 	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
@@ -170,23 +170,4 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 	}
 
 	return materialData;
-}
-
-Microsoft::WRL::ComPtr<ID3D12Resource> Model::CreateBufferResource(size_t sizeInBytes)
-{
-	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC ResourceDesc{};
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = sizeInBytes;
-	ResourceDesc.Height = 1;
-	ResourceDesc.DepthOrArraySize = 1;
-	ResourceDesc.MipLevels = 1;
-	ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
 }

@@ -54,6 +54,7 @@ private:
 	~DirectXCommon() = default;
 	DirectXCommon(const DirectXCommon& obj) = delete;
 	DirectXCommon& operator=(const DirectXCommon& obj) = delete;
+
 	//ポストプロセス
 	IDxcBlob* PostProsessBlob=nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>PostProsessgraphicsPipelineState = nullptr;
@@ -64,8 +65,6 @@ private:
 	D3D12_INPUT_LAYOUT_DESC PostProsessinputLayoutDesc{};
 	//
 	WinApp* winApp_;
-	/*int32_t kClientWidth_;
-	int32_t kClientHeight_;*/
 	HRESULT hr;
 	//TransitionBarrier
 	D3D12_RESOURCE_BARRIER barrier{};

@@ -25,10 +25,14 @@ public:
 	ID3D12Resource* GetDirectionalLight()const {
 		return directionalLightResource.Get(); }
 private:
+	Light() = default;
+	~Light() = default;
+	Light(const Light& obj) = delete;
+	Light& operator=(const Light& obj) = delete;
+
 	DirectXCommon* directX_ = nullptr;
 
 	Microsoft::WRL::ComPtr<ID3D12Resource>directionalLightResource = nullptr;
 	DirectionalLight* directionalLightData = nullptr;
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 };
 

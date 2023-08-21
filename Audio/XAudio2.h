@@ -41,6 +41,7 @@ private:
 	~XAudio2() = default;
 	XAudio2(const XAudio2& obj) = delete;
 	XAudio2& operator=(const XAudio2& obj) = delete;
+
 	float left = 0;
 	float right = 0;
 	static const int kMaxAudio = 8;

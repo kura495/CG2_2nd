@@ -24,8 +24,9 @@ public:
 	void ImGui(const char* Title);
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-	void DrawModel(const Matrix4x4& transform,const Matrix4x4& ViewMatrix);
+	void Draw(const Matrix4x4& transform,const Matrix4x4& ViewMatrix);
 private:
+
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
@@ -49,5 +50,4 @@ private:
 	
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
 };

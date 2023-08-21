@@ -5,13 +5,11 @@ void GamePlayState::Initialize()
 	//基本機能生成
 	camera_ = new Camera();
 	camera_->Initialize(1280, 720);
-	myEngine = MyEngine::GetInstance();
 	input = Input::GetInstance();
 	Audio = XAudio2::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
 	DirectX_ = DirectXCommon::GetInstance();
-	//model = Model::GetI
 	//
 	//3Dオブジェクト生成
 	player = new Player();
@@ -30,15 +28,12 @@ void GamePlayState::Initialize()
 void GamePlayState::Update()
 {
 #ifdef _DEBUG
-if (input->IspushKey(DIK_1)) {
+if (input->IspushKey(DIK_LALT)) {
 		camera_->DebugCamera(true);
-	}
-	if (input->IspushKey(DIK_2)) {
+}
+else {
 	camera_->DebugCamera(false);
-	}
-	if (input->IsTreggerKey(DIK_0)) {
-		Log("IsTreggerKey 0\n");
-	}
+}
 #endif // _DEBUG
 	GlobalVariables::GetInstance()->Update();
 

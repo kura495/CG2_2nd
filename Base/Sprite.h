@@ -49,5 +49,5 @@ private:
 	};
 	void MakeVertexBufferViewSprite();
 	void MakeIndexBufferViewSprite();
-	Microsoft::WRL::ComPtr<ID3D12Resource> CreateBufferResource(size_t sizeInBytes);
+
 };

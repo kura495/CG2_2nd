@@ -1,13 +1,12 @@
 ﻿#include"Mesh.h"
-#include"Scenes/Manager/GameManager.h"
 void Mesh::Initialize()
 {
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
-	vertexResource = CreateBufferResource(sizeof(VertexData)*3);
-	materialResource = CreateBufferResource(sizeof(Material));
-	wvpResource = CreateBufferResource(sizeof(TransformationMatrix));
+	vertexResource = directX_->CreateBufferResource(sizeof(VertexData)*3);
+	materialResource = directX_->CreateBufferResource(sizeof(Material));
+	wvpResource = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferView();
 	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 	//左下
@@ -70,22 +69,4 @@ void Mesh::MakeVertexBufferView()
 	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
 
-Microsoft::WRL::ComPtr<ID3D12Resource> Mesh::CreateBufferResource(size_t sizeInBytes)
-{
-	Microsoft::WRL::ComPtr<ID3D12Resource> Resource = nullptr;
-	D3D12_HEAP_PROPERTIES uploadHeapProperties{};
-	uploadHeapProperties.Type = D3D12_HEAP_TYPE_UPLOAD;
-	D3D12_RESOURCE_DESC ResourceDesc{};
-	ResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	ResourceDesc.Width = sizeInBytes;
-	ResourceDesc.Height = 1;
-	ResourceDesc.DepthOrArraySize = 1;
-	ResourceDesc.MipLevels = 1;
-	ResourceDesc.SampleDesc.Count = 1;
-	ResourceDesc.Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR;
-	//頂点リソースを作る
-	HRESULT hr = directX_->GetDevice()->CreateCommittedResource(&uploadHeapProperties, D3D12_HEAP_FLAG_NONE, &ResourceDesc, D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&Resource));
-	assert(SUCCEEDED(hr));
-	return Resource;
-}
 

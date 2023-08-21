@@ -177,9 +177,6 @@
     <ClCompile Include="Base\Model.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Base\Postprosess.cpp">
-      <Filter>ソース ファイル\Base</Filter>
-    </ClCompile>
     <ClCompile Include="Utility\CollisionManager.cpp">
       <Filter>ソース ファイル\Utility</Filter>
     </ClCompile>
@@ -319,9 +316,6 @@
     </ClInclude>
     <ClInclude Include="includeStruct\ModelData.h">
       <Filter>ヘッダー ファイル\IncludeStruct</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\Postprosess.h">
-      <Filter>ヘッダー ファイル\Base</Filter>
     </ClInclude>
     <ClInclude Include="GameObject\Player\Player.h">
       <Filter>ヘッダー ファイル\GameObject\Player</Filter>
