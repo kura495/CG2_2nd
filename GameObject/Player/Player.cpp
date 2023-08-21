@@ -24,7 +24,7 @@ void Player::Update()
 
 void Player::Draw(const Matrix4x4& ViewMatrix)
 {
-	model->DrawModel(AffineMatrix, ViewMatrix);
+	model->Draw(AffineMatrix, ViewMatrix);
 }
 
 void Player::ApplyGlobalVariables()
