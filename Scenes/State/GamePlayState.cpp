@@ -14,13 +14,15 @@ void GamePlayState::Initialize()
 	//3Dオブジェクト生成
 	player = new Player();
 	player->Initialize();
+	sphere = new Sphere();
+	sphere->Initialize();
 	//
 	//2Dオブジェクト作成
 
 	//
 	//リソースを作る
 	//テクスチャ
-
+	Texture = textureManager_->LoadTexture("resources/uvChecker.png");
 	//サウンド
 	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
 	//
@@ -43,12 +45,14 @@ else {
 	Audio->Play(mokugyo, Volume, Pan);
 	ImGui::End();
 	camera_->Update();
-	
+	sphere->ImGui("Sphere");
 	player->Update();
 }
 void GamePlayState::Draw()
 {
-	player->Draw(camera_->GetWorldMatrix());
+	sphere->DrawSphere(camera_->GetWorldMatrix(), Texture);
+	//player->Draw(camera_->GetWorldMatrix());
+	
 	//1. ビット演算を取り回しの良いUtilityクラスにする
 	//2. 三項演算子をつかって、構造がわかりやすいようにする
 	//piplineStatus->GetIsMesh2() ? mesh2->Draw() : ;

@@ -43,11 +43,12 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f},
 	};
+	Sphere* sphere;
 	//2Dオブジェクトたち
 	
 	//
 	//テクスチャハンドルたち
-	
+	int Texture;
 	//
 	//サウンドハンドルたち
 	uint32_t mokugyo;
