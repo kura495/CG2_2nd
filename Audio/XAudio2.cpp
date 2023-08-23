@@ -105,6 +105,7 @@ void XAudio2::Release() {
 		XAudioInterface->Release();
 		XAudioInterface = nullptr;
 	}
+	soundData_.clear();
 	CoUninitialize();
 }
 
