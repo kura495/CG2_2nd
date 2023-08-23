@@ -51,7 +51,7 @@ void XAudio2::Initialize() {
 	// Assuming pVoice sends to pMasteringVoice
 }
 
-uint32_t XAudio2::LoadAudio(const wchar_t* filePath) {
+uint32_t XAudio2::LoadAudio(const char* filename) {
 	//位置決め
 #pragma region Index
 	uint32_t AudioIndex = kMaxAudio + 1;
@@ -71,113 +71,22 @@ uint32_t XAudio2::LoadAudio(const wchar_t* filePath) {
 		assert(false);
 	    }
 #pragma endregion 位置決め
-	    // WindowsマルチメディアAPIのハンドル
-	    HMMIO mmioHandle = NULL;
-
-	    // ファイルを開く
-	    mmioHandle = mmioOpen(
-	        (LPWSTR)filePath, // ファイル名
-	        NULL,             // MMIO情報
-	        MMIO_READ);       // モード
-	    if (mmioHandle == NULL) {
-		Log("open failed\n");
-		assert(false);
-	    }
-#pragma region RIFF
-		// RIFFチャンク用
-	    MMCKINFO RIFFchankInfo;
-	    // RIFFチャンクに進入するためにfccTypeにWAVEを設定する
-	    RIFFchankInfo.fccType = mmioFOURCC('W', 'A', 'V', 'E');
-	    // RIFFチャンクに入る
-	    if (MMSYSERR_NOERROR != mmioDescend(
-	                                mmioHandle,     // MMIOハンドル
-	                                &RIFFchankInfo, // 取得したチャンクの情報
-	                                NULL,           // 親チャンク
-	                                MMIO_FINDRIFF)) // 取得情報の種類
-	    {
-		// 失敗
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		Log("RIFF open failed\n");
-		assert(false);
-	    }
-	#pragma endregion RIFF
-#pragma region fmt
-		// チャンク情報
-	    MMCKINFO chankInfo;
-	    // fmtチャンクに入るためにIDに"fmt "を入れる
-	    chankInfo.ckid = mmioFOURCC('f', 'm', 't', ' ');
-	    if (MMSYSERR_NOERROR !=
-	        mmioDescend(mmioHandle, &chankInfo, &RIFFchankInfo, MMIO_FINDCHUNK)) {
-		// fmtチャンクがない
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		Log("fmt");
-		return false;
-	    }
-	    WAVEFORMATEX wfex{};
-	    // fmtデータの読み込み
-	   LONG read_size = mmioRead(
-	        mmioHandle,                      // ハンドル
-	        (HPSTR)&wfex,                    // 読み込み用バッファ
-	        sizeof(wfex)); // バッファサイズ
-
-	    if (read_size != sizeof(wfex)) {
-		// 読み込みサイズが一致してないのでエラー
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		Log("fmt open failed\n");
-		assert(false);
-	    }
-
-	    // フォーマットチェック
-	    if (wfex.wFormatTag != WAVE_FORMAT_PCM) {
-		// フォーマットエラー
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		assert(false);
-	    }
-
-	    // fmtチャンクを退出する
-	    if (mmioAscend(mmioHandle, &chankInfo, 0) != MMSYSERR_NOERROR) {
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		assert(false);
-	    }
-#pragma endregion fmt
-	    // dataチャンクに進入する
-	    chankInfo.ckid = mmioFOURCC('d', 'a', 't', 'a');
-	    if (mmioDescend(mmioHandle, &chankInfo, &RIFFchankInfo, MMIO_FINDCHUNK) !=
-	        MMSYSERR_NOERROR) {
-		// 進入失敗
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		Log("data open failed\n");
-		assert(false);
-	    }
-
-	    // サイズを保存
-	    char* pBuffer = (char*)malloc(chankInfo.cksize);
-
-	    // dataチャンク読み込み
-		  read_size = mmioRead(mmioHandle, (HPSTR)pBuffer, chankInfo.cksize);
-	    if (read_size != chankInfo.cksize) {
-		mmioClose(mmioHandle, MMIO_FHOPEN);
-		delete[] pBuffer;
-		Log("data open failed\n");
-		assert(false);
-	    }
-	    if (FAILED(XAudioInterface->CreateSourceVoice(&pSourceVoice[AudioIndex], &wfex))) {
-		free(pBuffer);
-		assert(false);
-	    }
+		soundData_[AudioIndex] = SoundLoadWave(filename);
+		if (FAILED(XAudioInterface->CreateSourceVoice(&pSourceVoice[AudioIndex], &soundData_[AudioIndex].wfex))) {
+			//SoundUnload(&soundData[AudioIndex]);
+			assert(false);
+		}
 	    XAUDIO2_BUFFER buffer{};
-	    buffer.pAudioData = (BYTE*)pBuffer;
+	    buffer.pAudioData = soundData_[AudioIndex].pBuffer;
 	    buffer.Flags = XAUDIO2_END_OF_STREAM;
-	    buffer.AudioBytes = chankInfo.cksize;
+	    buffer.AudioBytes = soundData_[AudioIndex].bufferSize;
 	    buffer.LoopBegin = 0;
 	    buffer.LoopLength = 0;
 	    buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
-		
-
 	    pSourceVoice[AudioIndex]->SubmitSourceBuffer(&buffer);
-	    // ファイルを閉じる
-	    mmioClose(mmioHandle, MMIO_FHOPEN);
+		//サウンドデータの開放
+
 		return AudioIndex;
 }
 
@@ -219,9 +128,80 @@ void XAudio2::Play(int AudioIndex,float AudioVolume,int pan) {
 	int InChannels = 2;
 	int OutChannels = 4;
 	pSourceVoice[AudioIndex]->SetOutputMatrix(NULL, InChannels, OutChannels, outputMatrix);
-	//hr = pSourceVoice[AudioIndex]->SetChannelVolumes(1, SourceVoiceChannelVolumes);
 	pSourceVoice[AudioIndex]->SetVolume(AudioVolume);
 	pSourceVoice[AudioIndex]->Start(0);
+}
+
+SoundData XAudio2::SoundLoadWave(const char* filename)
+{
+	//ファイル入力ストリームのインスタンス
+	std::ifstream file;
+	//.wavファイルをバイナリモードで開く
+	file.open(filename,std::ios_base::binary);
+	//ファイルオープン失敗を検出
+	assert(file.is_open());
+	//RIFFチャンク読み込み
+	RiffHeader riff;
+	//チャンクがRIFFかチェック
+	file.read((char*)&riff, sizeof(riff));
+	if (strncmp(riff.chunk.id, "RIFF", 4) != 0) {
+		assert(0);
+	}
+	//ファイルタイプがWAVEかチェック
+	if (strncmp(riff.type, "WAVE", 4) != 0) {
+		assert(0);
+	}
+	//formatチャンク読み込み
+	FormatChunk format = {};
+	//チャンクヘッダーの確認
+	file.read((char*)&format, sizeof(ChunkHeader));
+	if (strncmp(format.chunk.id, "fmt ", 4) != 0) {
+		assert(0);
+	}
+	//チャンク本体の読み込み
+	assert(format.chunk.size <= sizeof(format.fmt));
+	file.read((char*)&format.fmt, format.chunk.size);
+
+	//Dataチャンク読み込み
+	ChunkHeader data;
+	file.read((char*)&data, sizeof(data));
+	if (strncmp(data.id, "bext", 4) == 0) {
+		//JUNKチャンクの終わりまで進める
+		file.seekg(data.size, std::ios_base::cur);
+		//再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	//JUNKチャンクの場合
+	if (strncmp(data.id, "junk", 4) == 0) {
+		//JUNKチャンクの終わりまで進める
+		file.seekg(data.size, std::ios_base::cur);
+		//再読み込み
+		file.read((char*)&data, sizeof(data));
+	}
+	if (strncmp(data.id, "data", 4) != 0) {
+		assert(0);
+	}
+	//Dataチャンクの波形データを読み込み
+	char* pBuffer = new char[data.size];
+	file.read(pBuffer, data.size);
+
+	file.close();
+
+	SoundData soundData = {};
+
+	soundData.wfex = format.fmt;
+	soundData.pBuffer = reinterpret_cast<BYTE*>(pBuffer);
+	soundData.bufferSize = data.size;
+
+	return soundData;
+}
+
+void XAudio2::SoundUnload(uint32_t Index)
+{
+	auto it = soundData_.find(Index);
+	if (it != soundData_.end()) {
+		soundData_.erase(it);
+	}
 }
 
 void XAudio2::Log(const std::string& message) { OutputDebugStringA(message.c_str()); }

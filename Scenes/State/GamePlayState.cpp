@@ -24,7 +24,7 @@ void GamePlayState::Initialize()
 	//テクスチャ
 	Texture = textureManager_->LoadTexture("resources/uvChecker.png");
 	//サウンド
-	mokugyo = Audio->LoadAudio(L"resources/mokugyo.wav");
+	mokugyo = Audio->LoadAudio("resources/mokugyo.wav");
 	//
 }
 void GamePlayState::Update()

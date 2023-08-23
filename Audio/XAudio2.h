@@ -8,6 +8,7 @@
 #pragma comment(lib,"xaudio2.lib")
 #pragma comment(lib, "winmm.lib")
 #include<fstream>
+#include<map>
 struct ChunkHeader {
 	char id[4];//チャンクID
 	int32_t size;//チャンクサイズ
@@ -32,10 +33,11 @@ class XAudio2 {
 public:
 	static XAudio2* GetInstance();
 	void Initialize();
-	uint32_t LoadAudio(const wchar_t* filePath);
+	
 	void Release();
+	uint32_t LoadAudio(const char* filename);
 	void Play(int AudioInDex, float AudioVolume, int pan);
-
+	void SoundUnload(uint32_t Index);
 private:
 	XAudio2() = default;
 	~XAudio2() = default;
@@ -48,9 +50,18 @@ private:
 	HRESULT hr;
 	Microsoft::WRL::ComPtr<IXAudio2> XAudioInterface = nullptr;
 	IXAudio2MasteringVoice* pMasteringVoice = nullptr;
+
+
+	//ソースボイス
 	IXAudio2SourceVoice* pSourceVoice[kMaxAudio];
 	bool IsusedAudioIndex[kMaxAudio];
+	//
+	std::map<uint32_t, SoundData> soundData_;
+
 	float outputMatrix[8];
+
+	SoundData SoundLoadWave(const char* filename);
+	
 	void Log(const std::string& message);
 };
 
