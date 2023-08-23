@@ -3,7 +3,13 @@ struct TransformationMatrix {
 	float32_t4x4 WVP;
 	float32_t4x4 World;
 };
+struct ViewProjectionMatrix{
+    float32_t4x4 view;
+    float32_t4x4 projection;
+    float32_t3 cameraPos;
+};
 ConstantBuffer<TransformationMatrix> gTransformationMatrix : register(b0);
+ConstantBuffer<ViewProjectionMatrix> gViewProjectionMatrix : register(b1);
 struct VertexShaderInput {
 	float32_t4 position : POSITION0;
 	float32_t2 texcoord : TEXCOORD0;
