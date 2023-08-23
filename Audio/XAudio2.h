@@ -50,12 +50,11 @@ private:
 	HRESULT hr;
 	Microsoft::WRL::ComPtr<IXAudio2> XAudioInterface = nullptr;
 	IXAudio2MasteringVoice* pMasteringVoice = nullptr;
-
-
 	//ソースボイス
 	IXAudio2SourceVoice* pSourceVoice[kMaxAudio];
 	bool IsusedAudioIndex[kMaxAudio];
-	//
+	//音声データ
+	//再生中にぶっ飛ばすとバグるぜ！！！
 	std::map<uint32_t, SoundData> soundData_;
 
 	float outputMatrix[8];

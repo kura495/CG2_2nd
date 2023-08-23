@@ -52,7 +52,6 @@ void XAudio2::Initialize() {
 }
 
 uint32_t XAudio2::LoadAudio(const char* filename) {
-	//位置決め
 #pragma region Index
 	uint32_t AudioIndex = kMaxAudio + 1;
 	    for (int i = 0; i < kMaxAudio; ++i) {
@@ -73,7 +72,7 @@ uint32_t XAudio2::LoadAudio(const char* filename) {
 #pragma endregion 位置決め
 		soundData_[AudioIndex] = SoundLoadWave(filename);
 		if (FAILED(XAudioInterface->CreateSourceVoice(&pSourceVoice[AudioIndex], &soundData_[AudioIndex].wfex))) {
-			//SoundUnload(&soundData[AudioIndex]);
+			SoundUnload(AudioIndex);
 			assert(false);
 		}
 	    XAUDIO2_BUFFER buffer{};
@@ -85,8 +84,7 @@ uint32_t XAudio2::LoadAudio(const char* filename) {
 	    buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
 	    pSourceVoice[AudioIndex]->SubmitSourceBuffer(&buffer);
-		//サウンドデータの開放
-		//SoundUnload(AudioIndex);
+
 		return AudioIndex;
 }
 
