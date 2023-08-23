@@ -86,7 +86,7 @@ uint32_t XAudio2::LoadAudio(const char* filename) {
 
 	    pSourceVoice[AudioIndex]->SubmitSourceBuffer(&buffer);
 		//サウンドデータの開放
-
+		//SoundUnload(AudioIndex);
 		return AudioIndex;
 }
 
@@ -200,7 +200,10 @@ void XAudio2::SoundUnload(uint32_t Index)
 {
 	auto it = soundData_.find(Index);
 	if (it != soundData_.end()) {
-		soundData_.erase(it);
+		delete[] soundData_[Index].pBuffer;
+		soundData_[Index].pBuffer = 0;
+		soundData_[Index].bufferSize = 0;
+		soundData_[Index].wfex = {};
 	}
 }
 
