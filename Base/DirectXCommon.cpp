@@ -446,7 +446,7 @@ void DirectXCommon::MakeRootSignature()
 	//頂点位置に関するルートパラメーター(ViewProjection)
 	rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
 	rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderで使う
-	rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号を0にバインド
+	rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号を1にバインド
 
 	descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 	descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
