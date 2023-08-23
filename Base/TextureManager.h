@@ -26,8 +26,6 @@ public:
 	static TextureManager* GetInstance();
 	void Initialize(DirectXCommon* directX);
 	uint32_t LoadTexture(const std::string& filePath);
-
-	void ScreenConvertTexture(ID3D12Resource * ShaderResource);
 	/// <summary>
 	/// GPUHandle情報取得
 	/// </summary>
@@ -47,7 +45,7 @@ private:
 	// テクスチャコンテナ
 	std::array<Texture, kMaxTexture> textures_;
 	//中間リソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource[kMaxTexture];
+	Microsoft::WRL::ComPtr<ID3D12Resource> intermediateResource_[kMaxTexture];
 	
 	DirectX::ScratchImage ImageFileOpen(const std::string& filePath);
 	Microsoft::WRL::ComPtr<ID3D12Resource> CreateTextureResource(Microsoft::WRL::ComPtr<ID3D12Device>device, const DirectX::TexMetadata& metadata);

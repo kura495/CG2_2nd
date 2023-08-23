@@ -151,11 +151,10 @@ uint32_t XAudio2::LoadAudio(const wchar_t* filePath) {
 	    }
 
 	    // サイズを保存
-	    //outWaveData->Size = chankInfo.cksize;
 	    char* pBuffer = (char*)malloc(chankInfo.cksize);
 
 	    // dataチャンク読み込み
-	    read_size = mmioRead(mmioHandle, (HPSTR)pBuffer, chankInfo.cksize);
+		  read_size = mmioRead(mmioHandle, (HPSTR)pBuffer, chankInfo.cksize);
 	    if (read_size != chankInfo.cksize) {
 		mmioClose(mmioHandle, MMIO_FHOPEN);
 		delete[] pBuffer;

@@ -17,7 +17,7 @@ void GameManager::Initialize()
 	directX->Initialize(winApp);
 	//Engine
 	myEngine = MyEngine::GetInstance();
-	myEngine->Initialize(directX, kClientWidth, kClientHeight);
+	myEngine->Initialize(directX);
 	//Audio
 	Audio = XAudio2::GetInstance();
 	Audio->Initialize();

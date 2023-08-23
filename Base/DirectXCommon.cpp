@@ -178,7 +178,7 @@ Microsoft::WRL::ComPtr<ID3D12Resource> DirectXCommon::CreateBufferResource(size_
 }
 
 Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
-DirectXCommon::CreateDescriptorHeap(Microsoft::WRL::ComPtr<ID3D12Device> device, D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
+DirectXCommon::CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE heapType, UINT numDescriptors, bool shaderVisible)
 {
 	Microsoft::WRL::ComPtr<ID3D12DescriptorHeap>
 	 descriptorHeap = nullptr;
@@ -326,10 +326,10 @@ void DirectXCommon::MakeSwapChain()
 void DirectXCommon::MakeDescriptorHeap()
 {
 	//rtvディスクリプタヒープの作成
-	rtvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
+	rtvDescriptorHeap = CreateDescriptorHeap( D3D12_DESCRIPTOR_HEAP_TYPE_RTV, 2, false);
 	//srvディスクリプタ―ヒープの作成
 //srv用のディスクリプタ数は128。srvはshader内で触るものなので、ShaderVisibleはtrue
-	srvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
+	srvDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_CBV_SRV_UAV, 128, true);
 	//SwapChainからResourceを持ってくる
 	hr = swapChain->GetBuffer(0, IID_PPV_ARGS(&swapChainResources[0]));
 	//リソースの取得ができないので起動できない
@@ -351,7 +351,7 @@ void DirectXCommon::MakeDescriptorHeap()
 	//DSVDescriptorHeap
 	depthStencilResource =CreateDepthStencilTextureResource(WinApp::kClientWidth, WinApp::kClientHeight);
 	//DSV用のヒープでディスクリプタの数は1　DSVはShader内で触るものではないのでShaderVisibleはfalse
-	dsvDescriptorHeap = CreateDescriptorHeap(device.Get(), D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
+	dsvDescriptorHeap = CreateDescriptorHeap(D3D12_DESCRIPTOR_HEAP_TYPE_DSV, 1, false);
 	//DSVの設定
 	D3D12_DEPTH_STENCIL_VIEW_DESC dsvDesc{};
 	dsvDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;//Format 基本的にはResourceに合わせる
@@ -382,7 +382,7 @@ void DirectXCommon::MakeDXC()
 	assert(SUCCEEDED(hr));
 }
 
-IDxcBlob* DirectXCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile, IDxcUtils* dxcUtils, IDxcCompiler3* dxcCompiler, IDxcIncludeHandler* includeHandler)
+IDxcBlob* DirectXCommon::CompileShader(const std::wstring& filePath, const wchar_t* profile)
 {
 	//ログにメッセージ
 	Log(ConvertString(std::format(L"Begin CompileShader, path:{},profile:{}\n",filePath,profile)));
@@ -519,10 +519,10 @@ void DirectXCommon::MakeRasterizarState()
 
 void DirectXCommon::MakeShaderCompile()
 {
-	vertexShaderBlob = CompileShader(L"Object3D.VS.hlsl", L"vs_6_0", dxcUtils, dxcCompiler, includeHandler);
+	vertexShaderBlob = CompileShader(L"Object3D.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
-	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
-	PostProsessBlob = CompileShader(L"PostProsess.hlsl", L"ps_6_0", dxcUtils, dxcCompiler, includeHandler);
+	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0");
+	PostProsessBlob = CompileShader(L"PostProsess.hlsl", L"ps_6_0");
 }
 
 void DirectXCommon::MakePipelineStateObject()

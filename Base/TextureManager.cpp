@@ -36,7 +36,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	DirectX::ScratchImage mipImages = ImageFileOpen(filePath);
 	const DirectX::TexMetadata& metadata = mipImages.GetMetadata();
 	textures_.at(SpriteIndex).textureResource = CreateTextureResource(directX_->GetDevice(), metadata);
-	intermediateResource[SpriteIndex] = UploadTextureData(textures_.at(SpriteIndex).textureResource, mipImages);
+	intermediateResource_[SpriteIndex] = UploadTextureData(textures_.at(SpriteIndex).textureResource, mipImages);
 	//metadataを基にSRVの設定
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc{};
 	srvDesc.Format = metadata.format;
@@ -54,10 +54,7 @@ uint32_t TextureManager::LoadTexture(const std::string& filePath)
 	directX_->GetDevice()->CreateShaderResourceView(textures_.at(SpriteIndex).textureResource.Get(), &srvDesc, textures_.at(SpriteIndex).textureSrvHandleCPU);
 	return SpriteIndex;
 }
-void TextureManager::ScreenConvertTexture(ID3D12Resource* ShaderResource)
-{
 
-}
 const CD3DX12_GPU_DESCRIPTOR_HANDLE TextureManager::GetGPUHandle(uint32_t textureHandle)
 {
 	CD3DX12_GPU_DESCRIPTOR_HANDLE GPUHandle = textures_.at(textureHandle).textureSrvHandleGPU;
