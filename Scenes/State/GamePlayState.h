@@ -42,12 +42,8 @@ private:
 	ViewProjection viewProjection_;
 	//3Dオブジェクトたち
 	Player* player = nullptr;
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
 	Sphere* sphere;
+	float position = -25.0f;
 	//2Dオブジェクトたち
 	
 	//

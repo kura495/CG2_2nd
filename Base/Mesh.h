@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include"Base/DirectXCommon.h"
 #include"Base/TextureManager.h"
+#include"Base/WorldTransform.h"
+#include"Base/ViewProjection.h"
 #include"IncludeStruct/Transform.h"
 #include"IncludeStruct/VertexData.h"
 #include"IncludeStruct/Material.h"
@@ -11,18 +13,13 @@ class Mesh
 {
 public:
 	void Initialize();
-	void Draw(const Matrix4x4& ViewMatrix, const uint32_t textureHandle);
-	void ImGui(const char* Title);
+	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const uint32_t textureHandle);
 private:
 
 	Vector4 color_ = {1.0f,1.0f,1.0f,1.0f};
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
+
 	Transform uvTranformTriAngle{
 	{1.0f,1.0f,1.0f},
 	{0.0f,0.0f,0.0f},
@@ -39,12 +36,6 @@ private:
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
 	//色データ
 	Material* materialData = nullptr;
-	//WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> wvpResource = nullptr;
-	//WVPデータ
-	Matrix4x4* wvpData = nullptr;
-	static const int kMaxTexture = 10;
-	bool IsusedTextureIndex[kMaxTexture];
 
 	void MakeVertexBufferView();
 
