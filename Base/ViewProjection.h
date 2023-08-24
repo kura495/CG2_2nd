@@ -27,12 +27,12 @@ struct ViewProjection {
 	// X,Y,Z軸回りのローカル回転角
 	Vector3 rotation_ = { 0, 0, 0 };
 	// ローカル座標
-	Vector3 translation_ = { 0, 0, -50 };
+	Vector3 translation_ = { 0, 0, -25 };
 #pragma endregion
 
 #pragma region 射影行列の設定
 	// 垂直方向視野角
-	float fovAngleY = 45.0f * 3.141592654f / 180.0f;
+	float fovAngleY = 45.0f;
 	// ビューポートのアスペクト比
 	float aspectRatio = (float)16 / 9;
 	// 深度限界（手前側）

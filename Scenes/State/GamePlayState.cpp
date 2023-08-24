@@ -47,11 +47,11 @@ else {
 	Audio->Play(mokugyo, Volume, Pan);
 	ImGui::End();
 	camera_->Update();
-	sphere->ImGui("Sphere");
 	player->Update();
 }
 void GamePlayState::Draw()
 {
+	sphere->Draw(worldTransform_,viewProjection_, Texture);
 	player->Draw(viewProjection_);
 	
 	//1. ビット演算を取り回しの良いUtilityクラスにする

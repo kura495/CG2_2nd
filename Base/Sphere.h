@@ -3,6 +3,8 @@
 #include"Base/DirectXCommon.h"
 #include"Base/TextureManager.h"
 #include"Base/Light.h"
+#include"Base/WorldTransform.h"
+#include"Base/ViewProjection.h"
 #include"IncludeStruct/Transform.h"
 #include"IncludeStruct/VertexData.h"
 #include"IncludeStruct/Material.h"
@@ -15,8 +17,7 @@ class Sphere
 public:
 
 	void Initialize();
-	void DrawSphere(const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle);
-	void ImGui(const char* Title);
+	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const uint32_t& TextureHandle);
 private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
@@ -38,22 +39,12 @@ private:
 	//色データ
 	Material* materialDataSphere = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	//Sphere用WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSphere = nullptr;
-	//Sphere用WVPデータ
-	TransformationMatrix* transformationMatrixDataSphere = nullptr;
 	//Index用
 	Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceSphere = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSphere = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSphere{};
-
-	Transform transformSphere{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
 
 	//イニシャライズで呼び出す
 	void MakeVertexBufferViewSphere();

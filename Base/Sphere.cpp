@@ -8,7 +8,6 @@ void Sphere::Initialize()
 
 	vertexResourceSphere = directX_->CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
 	materialResourceSphere = directX_->CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceSphere = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 	MakeVertexBufferViewSphere();
 	indexResourceSphere = directX_->CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
 	MakeIndexBufferViewSphere();
@@ -78,7 +77,7 @@ void Sphere::Initialize()
 	}
 }
 
-void Sphere::DrawSphere(const Matrix4x4& ViewMatrix, const uint32_t& TextureHandle)
+void Sphere::Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const uint32_t& TextureHandle)
 {
 	
 	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
@@ -87,49 +86,25 @@ void Sphere::DrawSphere(const Matrix4x4& ViewMatrix, const uint32_t& TextureHand
 	materialDataSphere->color = color_;
 	materialDataSphere->enableLighting = lightFlag;
 	materialDataSphere->uvTransform = MakeIdentity4x4();
-	//
-	transformationMatrixResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSphere));
-	Matrix4x4 worldMatrixSphere = MakeAffineMatrix(transformSphere.scale, transformSphere.rotate, transformSphere.translate);
-	transformationMatrixDataSphere->WVP = Multiply(worldMatrixSphere, ViewMatrix);
+
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	transformationMatrixDataSphere->World = MakeIdentity4x4();
+
 
 	//頂点
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
 	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSphere);
 	//色用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere.Get()->GetGPUVirtualAddress());
-	//WVP
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSphere.Get()->GetGPUVirtualAddress());
+	//WorldTransformの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_.Get()->GetGPUVirtualAddress());
+	//ViewProjectionの場所を特定
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureHandle));
 	//Light
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, light_->GetDirectionalLight()->GetGPUVirtualAddress());
 
 	directX_->GetcommandList()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
-}
-void Sphere::ImGui(const char* Title)
-{
-	ImGui::Begin(Title);
-	//拡大
-	ImGui::SliderFloat3("ScaleSphere", &transformSphere.scale.x, 1, 30, "%.3f");
-	//回転
-	ImGui::SliderFloat3("RotateSphere", &transformSphere.rotate.x, -7, 7, "%.3f");
-	//移動
-	ImGui::SliderFloat3("TranslateSphere",&transformSphere.translate.x, -10, 10, "%.3f");
-	//色変更
-	ImGui::ColorPicker4("Color",&color_.x);
-	//ライティングのラジオボタン
-	if (ImGui::RadioButton("NotDo", lightFlag == Lighting::NotDo)) {
-		lightFlag = Lighting::NotDo;
-	}
-	else if (ImGui::RadioButton("harfLambert", lightFlag == Lighting::harfLambert)) {
-		lightFlag = Lighting::harfLambert;
-	}
-	else if (ImGui::RadioButton("Lambert", lightFlag == Lighting::Lambert)) {
-		lightFlag = Lighting::Lambert;
-	}
-	ImGui::End();
 }
 void Sphere::MakeVertexBufferViewSphere()
 {
