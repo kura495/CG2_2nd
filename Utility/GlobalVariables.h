@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include"IncludeStruct/Vector3.h"
+#include"Vector3.h"
 #include"Utility/ImGuiManager.h"
 #include"externals/nlohmann/json.hpp"
 #include<variant>

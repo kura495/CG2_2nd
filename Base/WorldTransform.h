@@ -4,12 +4,14 @@
 #include "DirectXCommon.h"
 #include "TransformationMatrix.h"
 
-
+struct ConstBufferDataWorldTransform {
+	TransformationMatrix matWorld; // ローカル → ワールド変換行列
+};
 struct WorldTransform {
 	// 定数バッファ
 	Microsoft::WRL::ComPtr<ID3D12Resource> constBuff_;
 	// マッピング済みアドレス
-	TransformationMatrix* constMap = nullptr;
+	ConstBufferDataWorldTransform* constMap = nullptr;
 	// ローカルスケール
 	Vector3 scale_ = { 1, 1, 1 };
 	// X,Y,Z軸回りのローカル回転角
@@ -17,7 +19,7 @@ struct WorldTransform {
 	// ローカル座標
 	Vector3 translation_ = { 0, 0, 0 };
 	// ローカル → ワールド変換行列
-	Matrix4x4 matWorld_;
+	TransformationMatrix matWorld_;
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 
@@ -38,4 +40,5 @@ struct WorldTransform {
 	/// </summary>
 	void TransferMatrix();
 
+	void UpdateMatrix();
 };

@@ -6,8 +6,8 @@
 #pragma comment(lib,"d3d12.lib")
 #pragma comment(lib,"dxgi.lib")
 #include"WinApp.h"
-#include"includeStruct/Vector3.h"
-#include"includeStruct/Vector4.h"
+#include"Vector3.h"
+#include"Vector4.h"
 #include<dxcapi.h>
 #pragma comment(lib,"dxcompiler.lib")
 #include<dxgidebug.h>

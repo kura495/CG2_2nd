@@ -4,6 +4,10 @@ void Player::Initialize()
 {
 	input = Input::GetInstance();
 	model = Model::CreateModelFromObj("resources","bunny.obj");
+	
+	worldTransform_.Initialize();
+
+
 	const char* groupName = "Player";
 
 	//GlobalVariables::GetInstance()->CreateGroup(groupName);
@@ -13,18 +17,18 @@ void Player::Initialize()
 void Player::Update()
 {
 	if (input->IspushKey(DIK_W)) {
-		transform.translate.z += 0.5f * speed;
+		worldTransform_.translation_.z += 0.5f * speed;
 	}
 	else if (input->IspushKey(DIK_S)) {
-		transform.translate.z -= 0.5f * speed;
+		worldTransform_.translation_.z -= 0.5f * speed;
 	}
-	AffineMatrix = MakeAffineMatrix(transform.scale, transform.rotate, transform.translate);
+	worldTransform_.UpdateMatrix();
 	ApplyGlobalVariables();
 }
 
-void Player::Draw(const Matrix4x4& ViewMatrix)
+void Player::Draw(const ViewProjection& viewProjection)
 {
-	model->Draw(AffineMatrix, ViewMatrix);
+	model->Draw(worldTransform_, viewProjection);
 }
 
 void Player::ApplyGlobalVariables()

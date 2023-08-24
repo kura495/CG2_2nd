@@ -590,7 +590,7 @@ void DirectXCommon::PostProsessRootSignature()
 {
 		D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 		descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-		D3D12_ROOT_PARAMETER rootParameters[4] = {};
+		D3D12_ROOT_PARAMETER rootParameters[5] = {};
 		//色に関するルートパラメーター
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PIXELShaderで使う
@@ -599,6 +599,9 @@ void DirectXCommon::PostProsessRootSignature()
 		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
 		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderで使う
 		rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号を0にバインド
+		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
+		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderで使う
+		rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号を0にバインド
 		descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 		descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 		//テクスチャで使う

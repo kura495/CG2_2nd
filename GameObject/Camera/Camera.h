@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include"Math/MatrixCalc.h"
 #include"Math/VectorCalc.h"
-#include"IncludeStruct/Transform.h"
-#include"IncludeStruct/Vector3.h"
+#include"Transform.h"
+#include"Vector3.h"
 #include"Utility/ImGuiManager.h"
 #include"Input/Input.h"
 

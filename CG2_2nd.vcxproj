@@ -44,12 +44,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <ExternalIncludePath>$(SolutionDir)/;$(SolutionDir)/includeStruct;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)/;$(SolutionDir)/includeStruct;$(SolutionDir)/Math/MathStruct;$(ExternalIncludePath)</ExternalIncludePath>
     <IncludePath>$(ProjectDir)..\externals\nlohmann</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)..\externals\nlohmann</IncludePath>
-    <ExternalIncludePath>$(SolutionDir)/;$(SolutionDir)/includeStruct;$(ExternalIncludePath)</ExternalIncludePath>
+    <ExternalIncludePath>$(SolutionDir)/;$(SolutionDir)/includeStruct;$(SolutionDir)/Math/MathStruct;$(ExternalIncludePath)</ExternalIncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -107,6 +107,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Base\Sphere.cpp" />
     <ClCompile Include="Base\Sprite.cpp" />
     <ClCompile Include="Base\TextureManager.cpp" />
+    <ClCompile Include="Base\ViewProjection.cpp" />
     <ClCompile Include="Base\WinApp.cpp" />
     <ClCompile Include="Base\WorldTransform.cpp" />
     <ClCompile Include="externals\imgui\imgui.cpp" />
@@ -142,6 +143,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="Base\Sphere.h" />
     <ClInclude Include="Base\Sprite.h" />
     <ClInclude Include="Base\TextureManager.h" />
+    <ClInclude Include="Base\ViewProjection.h" />
     <ClInclude Include="Base\WinApp.h" />
     <ClInclude Include="Base\WorldTransform.h" />
     <ClInclude Include="externals\imgui\imconfig.h" />
@@ -155,16 +157,16 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClInclude Include="GameObject\Camera\Camera.h" />
     <ClInclude Include="GameObject\Player\Player.h" />
     <ClInclude Include="includeStruct\Material.h" />
-    <ClInclude Include="includeStruct\Matrix3x3.h" />
-    <ClInclude Include="includeStruct\Matrix4x4.h" />
     <ClInclude Include="includeStruct\ModelData.h" />
     <ClInclude Include="includeStruct\Transform.h" />
     <ClInclude Include="includeStruct\TransformationMatrix.h" />
-    <ClInclude Include="includeStruct\Vector2.h" />
-    <ClInclude Include="includeStruct\Vector3.h" />
-    <ClInclude Include="includeStruct\Vector4.h" />
     <ClInclude Include="includeStruct\VertexData.h" />
     <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="Math\MathStruct\Matrix3x3.h" />
+    <ClInclude Include="Math\MathStruct\Matrix4x4.h" />
+    <ClInclude Include="Math\MathStruct\Vector2.h" />
+    <ClInclude Include="Math\MathStruct\Vector3.h" />
+    <ClInclude Include="Math\MathStruct\Vector4.h" />
     <ClInclude Include="math\MatrixCalc.h" />
     <ClInclude Include="math\VectorCalc.h" />
     <ClInclude Include="Scenes\Manager\GameManager.h" />

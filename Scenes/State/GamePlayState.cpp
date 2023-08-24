@@ -26,6 +26,8 @@ void GamePlayState::Initialize()
 	//サウンド
 	mokugyo = Audio->LoadAudio("resources/mokugyo.wav");
 	//
+	viewProjection_.Initialize();
+	worldTransform_.Initialize();
 }
 void GamePlayState::Update()
 {
@@ -50,8 +52,7 @@ else {
 }
 void GamePlayState::Draw()
 {
-	sphere->DrawSphere(camera_->GetWorldMatrix(), Texture);
-	//player->Draw(camera_->GetWorldMatrix());
+	player->Draw(viewProjection_);
 	
 	//1. ビット演算を取り回しの良いUtilityクラスにする
 	//2. 三項演算子をつかって、構造がわかりやすいようにする

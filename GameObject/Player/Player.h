@@ -1,5 +1,7 @@
 ﻿#pragma once
 #include"Base/Model.h"
+#include"Base/WorldTransform.h"
+#include"Base/ViewProjection.h"
 #include"IncludeStruct/Transform.h"
 #include"Input/Input.h"
 class Player
@@ -7,18 +9,13 @@ class Player
 public:
 	void Initialize();
 	void Update();
-	void Draw(const Matrix4x4& ViewMatrix);
+	void Draw(const ViewProjection& viewProjection);
 private:
 	void ApplyGlobalVariables();
 	Input* input = nullptr;
 	Model* model = nullptr;
 	GlobalVariables* globalVariables = nullptr;
-	Transform transform{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
-	Matrix4x4 AffineMatrix;
+	WorldTransform worldTransform_;
 	float speed = 0.0f;
 };
 

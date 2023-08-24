@@ -16,6 +16,8 @@
 #pragma comment(lib,"dxguid.lib")
 #include"GameObject/Camera/Camera.h"
 #include"GameObject/Player/Player.h"
+#include "Base/WorldTransform.h"
+#include "Base/ViewProjection.h"
 
 class GamePlayState :public GameState
 {
@@ -36,6 +38,8 @@ private:
 	GlobalVariables* globalVariables = nullptr;
 	Model* model = nullptr;
 	//
+	WorldTransform worldTransform_;
+	ViewProjection viewProjection_;
 	//3Dオブジェクトたち
 	Player* player = nullptr;
 	Transform transform{

@@ -2,13 +2,16 @@
 
 void WorldTransform::Initialize()
 {
-
-	constBuff_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix));
+	matWorld_.WVP = MakeIdentity4x4();
+	matWorld_.World = MakeIdentity4x4();
+	CreateConstBuffer();
+	Map();
+	TransferMatrix();
 }
 
 void WorldTransform::CreateConstBuffer()
 {
-	constBuff_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(TransformationMatrix));
+	constBuff_ = DirectXCommon::GetInstance()->CreateBufferResource(sizeof(ConstBufferDataWorldTransform));
 }
 
 void WorldTransform::Map()
@@ -18,7 +21,18 @@ void WorldTransform::Map()
 
 void WorldTransform::TransferMatrix()
 {
+	constMap->matWorld.WVP = matWorld_.WVP;
+	constMap->matWorld.World = matWorld_.World;
+}
+
+void WorldTransform::UpdateMatrix()
+{
 	Matrix4x4 AffineMatrix = MakeAffineMatrix(scale_, rotation_, translation_);
-	constMap->WVP = AffineMatrix;
-	constMap->World = MakeIdentity4x4();
+	matWorld_.WVP = AffineMatrix;
+	//親があれば親のワールド行列を掛ける
+	if (parent_) {
+		matWorld_.WVP = Multiply(matWorld_.WVP, parent_->matWorld_.WVP);
+	}
+
+	TransferMatrix();
 }

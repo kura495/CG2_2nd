@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include"IncludeStruct/Vector4.h"
-#include"IncludeStruct/Vector3.h"
+#include"Vector4.h"
+#include"Vector3.h"
 #include"Utility/ImGuiManager.h"
 #include<d3d12.h>
 #include<wrl.h>

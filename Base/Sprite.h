@@ -1,12 +1,12 @@
 ﻿#pragma once
-#include"Base/DirectXCommon.h"
-#include"Base/TextureManager.h"
-#include"IncludeStruct/Transform.h"
-#include"IncludeStruct/VertexData.h"
-#include"IncludeStruct/Material.h"
-#include"IncludeStruct/TransformationMatrix.h"
-#include"Math/MatrixCalc.h"
-#include<wrl.h>
+#include "Base/DirectXCommon.h"
+#include "Base/TextureManager.h"
+#include "IncludeStruct/Transform.h"
+#include "IncludeStruct/VertexData.h"
+#include "IncludeStruct/Material.h"
+#include "IncludeStruct/TransformationMatrix.h"
+#include "Math/MatrixCalc.h"
+#include <wrl.h>
 class Sprite
 {
 public:

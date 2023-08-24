@@ -6,7 +6,7 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
 	materialResourceObj = directX_->CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceObj = directX_->CreateBufferResource(sizeof(TransformationMatrix));
+	//transformationMatrixResourceObj = directX_->CreateBufferResource(sizeof(TransformationMatrix));
 
 	modelData_ = LoadObjFile(directoryPath,filename);
 	//バッファリソースはLoadObjFileの中で作ってるよ
@@ -45,7 +45,7 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-void Model::Draw(const Matrix4x4& transform, const Matrix4x4& ViewMatrix)
+void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProjection)
 {
 
 	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
@@ -54,18 +54,17 @@ void Model::Draw(const Matrix4x4& transform, const Matrix4x4& ViewMatrix)
 	materialDataObj->color = color_;
 	materialDataObj->uvTransform = MakeIdentity4x4();
 
-	transformationMatrixResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataObj));
-	//Matrix4x4 worldMatrixObj = MakeAffineMatrix(transformObj.scale, transformObj.rotate, transformObj.translate);
-	transformationMatrixDataObj->WVP = Multiply(transform, ViewMatrix);
+	
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	transformationMatrixDataObj->World = MakeIdentity4x4();
 
 	//頂点
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
 	//色用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceObj->GetGPUVirtualAddress());
 	//WVP
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceObj->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
+	//ViewProjection
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
 	//Light

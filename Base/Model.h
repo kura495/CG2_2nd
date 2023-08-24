@@ -1,21 +1,23 @@
 ﻿#pragma once
-#include"IncludeStruct/Material.h"
-#include"IncludeStruct/Transform.h"
-#include"IncludeStruct/TransformationMatrix.h"
-#include"IncludeStruct/VertexData.h"
-#include"IncludeStruct/ModelData.h"
-#include"Base/TextureManager.h"
-#include"Base/Light.h"
-#include"Utility/ImGuiManager.h"
-#include"Utility/GlobalVariables.h"
-#include"Math/MatrixCalc.h"
-#include"Utility/GlobalVariables.h"
-#include<d3d12.h>
-#include<string>
-#include<cassert>
-#include<fstream>
-#include<sstream>
-#include<wrl.h>
+#include "IncludeStruct/Material.h"
+#include "IncludeStruct/Transform.h"
+#include "IncludeStruct/TransformationMatrix.h"
+#include "IncludeStruct/VertexData.h"
+#include "IncludeStruct/ModelData.h"
+#include "Base/TextureManager.h"
+#include "Base/Light.h"
+#include "Utility/ImGuiManager.h"
+#include "Utility/GlobalVariables.h"
+#include "Math/MatrixCalc.h"
+#include "Utility/GlobalVariables.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include <d3d12.h>
+#include <string>
+#include <cassert>
+#include <fstream>
+#include <sstream>
+#include <wrl.h>
 
 class Model
 {
@@ -24,7 +26,7 @@ public:
 	void ImGui(const char* Title);
 	static Model* CreateModelFromObj(const std::string& directoryPath, const std::string& filename);
 	ModelData LoadObjFile(const std::string& directoryPath, const std::string& filename);
-	void Draw(const Matrix4x4& transform,const Matrix4x4& ViewMatrix);
+	void Draw(const WorldTransform& transform,const ViewProjection& ViewMatrix);
 private:
 
 	DirectXCommon* directX_ = nullptr;
@@ -43,10 +45,10 @@ private:
 	//色データ
 	Material* materialDataObj = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	//Sprite用WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceObj = nullptr;
-	//Sprite用WVPデータ
-	TransformationMatrix* transformationMatrixDataObj = nullptr;
+	////Sprite用WVPリソース
+	//Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceObj = nullptr;
+	////Sprite用WVPデータ
+	//TransformationMatrix* transformationMatrixDataObj = nullptr;
 	
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 
