@@ -68,18 +68,7 @@ void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHa
 
 	directX_->GetcommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
-void Sprite::ImGui(const char* Title)
-{
-	ImGui::Begin(Title);
-	ImGui::SliderFloat3("ScaleSprite", &transformSprite.scale.x, 1, 30, "%.3f");
-	ImGui::SliderFloat3("RotateSprite", &transformSprite.rotate.x, -7, 7, "%.3f");
-	ImGui::SliderFloat3("TranslateSprite", &transformSprite.translate.x, -640, 640, "%.3f");
-	ImGui::DragFloat2("UVTranslate", &uvTranformSprite.translate.x, 0.01f, -10.0f, 10.0f);
-	ImGui::DragFloat2("UVScale", &uvTranformSprite.scale.x, 0.01f, -10.0f, 10.0f);
-	ImGui::SliderAngle("UVRotate", &uvTranformSprite.rotate.z);
-	ImGui::ColorPicker4("Color", &color_.x);
-	ImGui::End();
-}
+
 void Sprite::MakeVertexBufferViewSprite()
 {
 	//リソースの先頭のアドレス

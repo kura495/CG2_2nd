@@ -1,11 +1,12 @@
 ﻿#pragma once
-#include"Vector3.h"
-#include"Utility/ImGuiManager.h"
-#include"externals/nlohmann/json.hpp"
-#include<variant>
-#include<map>
-#include<string>
-#include<fstream>
+#include "Math_Structs.h"
+#include "ImGuiManager.h"
+#include "externals/nlohmann/json.hpp"
+#include <variant>
+#include <map>
+#include <string>
+#include <fstream>
+
 struct Item {
 	//項目の値
 	std::variant<int32_t, float, Vector3> value;

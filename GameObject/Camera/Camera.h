@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include"Math/MatrixCalc.h"
-#include"Math/VectorCalc.h"
-#include"Transform.h"
-#include"Vector3.h"
-#include"Utility/ImGuiManager.h"
-#include"Input/Input.h"
+#include "MatrixCalc.h"
+#include "VectorCalc.h"
+#include "Transform.h"
+#include "Math_Structs.h"
+#include "ImGuiManager.h"
+#include "Input.h"
 
 class Camera
 {

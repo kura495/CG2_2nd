@@ -165,9 +165,6 @@
     <ClCompile Include="Base\ViewProjection.cpp">
       <Filter>ソース ファイル\Base</Filter>
     </ClCompile>
-    <ClCompile Include="Base\Audio\XAudio2.cpp">
-      <Filter>ソース ファイル\Base\Audio</Filter>
-    </ClCompile>
     <ClCompile Include="Base\Input\Input.cpp">
       <Filter>ソース ファイル\Base\Input</Filter>
     </ClCompile>
@@ -328,9 +325,6 @@
     </ClInclude>
     <ClInclude Include="Base\Math\Math_Structs.h">
       <Filter>ヘッダー ファイル\Base\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Base\Audio\XAudio2.h">
-      <Filter>ヘッダー ファイル\Base\Audio</Filter>
     </ClInclude>
     <ClInclude Include="Base\Input\Input.h">
       <Filter>ヘッダー ファイル\Base\Input</Filter>

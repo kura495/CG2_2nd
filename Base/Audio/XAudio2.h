@@ -1,15 +1,14 @@
 ﻿#pragma once
 #include "DirectXCommon.h"
 #include "Math_Structs.h"
-
 #include <xaudio2.h>
 #include <x3daudio.h>
-#include <mmsystem.h>
-#include<cassert>
+#include <cassert>
 #pragma comment(lib,"xaudio2.lib")
 #pragma comment(lib, "winmm.lib")
-#include<fstream>
-#include<map>
+#include <fstream>
+#include <map>
+
 
 
 struct ChunkHeader {

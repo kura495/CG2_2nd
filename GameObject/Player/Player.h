@@ -1,9 +1,9 @@
 ﻿#pragma once
-#include"Base/Model.h"
-#include"Base/WorldTransform.h"
-#include"Base/ViewProjection.h"
-#include"IncludeStruct/Transform.h"
-#include"Input/Input.h"
+#include "Model.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "Transform.h"
+#include "Input.h"
 class Player
 {
 public:
