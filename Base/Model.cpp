@@ -5,18 +5,18 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
-	materialResourceObj = directX_->CreateBufferResource(sizeof(Material));
+	materialResource = directX_->CreateBufferResource(sizeof(Material));
 
 	modelData_ = LoadObjFile(directoryPath,filename);
 	//バッファリソースはLoadObjFileの中で作ってるよ
-	vertexResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataObj));
-	std::memcpy(vertexDataObj, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
+	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
+	std::memcpy(vertexData, modelData_.vertices.data(), sizeof(VertexData) * modelData_.vertices.size());
 
-	materialResourceObj.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataObj));
+	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 
-	materialDataObj->enableLighting = lightFlag;
-	materialDataObj->color = color_;
-	materialDataObj->uvTransform = MakeIdentity4x4();
+	materialData->enableLighting = lightFlag;
+	materialData->color = color_;
+	materialData->uvTransform = MakeIdentity4x4();
 }
 
 void Model::ImGui(const char* Title)
@@ -56,13 +56,13 @@ void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProj
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewObj);
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	//matWorld
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
 	//ViewProjection
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	//Color
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceObj->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
 	//Light
@@ -140,10 +140,10 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 	}
 	modelData.TextureIndex = textureManager_->LoadTexture(modelData.material.textureFilePath);
 	//頂点リソースを作る
-	vertexResourceObj = directX_->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferViewObj.BufferLocation = vertexResourceObj.Get()->GetGPUVirtualAddress();
-	vertexBufferViewObj.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
-	vertexBufferViewObj.StrideInBytes = sizeof(VertexData);
+	vertexResource = directX_->CreateBufferResource(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
+	vertexBufferView.SizeInBytes = UINT(sizeof(VertexData) * modelData.vertices.size());
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
 	return modelData;
 }
 

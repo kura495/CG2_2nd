@@ -24,30 +24,23 @@ private:
 	//分割数
 	const int kSubdivision = 16;
 	//
-	//フラグたち
+	//どのライトを使うか
 	int32_t lightFlag = Lighting::NotDo;
 	//
 	//Sphere用頂点データ
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSphere = nullptr;
-	//Sphere用頂点データ
-	VertexData* vertexDataSphere = nullptr;
-	//Sphere用バーテックスバッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSphere{};
-	//マテリアルリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSphere = nullptr;
-	//色データ
-	Material* materialDataSphere = nullptr;
-	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	//Index用
-	Microsoft::WRL::ComPtr<ID3D12Resource> indexResourceSphere = nullptr;
-	//Index用頂点データ
-	uint32_t* indexDataSphere = nullptr;
-	//Index用バッファビュー
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSphere{};
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
+	VertexData* vertexData = nullptr;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
 
-	//イニシャライズで呼び出す
-	void MakeVertexBufferViewSphere();
-	void MakeIndexBufferViewSphere();
-	//
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
+	Material* materialData = nullptr;
+	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> indexResource = nullptr;
+	uint32_t* indexData = nullptr;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
+
+	void MakeVertexBufferView();
+	void MakeIndexBufferView();
 	
 };

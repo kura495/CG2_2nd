@@ -4,64 +4,64 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	directX_ = DirectXCommon::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 
-	vertexResourceSprite = directX_->CreateBufferResource(sizeof(VertexData) * 4);
-	materialResourceSprite = directX_->CreateBufferResource(sizeof(Material));
+	vertexResource = directX_->CreateBufferResource(sizeof(VertexData) * 4);
+	materialResource = directX_->CreateBufferResource(sizeof(Material));
 
-	MakeVertexBufferViewSprite();
-	indexResourceSprite = directX_->CreateBufferResource(sizeof(uint32_t) * 6);
-	MakeIndexBufferViewSprite();
+	MakeVertexBufferView();
+	indexResource = directX_->CreateBufferResource(sizeof(uint32_t) * 6);
+	MakeIndexBufferView();
 
-	vertexResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSprite));
+	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 
 	//左下
-	vertexDataSprite[0].position = LeftBottom;
-	vertexDataSprite[0].texcoord = { 0.0f,1.0f };
+	vertexData[0].position = LeftBottom;
+	vertexData[0].texcoord = { 0.0f,1.0f };
 	//左上
-	vertexDataSprite[1].position = LeftTop;
-	vertexDataSprite[1].texcoord = { 0.0f,0.0f };
+	vertexData[1].position = LeftTop;
+	vertexData[1].texcoord = { 0.0f,0.0f };
 	//右下
-	vertexDataSprite[2].position = RightBottom;
-	vertexDataSprite[2].texcoord = { 1.0f,1.0f };
+	vertexData[2].position = RightBottom;
+	vertexData[2].texcoord = { 1.0f,1.0f };
 	//右上
-	vertexDataSprite[3].position = RightTop;
-	vertexDataSprite[3].texcoord = { 1.0f,0.0f };
+	vertexData[3].position = RightTop;
+	vertexData[3].texcoord = { 1.0f,0.0f };
 
 	//インデックスリソースにデータを書き込む
-	indexResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSprite));
+	indexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
 
 	//三角形1枚目
-	indexDataSprite[0] = 0;
-	indexDataSprite[1] = 1;
-	indexDataSprite[2] = 2;
+	indexData[0] = 0;
+	indexData[1] = 1;
+	indexData[2] = 2;
 	//三角形2枚目
-	indexDataSprite[3] = 1;
-	indexDataSprite[4] = 3;
-	indexDataSprite[5] = 2;
+	indexData[3] = 1;
+	indexData[4] = 3;
+	indexData[5] = 2;
 }
 
 void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHandle)
 {
 
 	//色の書き込み
-	materialResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSprite));
-	materialDataSprite->color = color_;
+	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
+	materialData->color = color_;
 	//ライティングをしない
-	materialDataSprite->enableLighting = false;
-	materialDataSprite->uvTransform = MakeIdentity4x4();
-	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranformSprite.scale);
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
-	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
-	materialDataSprite->uvTransform = uvTransformMatrix;
+	materialData->enableLighting = false;
+	materialData->uvTransform = MakeIdentity4x4();
+	Matrix4x4 uvTransformMatrix = MakeScaleMatrix(uvTranform.scale);
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranform.rotate.z));
+	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranform.translate));
+	materialData->uvTransform = uvTransformMatrix;
 
 
 
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSprite);
-	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSprite);
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferView);
 	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_.Get()->GetGPUVirtualAddress());
 	//テクスチャ
@@ -70,21 +70,21 @@ void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHa
 	directX_->GetcommandList()->DrawIndexedInstanced(6, 1, 0, 0, 0);
 }
 
-void Sprite::MakeVertexBufferViewSprite()
+void Sprite::MakeVertexBufferView()
 {
 	//リソースの先頭のアドレス
-	vertexBufferViewSprite.BufferLocation = vertexResourceSprite.Get()->GetGPUVirtualAddress();
+	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSprite.SizeInBytes = sizeof(VertexData) * 4;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 4;
 	//1頂点あたりのアドレス
-	vertexBufferViewSprite.StrideInBytes = sizeof(VertexData);
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
-void Sprite::MakeIndexBufferViewSprite()
+void Sprite::MakeIndexBufferView()
 {
 	//リソース先頭アドレス
-	indexBufferViewSprite.BufferLocation = indexResourceSprite.Get()->GetGPUVirtualAddress();
+	indexBufferView.BufferLocation = indexResource.Get()->GetGPUVirtualAddress();
 	//使用するインデックスサイズ
-	indexBufferViewSprite.SizeInBytes = sizeof(uint32_t) * 6;
+	indexBufferView.SizeInBytes = sizeof(uint32_t) * 6;
 	//インデックスはuint32_t
-	indexBufferViewSprite.Format = DXGI_FORMAT_R32_UINT;
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 }

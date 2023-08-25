@@ -17,31 +17,27 @@ public:
 private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;
-	//Sprite用頂点データ
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceSprite = nullptr;
-	//Sprite用頂点データ
-	VertexData* vertexDataSprite = nullptr;
-	//Sprite用バーテックスバッファビュー
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewSprite{};
-	//マテリアルリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceSprite = nullptr;
-	//色データ
-	Material* materialDataSprite = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
+	VertexData* vertexData = nullptr;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
+	Material* materialData = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 
 	//Index用
-	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite = nullptr;
-	//Index用頂点データ
-	uint32_t* indexDataSprite = nullptr;
-	//Index用バッファビュー
-	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
+	Microsoft::WRL::ComPtr<ID3D12Resource>indexResource = nullptr;
+	uint32_t* indexData = nullptr;
+	D3D12_INDEX_BUFFER_VIEW indexBufferView{};
 
-	Transform uvTranformSprite{
+	Transform uvTranform{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f}
 	};
-	void MakeVertexBufferViewSprite();
-	void MakeIndexBufferViewSprite();
+
+	void MakeVertexBufferView();
+	void MakeIndexBufferView();
 
 };

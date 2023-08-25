@@ -34,14 +34,13 @@ private:
 	int32_t lightFlag = Lighting::harfLambert;
 	//
 	ModelData modelData_;
-	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceObj = nullptr;
-	//Obj用頂点データ
-	VertexData* vertexDataObj = nullptr;
-	D3D12_VERTEX_BUFFER_VIEW vertexBufferViewObj{};
-	//マテリアルリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource> materialResourceObj = nullptr;
-	//色データ
-	Material* materialDataObj = nullptr;
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResource = nullptr;
+	VertexData* vertexData = nullptr;
+	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
+
+	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
+	Material* materialData = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
 	
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);

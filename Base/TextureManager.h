@@ -31,7 +31,6 @@ public:
 	/// GPUHandle情報取得
 	/// </summary>
 	/// <param name="textureHandle">テクスチャハンドル</param>
-	/// <returns>リソース情報</returns>
 	const CD3DX12_GPU_DESCRIPTOR_HANDLE GetGPUHandle(uint32_t textureHandle);
 private:
 	TextureManager() = default;

@@ -6,14 +6,16 @@ void Sphere::Initialize()
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
 
-	vertexResourceSphere = directX_->CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
-	materialResourceSphere = directX_->CreateBufferResource(sizeof(Material));
-	MakeVertexBufferViewSphere();
-	indexResourceSphere = directX_->CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
-	MakeIndexBufferViewSphere();
+	vertexResource = directX_->CreateBufferResource(sizeof(VertexData) * 4 * kSubdivision * kSubdivision);
+	vertexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexData));
 
-	vertexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&vertexDataSphere));
-	indexResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexDataSphere));
+	materialResource = directX_->CreateBufferResource(sizeof(Material));
+	MakeVertexBufferView();
+
+	indexResource = directX_->CreateBufferResource(sizeof(uint32_t) * 6 * kSubdivision * kSubdivision);
+	indexResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&indexData));
+	MakeIndexBufferView();
+
 	//経度分割の1つ分の角度　φ 横
 	const float kLonEvery = float(std::numbers::pi) * 2.0f / float(kSubdivision);
 	//緯度分割の1つ分の角度　θ 縦
@@ -29,50 +31,50 @@ void Sphere::Initialize()
 			float v = 1.0f - float(latIndex) / float(kSubdivision);
 #pragma region VertexData
 			//点A(左下)
-			vertexDataSphere[Vertexstart].position.x = cos(lat) * cos(lon);
-			vertexDataSphere[Vertexstart].position.y = sin(lat);
-			vertexDataSphere[Vertexstart].position.z = cos(lat) * sin(lon);
-			vertexDataSphere[Vertexstart].position.w = 1.0f;
-			vertexDataSphere[Vertexstart].texcoord = { u ,v };
-			vertexDataSphere[Vertexstart].normal.x = vertexDataSphere[Vertexstart].position.x;
-			vertexDataSphere[Vertexstart].normal.y = vertexDataSphere[Vertexstart].position.y;
-			vertexDataSphere[Vertexstart].normal.z = vertexDataSphere[Vertexstart].position.z;
+			vertexData[Vertexstart].position.x = cos(lat) * cos(lon);
+			vertexData[Vertexstart].position.y = sin(lat);
+			vertexData[Vertexstart].position.z = cos(lat) * sin(lon);
+			vertexData[Vertexstart].position.w = 1.0f;
+			vertexData[Vertexstart].texcoord = { u ,v };
+			vertexData[Vertexstart].normal.x = vertexData[Vertexstart].position.x;
+			vertexData[Vertexstart].normal.y = vertexData[Vertexstart].position.y;
+			vertexData[Vertexstart].normal.z = vertexData[Vertexstart].position.z;
 			//点B(左上)
-			vertexDataSphere[Vertexstart + 1].position.x = cos(lat + kLatEvery) * cos(lon);
-			vertexDataSphere[Vertexstart + 1].position.y = sin(lat + kLatEvery);
-			vertexDataSphere[Vertexstart + 1].position.z = cos(lat + kLatEvery) * sin(lon);
-			vertexDataSphere[Vertexstart + 1].position.w = 1.0f;
-			vertexDataSphere[Vertexstart + 1].texcoord = { u,v - uvLength };
-			vertexDataSphere[Vertexstart + 1].normal.x = vertexDataSphere[Vertexstart + 1].position.x;
-			vertexDataSphere[Vertexstart + 1].normal.y = vertexDataSphere[Vertexstart + 1].position.y;
-			vertexDataSphere[Vertexstart + 1].normal.z = vertexDataSphere[Vertexstart + 1].position.z;
+			vertexData[Vertexstart + 1].position.x = cos(lat + kLatEvery) * cos(lon);
+			vertexData[Vertexstart + 1].position.y = sin(lat + kLatEvery);
+			vertexData[Vertexstart + 1].position.z = cos(lat + kLatEvery) * sin(lon);
+			vertexData[Vertexstart + 1].position.w = 1.0f;
+			vertexData[Vertexstart + 1].texcoord = { u,v - uvLength };
+			vertexData[Vertexstart + 1].normal.x = vertexData[Vertexstart + 1].position.x;
+			vertexData[Vertexstart + 1].normal.y = vertexData[Vertexstart + 1].position.y;
+			vertexData[Vertexstart + 1].normal.z = vertexData[Vertexstart + 1].position.z;
 			//点C(右下)
-			vertexDataSphere[Vertexstart + 2].position.x = cos(lat) * cos(lon + kLonEvery);
-			vertexDataSphere[Vertexstart + 2].position.y = sin(lat);
-			vertexDataSphere[Vertexstart + 2].position.z = cos(lat) * sin(lon + kLonEvery);
-			vertexDataSphere[Vertexstart + 2].position.w = 1.0f;
-			vertexDataSphere[Vertexstart + 2].texcoord = { u + uvLength,v };
-			vertexDataSphere[Vertexstart + 2].normal.x = vertexDataSphere[Vertexstart + 2].position.x;
-			vertexDataSphere[Vertexstart + 2].normal.y = vertexDataSphere[Vertexstart + 2].position.y;
-			vertexDataSphere[Vertexstart + 2].normal.z = vertexDataSphere[Vertexstart + 2].position.z;
+			vertexData[Vertexstart + 2].position.x = cos(lat) * cos(lon + kLonEvery);
+			vertexData[Vertexstart + 2].position.y = sin(lat);
+			vertexData[Vertexstart + 2].position.z = cos(lat) * sin(lon + kLonEvery);
+			vertexData[Vertexstart + 2].position.w = 1.0f;
+			vertexData[Vertexstart + 2].texcoord = { u + uvLength,v };
+			vertexData[Vertexstart + 2].normal.x = vertexData[Vertexstart + 2].position.x;
+			vertexData[Vertexstart + 2].normal.y = vertexData[Vertexstart + 2].position.y;
+			vertexData[Vertexstart + 2].normal.z = vertexData[Vertexstart + 2].position.z;
 			//点D(右上)
-			vertexDataSphere[Vertexstart + 3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
-			vertexDataSphere[Vertexstart + 3].position.y = sin(lat + kLatEvery);
-			vertexDataSphere[Vertexstart + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
-			vertexDataSphere[Vertexstart + 3].position.w = 1.0f;
-			vertexDataSphere[Vertexstart + 3].texcoord = { u + uvLength,v - uvLength };
-			vertexDataSphere[Vertexstart + 3].normal.x = vertexDataSphere[Vertexstart + 3].position.x;
-			vertexDataSphere[Vertexstart + 3].normal.y = vertexDataSphere[Vertexstart + 3].position.y;
-			vertexDataSphere[Vertexstart + 3].normal.z = vertexDataSphere[Vertexstart + 3].position.z;
+			vertexData[Vertexstart + 3].position.x = cos(lat + kLatEvery) * cos(lon + kLonEvery);
+			vertexData[Vertexstart + 3].position.y = sin(lat + kLatEvery);
+			vertexData[Vertexstart + 3].position.z = cos(lat + kLatEvery) * sin(lon + kLonEvery);
+			vertexData[Vertexstart + 3].position.w = 1.0f;
+			vertexData[Vertexstart + 3].texcoord = { u + uvLength,v - uvLength };
+			vertexData[Vertexstart + 3].normal.x = vertexData[Vertexstart + 3].position.x;
+			vertexData[Vertexstart + 3].normal.y = vertexData[Vertexstart + 3].position.y;
+			vertexData[Vertexstart + 3].normal.z = vertexData[Vertexstart + 3].position.z;
 #pragma endregion 頂点データ
 			//三角形1枚目
-			indexDataSphere[Indexstart] = Vertexstart;
-			indexDataSphere[Indexstart + 1] = Vertexstart + 1;
-			indexDataSphere[Indexstart + 2] = Vertexstart + 2;
+			indexData[Indexstart] = Vertexstart;
+			indexData[Indexstart + 1] = Vertexstart + 1;
+			indexData[Indexstart + 2] = Vertexstart + 2;
 			//三角形2枚目
-			indexDataSphere[Indexstart + 3] = Vertexstart + 1;
-			indexDataSphere[Indexstart + 4] = Vertexstart + 3;
-			indexDataSphere[Indexstart + 5] = Vertexstart + 2;
+			indexData[Indexstart + 3] = Vertexstart + 1;
+			indexData[Indexstart + 4] = Vertexstart + 3;
+			indexData[Indexstart + 5] = Vertexstart + 2;
 		}
 	}
 }
@@ -80,24 +82,23 @@ void Sphere::Initialize()
 void Sphere::Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const uint32_t& TextureHandle)
 {
 	
-	materialResourceSphere.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialDataSphere));
+	materialResource.Get()->Map(0, nullptr, reinterpret_cast<void**>(&materialData));
 
 	//ライティングをする
-	materialDataSphere->color = color_;
-	materialDataSphere->enableLighting = lightFlag;
-	materialDataSphere->uvTransform = MakeIdentity4x4();
+	materialData->color = color_;
+	materialData->enableLighting = lightFlag;
+	materialData->uvTransform = MakeIdentity4x4();
 
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-
 	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferViewSphere);
-	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferViewSphere);
-	//色用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSphere.Get()->GetGPUVirtualAddress());
-	//WorldTransformの場所を特定
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferView);
+	//colorとuvTransform
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
+	//WorldTransform
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_.Get()->GetGPUVirtualAddress());
-	//ViewProjectionの場所を特定
+	//ViewProjection
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureHandle));
@@ -106,21 +107,21 @@ void Sphere::Draw(const WorldTransform& transform, const ViewProjection& viewPro
 
 	directX_->GetcommandList()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
 }
-void Sphere::MakeVertexBufferViewSphere()
+void Sphere::MakeVertexBufferView()
 {
 	//リソースの先頭のアドレス
-	vertexBufferViewSphere.BufferLocation = vertexResourceSphere.Get()->GetGPUVirtualAddress();
+	vertexBufferView.BufferLocation = vertexResource.Get()->GetGPUVirtualAddress();
 	//使用する頂点サイズ
-	vertexBufferViewSphere.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
+	vertexBufferView.SizeInBytes = sizeof(VertexData) * 4 * kSubdivision * kSubdivision;
 	//1頂点あたりのアドレス
-	vertexBufferViewSphere.StrideInBytes = sizeof(VertexData);
+	vertexBufferView.StrideInBytes = sizeof(VertexData);
 }
-void Sphere::MakeIndexBufferViewSphere()
+void Sphere::MakeIndexBufferView()
 {
 	//リソース先頭アドレス
-	indexBufferViewSphere.BufferLocation = indexResourceSphere.Get()->GetGPUVirtualAddress();
+	indexBufferView.BufferLocation = indexResource.Get()->GetGPUVirtualAddress();
 	//使用するインデックスサイズ
-	indexBufferViewSphere.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
+	indexBufferView.SizeInBytes = sizeof(uint32_t) * 6 * kSubdivision * kSubdivision;
 	//インデックスはuint32_t
-	indexBufferViewSphere.Format = DXGI_FORMAT_R32_UINT;
+	indexBufferView.Format = DXGI_FORMAT_R32_UINT;
 }

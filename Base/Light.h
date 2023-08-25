@@ -17,6 +17,7 @@ class Light
 	Vector3 direction;//ライトの向き
 	float intensity;//ライトの輝度
 };
+
 public:
 	static Light* GetInstance();
 	void Initialize();

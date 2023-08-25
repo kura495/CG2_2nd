@@ -28,13 +28,11 @@ private:
 
 	//バーテックスリソース
 	Microsoft::WRL::ComPtr<ID3D12Resource>vertexResource = nullptr;
-	//頂点データ
 	VertexData* vertexData = nullptr;
-	//バーテックスバッファビュー
+
 	D3D12_VERTEX_BUFFER_VIEW vertexBufferView{};
-	//マテリアルリソース
+
 	Microsoft::WRL::ComPtr<ID3D12Resource> materialResource = nullptr;
-	//色データ
 	Material* materialData = nullptr;
 
 	void MakeVertexBufferView();
