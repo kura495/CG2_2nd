@@ -60,9 +60,9 @@ void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHa
 	//頂点
 	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
 	directX_->GetcommandList()->IASetIndexBuffer(&indexBufferView);
-	//色用のCBufferの場所を特定
+	//色とuvTransform
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource.Get()->GetGPUVirtualAddress());
-	//WVP用のCBufferの場所を特定
+	//WorldTransform
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_.Get()->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureHandle));

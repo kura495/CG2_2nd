@@ -61,7 +61,7 @@ void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProj
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
 	//ViewProjection
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
-	//Color
+	//色とuvTransform
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
@@ -149,7 +149,7 @@ ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string
 
 MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename)
 {
-	MaterialData materialData;//構築するMaterialData
+	MaterialData material;//構築するMaterialData
 	std::string line;//ファイルから読んだ1行を格納するもの
 	std::ifstream file(directoryPath + '/' + filename);//ファイルを開く
 	assert(file.is_open());//開けなかったら止める
@@ -162,9 +162,9 @@ MaterialData Model::LoadMaterialTemplateFile(const std::string& directoryPath, c
 			std::string textureFilename;
 			s >> textureFilename;
 			//連結してファイルパスにする
-			materialData.textureFilePath = directoryPath + "/" + textureFilename;
+			material.textureFilePath = directoryPath + "/" + textureFilename;
 		}
 	}
 
-	return materialData;
+	return material;
 }
