@@ -1,11 +1,10 @@
 ﻿#pragma once
-#include"Vector4.h"
-#include"Vector3.h"
-#include"Utility/ImGuiManager.h"
-#include<d3d12.h>
-#include<wrl.h>
-//namespace Lighting{
-	enum Lighting {
+#include "Math_Structs.h"
+#include "ImGuiManager.h"
+#include <d3d12.h>
+#include <wrl.h>
+
+enum Lighting {
 		NotDo = false,
 		harfLambert = 1,
 		Lambert = 2,

@@ -1,13 +1,12 @@
 ﻿#pragma once
-#include "Base/DirectXCommon.h"
-#include "Base/TextureManager.h"
-#include "Base/WorldTransform.h"
-#include "Base/ViewProjection.h"
-#include "IncludeStruct/Transform.h"
-#include "IncludeStruct/VertexData.h"
-#include "IncludeStruct/Material.h"
-#include "IncludeStruct/TransformationMatrix.h"
-#include "Math/MatrixCalc.h"
+#include "DirectXCommon.h"
+#include "TextureManager.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "Transform.h"
+#include "VertexData.h"
+#include "Material.h"
+#include "MatrixCalc.h"
 #include <wrl.h>
 class Mesh
 {

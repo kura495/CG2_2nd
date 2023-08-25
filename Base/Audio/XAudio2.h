@@ -1,14 +1,17 @@
 ﻿#pragma once
-#include "Base/DirectXCommon.h"
+#include "DirectXCommon.h"
+#include "Math_Structs.h"
+
 #include <xaudio2.h>
-#include<x3daudio.h>
+#include <x3daudio.h>
 #include <mmsystem.h>
-#include"Vector2.h"
 #include<cassert>
 #pragma comment(lib,"xaudio2.lib")
 #pragma comment(lib, "winmm.lib")
 #include<fstream>
 #include<map>
+
+
 struct ChunkHeader {
 	char id[4];//チャンクID
 	int32_t size;//チャンクサイズ

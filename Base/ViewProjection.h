@@ -1,9 +1,8 @@
 ﻿#pragma once
 
 #include "DirectXCommon.h"
-#include "Matrix4x4.h"
-#include "Vector3.h"
-#include "Math/MatrixCalc.h"
+#include "Math_Structs.h"
+#include "MatrixCalc.h"
 #include <d3d12.h>
 #include <wrl.h>
 

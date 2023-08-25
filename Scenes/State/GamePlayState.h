@@ -1,23 +1,24 @@
 ﻿#pragma once
 #include "IgameState.h"
-#include "Base/MyEngine.h"
-#include "IncludeStruct/ModelData.h"
-#include "Audio/XAudio2.h"
-#include "Input/Input.h"
-#include "Base/Mesh.h"
-#include "Base/Sprite.h"
-#include "Base/Light.h"
-#include "Base/Sphere.h"
-#include "Base/TextureManager.h"
-#include "Base/Model.h"
+#include "MyEngine.h"
+#include "ModelData.h"
+#include "XAudio2.h"
+#include "Input.h"
+#include "Mesh.h"
+#include "Sprite.h"
+#include "Light.h"
+#include "Sphere.h"
+#include "TextureManager.h"
+#include "Model.h"
 #define DIRECTINPUT_VERSION 0x0800//DirectInputのバージョン指定
 #include <dinput.h>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
 #include "GameObject/Camera/Camera.h"
 #include "GameObject/Player/Player.h"
-#include "Base/WorldTransform.h"
-#include "Base/ViewProjection.h"
+#include "WorldTransform.h"
+#include "ViewProjection.h"
+#include "Math_Structs.h"
 
 class GamePlayState :public GameState
 {

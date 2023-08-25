@@ -1,8 +1,7 @@
 #pragma once
-#include"Vector4.h"
-#include"Matrix4x4.h"
-#include<stdint.h>
-#include<string>
+#include "Math_Structs.h"
+#include <stdint.h>
+#include <string>
 struct Material {
 	Vector4 color;
 	int32_t enableLighting;

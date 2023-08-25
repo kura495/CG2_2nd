@@ -6,7 +6,7 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 
 	vertexResourceSprite = directX_->CreateBufferResource(sizeof(VertexData) * 4);
 	materialResourceSprite = directX_->CreateBufferResource(sizeof(Material));
-	transformationMatrixResourceSprite = directX_->CreateBufferResource(sizeof(TransformationMatrix));
+
 	MakeVertexBufferViewSprite();
 	indexResourceSprite = directX_->CreateBufferResource(sizeof(uint32_t) * 6);
 	MakeIndexBufferViewSprite();
@@ -38,7 +38,7 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	indexDataSprite[4] = 3;
 	indexDataSprite[5] = 2;
 }
-void Sprite::DrawSprite(const uint32_t TextureHandle)
+void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHandle)
 {
 
 	//色の書き込み
@@ -51,15 +51,8 @@ void Sprite::DrawSprite(const uint32_t TextureHandle)
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeRotateZMatrix(uvTranformSprite.rotate.z));
 	uvTransformMatrix = Multiply(uvTransformMatrix, MakeTranslateMatrix(uvTranformSprite.translate));
 	materialDataSprite->uvTransform = uvTransformMatrix;
-	//WVPを書き込むためのアドレス取得
-	transformationMatrixResourceSprite.Get()->Map(0, nullptr, reinterpret_cast<void**>(&transformationMatrixDataSprite));
-	Matrix4x4 worldMatrixSprite = MakeAffineMatrix(transformSprite.scale, transformSprite.rotate, transformSprite.translate);
-	Matrix4x4 viewMatrixSprite = MakeIdentity4x4();
-	Matrix4x4 ProjectionMatrixSprite = MakeOrthographicMatrix(0.0f, 0.0f, float(WinApp::kClientWidth), float(WinApp::kClientHeight), 0.0f, 100.0f);
-	Matrix4x4 worldViewProjectionMatrixSprite = Multiply(worldMatrixSprite, Multiply(viewMatrixSprite, ProjectionMatrixSprite));
-	//
-	transformationMatrixDataSprite->WVP = worldViewProjectionMatrixSprite;
-	transformationMatrixDataSprite->World = MakeIdentity4x4();
+
+
 
 	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -69,7 +62,7 @@ void Sprite::DrawSprite(const uint32_t TextureHandle)
 	//色用のCBufferの場所を特定
 	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResourceSprite.Get()->GetGPUVirtualAddress());
 	//WVP用のCBufferの場所を特定
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transformationMatrixResourceSprite.Get()->GetGPUVirtualAddress());
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_.Get()->GetGPUVirtualAddress());
 	//テクスチャ
 	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(TextureHandle));
 

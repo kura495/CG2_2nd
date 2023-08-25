@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include"includeStruct/Vector3.h"
-#include<cstdint>
+#include "Math_Structs.h"
+#include <cstdint>
 class Collider {
 public:
 	//半径を取得

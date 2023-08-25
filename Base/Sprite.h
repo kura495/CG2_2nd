@@ -1,17 +1,17 @@
 ﻿#pragma once
-#include "Base/DirectXCommon.h"
-#include "Base/TextureManager.h"
-#include "IncludeStruct/Transform.h"
-#include "IncludeStruct/VertexData.h"
-#include "IncludeStruct/Material.h"
-#include "IncludeStruct/TransformationMatrix.h"
-#include "Math/MatrixCalc.h"
+#include "DirectXCommon.h"
+#include "TextureManager.h"
+#include "Transform.h"
+#include "VertexData.h"
+#include "Material.h"
+#include "MatrixCalc.h"
+#include "WorldTransform.h"
 #include <wrl.h>
 class Sprite
 {
 public:
 	void Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
-	void DrawSprite(const uint32_t TextureHandle);
+	void DrawSprite(const WorldTransform& transform, const uint32_t TextureHandle);
 	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;
@@ -27,21 +27,14 @@ private:
 	//色データ
 	Material* materialDataSprite = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	//Sprite用WVPリソース
-	Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceSprite = nullptr;
-	//Sprite用WVPデータ
-	TransformationMatrix* transformationMatrixDataSprite = nullptr;
+
 	//Index用
 	Microsoft::WRL::ComPtr<ID3D12Resource>indexResourceSprite = nullptr;
 	//Index用頂点データ
 	uint32_t* indexDataSprite = nullptr;
 	//Index用バッファビュー
 	D3D12_INDEX_BUFFER_VIEW indexBufferViewSprite{};
-	Transform transformSprite{
-		{1.0f,1.0f,1.0f},
-		{0.0f,0.0f,0.0f},
-		{0.0f,0.0f,0.0f},
-	};
+
 	Transform uvTranformSprite{
 		{1.0f,1.0f,1.0f},
 		{0.0f,0.0f,0.0f},
