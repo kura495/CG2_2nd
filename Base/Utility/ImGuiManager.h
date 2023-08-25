@@ -1,6 +1,6 @@
 #pragma once
-#include"Base/WinApp.h"
-#include"Base/DirectXCommon.h"
+#include "WinApp.h"
+#include "DirectXCommon.h"
 class ImGuiManager
 {
 public:

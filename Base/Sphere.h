@@ -1,5 +1,4 @@
 ﻿#pragma once
-#pragma once
 #include "DirectXCommon.h"
 #include "TextureManager.h"
 #include "Light.h"
@@ -11,6 +10,7 @@
 #include "MatrixCalc.h"
 #include <wrl.h>
 #include <numbers>
+
 class Sphere
 {
 public:

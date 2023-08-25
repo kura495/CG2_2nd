@@ -19,8 +19,8 @@ void GameManager::Initialize()
 	myEngine = MyEngine::GetInstance();
 	myEngine->Initialize(directX);
 	//Audio
-	Audio = XAudio2::GetInstance();
-	Audio->Initialize();
+	audio = Audio::GetInstance();
+	audio->Initialize();
 	//Input
 	input = Input::GetInstance();
 	input->Initialize(winApp);
@@ -65,5 +65,4 @@ void GameManager::Release()
 {
 	ImGui_ImplDX12_Shutdown();
 	CoUninitialize();
-	//delete this;
 }

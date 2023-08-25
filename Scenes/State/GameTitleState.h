@@ -1,5 +1,6 @@
 #pragma once
 #include"IgameState.h"
+
 class GameTitleState :public GameState
 {
 public:

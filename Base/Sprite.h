@@ -7,6 +7,7 @@
 #include "MatrixCalc.h"
 #include "WorldTransform.h"
 #include <wrl.h>
+
 class Sprite
 {
 public:

@@ -1,18 +1,19 @@
 #pragma once
-#include"Base/WinApp.h"
-#include"Base/DirectXCommon.h"
-#include"Base/MyEngine.h"
-#include"Utility/ImGuiManager.h"
+#include"WinApp.h"
+#include"DirectXCommon.h"
+#include"MyEngine.h"
+#include"Mesh.h"
+#include"TextureManager.h"
+#include"Light.h"
+#include"ImGuiManager.h"
 #include"Scenes/State/GameTitleState.h"
 #include"Scenes/State/GamePlayState.h"
 #include"Scenes/State/GameClearState.h"
 #include"Scenes/State/IgameState.h"
-#include"Audio/XAudio2.h"
-#include"Input/Input.h"
-#include"Base/Mesh.h"
-#include"Base/TextureManager.h"
-#include"Base/Light.h"
-#include"Utility/GlobalVariables.h"
+#include"Audio.h"
+#include"Input.h"
+#include"GlobalVariables.h"
+
 class GameManager
 {
 public:
@@ -36,7 +37,7 @@ private:
 	int32_t kClientHeight;
 	ImGuiManager* imGuiManager = nullptr;
 	Input* input = nullptr;
-	XAudio2* Audio = nullptr;
+	Audio* audio = nullptr;
 	TextureManager* textureManager = nullptr;
 	Light* light = nullptr;
 

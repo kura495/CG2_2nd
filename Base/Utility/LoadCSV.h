@@ -1,8 +1,9 @@
 ﻿#pragma once
-#include<string>
-#include<sstream>
-#include<fstream>
-#include<cassert>
+#include <string>
+#include <sstream>
+#include <fstream>
+#include <cassert>
+
 /// <summary>
 	/// CSVを読み込む
 	/// </summary>

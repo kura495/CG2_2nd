@@ -2,14 +2,11 @@
 #include "DirectXCommon.h"
 #include "Math_Structs.h"
 #include <xaudio2.h>
+#pragma comment(lib,"xaudio2.lib")
 #include <x3daudio.h>
 #include <cassert>
-#pragma comment(lib,"xaudio2.lib")
-#pragma comment(lib, "winmm.lib")
 #include <fstream>
 #include <map>
-
-
 
 struct ChunkHeader {
 	char id[4];//チャンクID
@@ -31,9 +28,9 @@ struct SoundData {
 	//バッファのサイズ
 	unsigned int bufferSize;
 };
-class XAudio2 {
+class Audio {
 public:
-	static XAudio2* GetInstance();
+	static Audio* GetInstance();
 	void Initialize();
 	
 	void Release();
@@ -41,10 +38,10 @@ public:
 	void Play(int AudioInDex, float AudioVolume, int pan);
 	void SoundUnload(uint32_t Index);
 private:
-	XAudio2() = default;
-	~XAudio2() = default;
-	XAudio2(const XAudio2& obj) = delete;
-	XAudio2& operator=(const XAudio2& obj) = delete;
+	Audio() = default;
+	~Audio() = default;
+	Audio(const Audio& obj) = delete;
+	Audio& operator=(const Audio& obj) = delete;
 
 	float left = 0;
 	float right = 0;
@@ -55,7 +52,7 @@ private:
 	//ソースボイス
 	IXAudio2SourceVoice* pSourceVoice[kMaxAudio];
 	bool IsusedAudioIndex[kMaxAudio];
-	//音声データ
+	//生音声データ
 	//再生中にぶっ飛ばすとバグるぜ！！！
 	std::map<uint32_t, SoundData> soundData_;
 

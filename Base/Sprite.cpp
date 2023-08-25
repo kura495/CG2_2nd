@@ -38,6 +38,7 @@ void Sprite::Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const
 	indexDataSprite[4] = 3;
 	indexDataSprite[5] = 2;
 }
+
 void Sprite::DrawSprite(const WorldTransform& transform,const uint32_t TextureHandle)
 {
 

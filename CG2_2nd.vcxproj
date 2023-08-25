@@ -98,6 +98,7 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Base\Audio\Audio.cpp" />
     <ClCompile Include="Base\DirectXCommon.cpp" />
     <ClCompile Include="Base\Input\Input.cpp" />
     <ClCompile Include="Base\Light.cpp" />
@@ -133,16 +134,17 @@ copy "$(WindowsSdkDir)bin\$(TargetPlatFormVersion)\x64\dxil.dll" "$(TargetDir)dx
     <ClCompile Include="Scenes\State\GameTitleState.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base\Audio\Audio.h" />
     <ClInclude Include="Base\DirectXCommon.h" />
     <ClInclude Include="Base\Input\Input.h" />
     <ClInclude Include="Base\Light.h" />
     <ClInclude Include="Base\Math\Math_Structs.h" />
-    <ClInclude Include="Base\Math\Math_Struct\Matrix3x3.h" />
-    <ClInclude Include="Base\Math\Math_Struct\Matrix4x4.h" />
-    <ClInclude Include="Base\Math\Math_Struct\Vector2.h" />
-    <ClInclude Include="Base\Math\Math_Struct\Vector3.h" />
-    <ClInclude Include="Base\Math\Math_Struct\Vector4.h" />
     <ClInclude Include="Base\Math\MatrixCalc.h" />
+    <ClInclude Include="Base\Math\Struct\Matrix3x3.h" />
+    <ClInclude Include="Base\Math\Struct\Matrix4x4.h" />
+    <ClInclude Include="Base\Math\Struct\Vector2.h" />
+    <ClInclude Include="Base\Math\Struct\Vector3.h" />
+    <ClInclude Include="Base\Math\Struct\Vector4.h" />
     <ClInclude Include="Base\Math\VectorCalc.h" />
     <ClInclude Include="Base\Mesh.h" />
     <ClInclude Include="Base\Model.h" />

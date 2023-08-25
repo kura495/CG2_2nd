@@ -2,7 +2,7 @@
 #include "IgameState.h"
 #include "MyEngine.h"
 #include "ModelData.h"
-#include "XAudio2.h"
+#include "Audio.h"
 #include "Input.h"
 #include "Mesh.h"
 #include "Sprite.h"
@@ -27,13 +27,14 @@ public:
 	void Initialize();
 	void Update();
 	void Draw();
+
 private:
 	//基本機能ズ
 	MyEngine* myEngine = nullptr;
 	Camera* camera_ = nullptr;
 	TextureManager* textureManager_ = nullptr;	
 	Input* input = nullptr;
-	XAudio2* Audio=nullptr;
+	Audio* audio=nullptr;
 	Light* light_ = nullptr;
 	DirectXCommon* DirectX_ = nullptr;
 	GlobalVariables* globalVariables = nullptr;

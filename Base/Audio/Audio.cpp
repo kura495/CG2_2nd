@@ -1,10 +1,11 @@
-#include"XAudio2.h"
-XAudio2* XAudio2::GetInstance()
+#include"Audio.h"
+
+Audio* Audio::GetInstance()
 {
-	static XAudio2 instance;
+	static Audio instance;
 	return &instance;
 }
-void XAudio2::Initialize() {
+void Audio::Initialize() {
 	hr=XAudio2Create(&XAudioInterface,0,XAUDIO2_DEFAULT_PROCESSOR);
 	assert(SUCCEEDED(hr));
 	hr = XAudioInterface->CreateMasteringVoice(&pMasteringVoice);
@@ -51,7 +52,7 @@ void XAudio2::Initialize() {
 	// Assuming pVoice sends to pMasteringVoice
 }
 
-uint32_t XAudio2::LoadAudio(const char* filename) {
+uint32_t Audio::LoadAudio(const char* filename) {
 #pragma region Index
 	uint32_t AudioIndex = kMaxAudio + 1;
 	    for (int i = 0; i < kMaxAudio; ++i) {
@@ -88,7 +89,7 @@ uint32_t XAudio2::LoadAudio(const char* filename) {
 		return AudioIndex;
 }
 
-void XAudio2::Release() {
+void Audio::Release() {
 	
 	for (int i=0;i<kMaxAudio;i++) {
 		if (pSourceVoice[i]) {
@@ -107,7 +108,7 @@ void XAudio2::Release() {
 	CoUninitialize();
 }
 
-void XAudio2::Play(int AudioIndex,float AudioVolume,int pan) {
+void Audio::Play(int AudioIndex,float AudioVolume,int pan) {
 	// pan of -1.0 indicates all left speaker, 
 // 1.0 is all right speaker, 0.0 is split between left and right
 	right = 0;
@@ -131,7 +132,7 @@ void XAudio2::Play(int AudioIndex,float AudioVolume,int pan) {
 	pSourceVoice[AudioIndex]->Start(0);
 }
 
-SoundData XAudio2::SoundLoadWave(const char* filename)
+SoundData Audio::SoundLoadWave(const char* filename)
 {
 	//ファイル入力ストリームのインスタンス
 	std::ifstream file;
@@ -195,7 +196,7 @@ SoundData XAudio2::SoundLoadWave(const char* filename)
 	return soundData;
 }
 
-void XAudio2::SoundUnload(uint32_t Index)
+void Audio::SoundUnload(uint32_t Index)
 {
 	auto it = soundData_.find(Index);
 	if (it != soundData_.end()) {
@@ -206,4 +207,4 @@ void XAudio2::SoundUnload(uint32_t Index)
 	}
 }
 
-void XAudio2::Log(const std::string& message) { OutputDebugStringA(message.c_str()); }
+void Audio::Log(const std::string& message) { OutputDebugStringA(message.c_str()); }

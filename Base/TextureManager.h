@@ -3,6 +3,7 @@
 #include "externals/DirectXTex/DirectXTex.h"
 #include <wrl.h>
 #include <array>
+
 class TextureManager
 {
 public:

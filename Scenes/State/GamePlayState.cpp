@@ -6,7 +6,7 @@ void GamePlayState::Initialize()
 	camera_ = new Camera();
 	camera_->Initialize(1280, 720);
 	input = Input::GetInstance();
-	Audio = XAudio2::GetInstance();
+	audio = Audio::GetInstance();
 	textureManager_ = TextureManager::GetInstance();
 	light_ = Light::GetInstance();
 	DirectX_ = DirectXCommon::GetInstance();
@@ -24,7 +24,7 @@ void GamePlayState::Initialize()
 	//テクスチャ
 	Texture = textureManager_->LoadTexture("resources/uvChecker.png");
 	//サウンド
-	mokugyo = Audio->LoadAudio("resources/mokugyo.wav");
+	mokugyo = audio->LoadAudio("resources/mokugyo.wav");
 	//
 	viewProjection_.Initialize();
 	worldTransform_.Initialize();
@@ -44,7 +44,7 @@ else {
 	ImGui::Begin("Sound");
 	ImGui::SliderInt("Pan", &Pan, 1, -1);
 	ImGui::SliderFloat("Volume",&Volume,0.0f,1.0f);
-	Audio->Play(mokugyo, Volume, Pan);
+	audio->Play(mokugyo, Volume, Pan);
 	ImGui::End();
 	camera_->Update();
 	player->Update();
