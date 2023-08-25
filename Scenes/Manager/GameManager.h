@@ -17,35 +17,35 @@
 class GameManager
 {
 public:
-	void Run();
-	
-	
-private:
-	void Initialize();
-	void Gameloop();
-	//Base
 	enum GameStateNo {
 		TITLE,
 		PLAY,
 		GameStateMax
 	};
+
+	void Run();
+	
+private:
+
+	//Base
+	MyEngine* myEngine = nullptr;
 	WinApp* winApp = nullptr;
 	DirectXCommon* directX = nullptr;
-	MyEngine* myEngine = nullptr;
-	//ウィンドウサイズ
-	int32_t kClientWidth;
-	int32_t kClientHeight;
+	TextureManager* textureManager = nullptr;
+
 	ImGuiManager* imGuiManager = nullptr;
 	Input* input = nullptr;
 	Audio* audio = nullptr;
-	TextureManager* textureManager = nullptr;
+	
 	Light* light = nullptr;
 
 	MSG msg{};
 	//State
 	std::unique_ptr<GameState>state[GameStateMax];
 	Vector4 ClearColor{ 0.1f,0.25f,0.5f,1.0f };
-
+	
+	void Initialize();
+	void Gameloop();
 	void Release();
 };
 

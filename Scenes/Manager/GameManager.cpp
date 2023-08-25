@@ -9,15 +9,13 @@ void GameManager::Initialize()
 {
 	//COMの初期化
 	CoInitializeEx(0, COINIT_MULTITHREADED);
-	//Window
-	winApp = WinApp::GetInstance();
-	winApp->Initialize();
-	//DirectX
-	directX = DirectXCommon::GetInstance();
-	directX->Initialize(winApp);
 	//Engine
 	myEngine = MyEngine::GetInstance();
-	myEngine->Initialize(directX);
+	myEngine->Initialize();
+	//Window
+	winApp = WinApp::GetInstance();
+	//DirectX
+	directX = DirectXCommon::GetInstance();
 	//Audio
 	audio = Audio::GetInstance();
 	audio->Initialize();
@@ -29,15 +27,14 @@ void GameManager::Initialize()
 	imGuiManager->Initialize(winApp, directX);
 	//TextureManager
 	textureManager = TextureManager::GetInstance();
-	textureManager->Initialize(directX);
 	//Light
 	light = Light::GetInstance();
 	light->Initialize();
 	//グローバル変数読み込み
 	GlobalVariables::GetInstance()->LoadFiles();
 	//State
-	state[TITLE]　=　std::make_unique<GameTitleState>();
-	state[PLAY]　= std::make_unique<GamePlayState>();
+	state[TITLE] = std::make_unique<GameTitleState>();
+	state[PLAY] = std::make_unique<GamePlayState>();
 	state[PLAY]->Initialize();
 	GameState::StateNo = TITLE;
 }

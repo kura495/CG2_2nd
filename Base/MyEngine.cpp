@@ -6,12 +6,17 @@ MyEngine* MyEngine::GetInstance()
 		return &instance;
 }
 
-void MyEngine::Initialize(DirectXCommon* directX)
+void MyEngine::Initialize()
 {
-	kClientWidth_ = WinApp::kClientWidth;
-	kClientHeight_ = WinApp::kClientHeight;
-	directX_ = directX;
-	
+	//Window
+	winApp_ = WinApp::GetInstance();
+	winApp_->Initialize();
+	//DirectX
+	directX_ = DirectXCommon::GetInstance();
+	directX_->Initialize(winApp_);
+	//TextureManager
+	textureManager_ = TextureManager::GetInstance();
+	textureManager_->Initialize(directX_);
 }
 
 
