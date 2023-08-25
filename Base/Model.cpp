@@ -19,6 +19,27 @@ void Model::Initialize(const std::string& directoryPath, const std::string& file
 	materialData->uvTransform = MakeIdentity4x4();
 }
 
+void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProjection)
+{
+
+	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//頂点
+	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
+	//matWorld
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
+	//ViewProjection
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
+	//色とuvTransform
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
+	//テクスチャ
+	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
+	//Light
+	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, light_->GetDirectionalLight()->GetGPUVirtualAddress());
+
+	directX_->GetcommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
+}
+
 void Model::ImGui(const char* Title)
 {
 	ImGui::Begin(Title);
@@ -50,26 +71,7 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-void Model::Draw(const WorldTransform& transform, const ViewProjection& viewProjection)
-{
 
-	directX_->GetcommandList()->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//頂点
-	directX_->GetcommandList()->IASetVertexBuffers(0, 1, &vertexBufferView);
-	//matWorld
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(1, transform.constBuff_->GetGPUVirtualAddress());
-	//ViewProjection
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(4, viewProjection.constBuff_->GetGPUVirtualAddress());
-	//色とuvTransform
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(0, materialResource->GetGPUVirtualAddress());
-	//テクスチャ
-	directX_->GetcommandList()->SetGraphicsRootDescriptorTable(2, textureManager_->GetGPUHandle(modelData_.TextureIndex));
-	//Light
-	directX_->GetcommandList()->SetGraphicsRootConstantBufferView(3, light_->GetDirectionalLight()->GetGPUVirtualAddress());
-
-	directX_->GetcommandList()->DrawInstanced(UINT(modelData_.vertices.size()), 1, 0, 0);
-}
 
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
