@@ -1,4 +1,4 @@
-﻿#include"Mesh.h"
+﻿#include "Mesh.h"
 void Mesh::Initialize()
 {
 	directX_ = DirectXCommon::GetInstance();

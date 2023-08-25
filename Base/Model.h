@@ -45,10 +45,6 @@ private:
 	//色データ
 	Material* materialDataObj = nullptr;
 	Vector4 color_ = { 1.0f,1.0f,1.0f,1.0f };
-	////Sprite用WVPリソース
-	//Microsoft::WRL::ComPtr<ID3D12Resource>transformationMatrixResourceObj = nullptr;
-	////Sprite用WVPデータ
-	//TransformationMatrix* transformationMatrixDataObj = nullptr;
 	
 	MaterialData LoadMaterialTemplateFile(const std::string& directoryPath, const std::string& filename);
 

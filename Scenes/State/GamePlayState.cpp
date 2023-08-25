@@ -1,4 +1,4 @@
-#include"Scenes/State/GamePlayState.h"
+#include "Scenes/State/GamePlayState.h"
 
 void GamePlayState::Initialize()
 {
