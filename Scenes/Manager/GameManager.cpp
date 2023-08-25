@@ -10,7 +10,7 @@ void GameManager::Initialize()
 	//COMの初期化
 	CoInitializeEx(0, COINIT_MULTITHREADED);
 	//Window
-	winApp = new WinApp();
+	winApp = WinApp::GetInstance();
 	winApp->Initialize();
 	//DirectX
 	directX = DirectXCommon::GetInstance();
@@ -25,7 +25,7 @@ void GameManager::Initialize()
 	input = Input::GetInstance();
 	input->Initialize(winApp);
 	//ImGui
-	imGuiManager = new ImGuiManager();
+	imGuiManager = ImGuiManager::GetInstance();
 	imGuiManager->Initialize(winApp, directX);
 	//TextureManager
 	textureManager = TextureManager::GetInstance();

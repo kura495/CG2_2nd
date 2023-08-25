@@ -19,6 +19,11 @@ public:
 	static const int32_t kClientWidth=1280;//横幅
 	static const int32_t kClientHeight=720;//縦幅
 private:
+	WinApp() = default;
+	~WinApp() = default;
+	WinApp(const WinApp& obj) = delete;
+	WinApp& operator=(const WinApp& obj) = delete;
+
 	HWND hwnd_=nullptr;
 	WNDCLASS wc{};
 

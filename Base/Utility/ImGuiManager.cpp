@@ -1,5 +1,11 @@
 #include"ImGuiManager.h"
 
+ImGuiManager* ImGuiManager::GetInstance()
+{
+	static ImGuiManager instance;
+	return &instance;
+}
+
 void ImGuiManager::Initialize(WinApp*winapp,DirectXCommon*directXcommon)
 {
 	IMGUI_CHECKVERSION();
