@@ -5,7 +5,7 @@
 #include "TransformationMatrix.h"
 
 struct ConstBufferDataWorldTransform {
-	TransformationMatrix matWorld; // ローカル → ワールド変換行列
+	Matrix4x4 matWorld; // ローカル → ワールド変換行列
 };
 struct WorldTransform {
 	// 定数バッファ
@@ -19,7 +19,7 @@ struct WorldTransform {
 	// ローカル座標
 	Vector3 translation_ = { 0, 0, 0 };
 	// ローカル → ワールド変換行列
-	TransformationMatrix matWorld_;
+	Matrix4x4 matWorld_;
 	// 親となるワールド変換へのポインタ
 	const WorldTransform* parent_ = nullptr;
 

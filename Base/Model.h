@@ -33,7 +33,7 @@ private:
 	TextureManager* textureManager_ = nullptr;
 	Light* light_ = nullptr;
 	//フラグたち
-	int32_t lightFlag = Lighting::NotDo;
+	int32_t lightFlag = Lighting::harfLambert;
 	//
 	ModelData modelData_;
 	Microsoft::WRL::ComPtr<ID3D12Resource> vertexResourceObj = nullptr;

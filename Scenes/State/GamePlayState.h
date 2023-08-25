@@ -43,7 +43,6 @@ private:
 	//3Dオブジェクトたち
 	Player* player = nullptr;
 	Sphere* sphere;
-	float position = -25.0f;
 	//2Dオブジェクトたち
 	
 	//

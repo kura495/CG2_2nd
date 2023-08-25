@@ -12,6 +12,8 @@ public:
 	void Draw(const ViewProjection& viewProjection);
 private:
 	void ApplyGlobalVariables();
+	void ImGui();
+
 	Input* input = nullptr;
 	Model* model = nullptr;
 	GlobalVariables* globalVariables = nullptr;
