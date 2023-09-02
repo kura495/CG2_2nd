@@ -29,6 +29,7 @@ void GamePlayState::Initialize()
 	viewProjection_.Initialize();
 	worldTransform_.Initialize();
 }
+
 void GamePlayState::Update()
 {
 #ifdef _DEBUG
@@ -49,6 +50,7 @@ else {
 	camera_->Update();
 	player->Update();
 }
+
 void GamePlayState::Draw()
 {
 	sphere->Draw(worldTransform_,viewProjection_, Texture);
