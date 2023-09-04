@@ -60,6 +60,8 @@ void GameManager::Gameloop()
 
 void GameManager::Release()
 {
+	directX->Release();
+
 	ImGui_ImplDX12_Shutdown();
 	CoUninitialize();
 }
