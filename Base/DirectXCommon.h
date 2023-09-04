@@ -47,6 +47,13 @@ public:
 	void PostProsessInPutLayout();
 	void PostProsessDraw();
 	//
+	//スプライト
+	void SpriteDraw();
+
+	void SpriteRootSignature();
+	void SpritePipelineStateObject();
+	void SpriteInPutLayout();
+	//
 
 private:
 	DirectXCommon() = default;
@@ -63,6 +70,17 @@ private:
 	D3D12_INPUT_ELEMENT_DESC PostProsessinputElementDescs[3] = {};
 	D3D12_INPUT_LAYOUT_DESC PostProsessinputLayoutDesc{};
 	//
+	//スプライト
+	IDxcBlob* SpriteBlob = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12PipelineState>SpriteGraphicsPipelineState = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>SpriteRootSignature = nullptr;
+	ID3DBlob* SpriteSignatureBlob = nullptr;
+	ID3DBlob* SpriteerrorBlob = nullptr;
+	D3D12_INPUT_ELEMENT_DESC SpriteinputElementDescs[3] = {};
+	D3D12_INPUT_LAYOUT_DESC SpriteinputLayoutDesc{};
+	//
+
+
 	WinApp* winApp_;
 	HRESULT hr;
 
