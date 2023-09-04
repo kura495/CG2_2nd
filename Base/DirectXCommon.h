@@ -48,8 +48,8 @@ public:
 	void PostProsessDraw();
 	//
 	//スプライト
-	void SpriteDraw();
-
+	void SpritePreDraw();
+	void SpritePostDraw();
 	void SpriteRootSignature();
 	void SpritePipelineStateObject();
 	void SpriteInPutLayout();
@@ -73,7 +73,7 @@ private:
 	//スプライト
 	IDxcBlob* SpriteBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>SpriteGraphicsPipelineState = nullptr;
-	Microsoft::WRL::ComPtr<ID3D12RootSignature>SpriteRootSignature = nullptr;
+	Microsoft::WRL::ComPtr<ID3D12RootSignature>SpriterootSignature = nullptr;
 	ID3DBlob* SpriteSignatureBlob = nullptr;
 	ID3DBlob* SpriteerrorBlob = nullptr;
 	D3D12_INPUT_ELEMENT_DESC SpriteinputElementDescs[3] = {};

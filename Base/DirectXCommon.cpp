@@ -699,9 +699,12 @@ void DirectXCommon::PostProsessInPutLayout()
 #pragma endregion ポストプロセス？
 
 #pragma region 
-void DirectXCommon::SpriteDraw()
+void DirectXCommon::SpritePreDraw()
 {
 	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
+}
+void DirectXCommon::SpritePostDraw()
+{
 }
 void DirectXCommon::SpriteRootSignature()
 {
@@ -716,9 +719,6 @@ void DirectXCommon::SpriteRootSignature()
 		rootParameters[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
 		rootParameters[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderで使う
 		rootParameters[1].Descriptor.ShaderRegister = 0;//レジスタ番号を0にバインド
-		rootParameters[4].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
-		rootParameters[4].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;//VERTEXShaderで使う
-		rootParameters[4].Descriptor.ShaderRegister = 1;//レジスタ番号を0にバインド
 		descriptionRootSignature.pParameters = rootParameters;//ルートパラメータ配列へのポインタ
 		descriptionRootSignature.NumParameters = _countof(rootParameters);//配列の長さ
 		//テクスチャで使う
@@ -751,21 +751,21 @@ void DirectXCommon::SpriteRootSignature()
 		descriptionRootSignature.pStaticSamplers = staticSamplers;
 		descriptionRootSignature.NumStaticSamplers = _countof(staticSamplers);
 
-		hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &PostProsesssignatureBlob, &PostProsesserrorBlob);
+		hr = D3D12SerializeRootSignature(&descriptionRootSignature, D3D_ROOT_SIGNATURE_VERSION_1, &SpriteSignatureBlob, &SpriteerrorBlob);
 		if (FAILED(hr)) {
-			Log(reinterpret_cast<char*>(PostProsesserrorBlob->GetBufferPointer()));
+			Log(reinterpret_cast<char*>(SpriteerrorBlob->GetBufferPointer()));
 			assert(false);
 		}
 
-		hr = device->CreateRootSignature(0, PostProsesssignatureBlob->GetBufferPointer(), PostProsesssignatureBlob->GetBufferSize(), IID_PPV_ARGS(&PostProsessrootSignature));
+		hr = device->CreateRootSignature(0, SpriteSignatureBlob->GetBufferPointer(), SpriteSignatureBlob->GetBufferSize(), IID_PPV_ARGS(&SpriterootSignature));
 		assert(SUCCEEDED(hr));
 
 }
 void DirectXCommon::SpritePipelineStateObject()
 {
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
-		graphicsPipelineStateDesc.pRootSignature = PostProsessrootSignature.Get();
-		graphicsPipelineStateDesc.InputLayout = PostProsessinputLayoutDesc;
+		graphicsPipelineStateDesc.pRootSignature = SpriterootSignature.Get();
+		graphicsPipelineStateDesc.InputLayout = SpriteinputLayoutDesc;
 		graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.PS = { PostProsessBlob->GetBufferPointer(),PostProsessBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.BlendState = blendDesc;
@@ -789,29 +789,29 @@ void DirectXCommon::SpritePipelineStateObject()
 		graphicsPipelineStateDesc.DepthStencilState = depthStencilDesc;
 		graphicsPipelineStateDesc.DSVFormat = DXGI_FORMAT_D24_UNORM_S8_UINT;
 
-		hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&PostProsessgraphicsPipelineState));
+		hr = device->CreateGraphicsPipelineState(&graphicsPipelineStateDesc, IID_PPV_ARGS(&SpriteGraphicsPipelineState));
 		assert(SUCCEEDED(hr));
 }
 void DirectXCommon::SpriteInPutLayout()
 {
 		//頂点レイアウト
-	PostProsessinputElementDescs[0].SemanticName = "POSITION";
-	PostProsessinputElementDescs[0].SemanticIndex = 0;
-	PostProsessinputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
-	PostProsessinputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	SpriteinputElementDescs[0].SemanticName = "POSITION";
+	SpriteinputElementDescs[0].SemanticIndex = 0;
+	SpriteinputElementDescs[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+	SpriteinputElementDescs[0].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 		//UV座標レイアウト
-	PostProsessinputElementDescs[1].SemanticName = "TEXCOORD";
-	PostProsessinputElementDescs[1].SemanticIndex = 0;
-	PostProsessinputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
-	PostProsessinputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	SpriteinputElementDescs[1].SemanticName = "TEXCOORD";
+	SpriteinputElementDescs[1].SemanticIndex = 0;
+	SpriteinputElementDescs[1].Format = DXGI_FORMAT_R32G32_FLOAT;
+	SpriteinputElementDescs[1].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 		//法線レイアウト
-	PostProsessinputElementDescs[2].SemanticName = "NORMAL";
-	PostProsessinputElementDescs[2].SemanticIndex = 0;
-	PostProsessinputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
-	PostProsessinputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+	SpriteinputElementDescs[2].SemanticName = "NORMAL";
+	SpriteinputElementDescs[2].SemanticIndex = 0;
+	SpriteinputElementDescs[2].Format = DXGI_FORMAT_R32G32B32_FLOAT;
+	SpriteinputElementDescs[2].AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
 
-	PostProsessinputLayoutDesc.pInputElementDescs = PostProsessinputElementDescs;
-	PostProsessinputLayoutDesc.NumElements = _countof(PostProsessinputElementDescs);
+	SpriteinputLayoutDesc.pInputElementDescs = SpriteinputElementDescs;
+	SpriteinputLayoutDesc.NumElements = _countof(SpriteinputElementDescs);
 }
-#pragma endregion ポストプロセス？
+#pragma endregion スプライト用
 
