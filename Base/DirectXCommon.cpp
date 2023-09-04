@@ -525,6 +525,7 @@ void DirectXCommon::MakeRasterizarState()
 
 void DirectXCommon::MakeShaderCompile()
 {
+	//TODO　シェーダー追加
 	vertexShaderBlob = CompileShader(L"Object3D.VS.hlsl", L"vs_6_0");
 	assert(vertexShaderBlob != nullptr);
 	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0");
@@ -699,12 +700,9 @@ void DirectXCommon::PostProsessInPutLayout()
 #pragma endregion ポストプロセス？
 
 #pragma region 
-void DirectXCommon::SpritePreDraw()
+void DirectXCommon::SetSpritePipeLine()
 {
-	commandList->SetPipelineState(PostProsessgraphicsPipelineState.Get());
-}
-void DirectXCommon::SpritePostDraw()
-{
+	commandList->SetPipelineState(SpriteGraphicsPipelineState.Get());
 }
 void DirectXCommon::SpriteRootSignature()
 {
