@@ -70,7 +70,8 @@ private:
 	D3D12_INPUT_LAYOUT_DESC PostProsessinputLayoutDesc{};
 	//
 	//スプライト
-	IDxcBlob* SpriteBlob = nullptr;
+	IDxcBlob* SpriteVertexBlob = nullptr;
+	IDxcBlob* SpritePixelBlob = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12PipelineState>SpriteGraphicsPipelineState = nullptr;
 	Microsoft::WRL::ComPtr<ID3D12RootSignature>SpriterootSignature = nullptr;
 	ID3DBlob* SpriteSignatureBlob = nullptr;

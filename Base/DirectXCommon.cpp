@@ -530,6 +530,8 @@ void DirectXCommon::MakeShaderCompile()
 	assert(vertexShaderBlob != nullptr);
 	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0");
 	PostProsessBlob = CompileShader(L"PostProsess.hlsl", L"ps_6_0");
+	SpriteVertexBlob = CompileShader();
+	SpritePixelBlob = CompileShader();
 }
 
 void DirectXCommon::MakePipelineStateObject()
