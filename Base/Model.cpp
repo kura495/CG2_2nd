@@ -71,8 +71,6 @@ Model* Model::CreateModelFromObj(const std::string& directoryPath, const std::st
 	return model;
 }
 
-
-
 ModelData Model::LoadObjFile(const std::string& directoryPath, const std::string& filename)
 {
 	ModelData modelData;//構築するモデルデータ

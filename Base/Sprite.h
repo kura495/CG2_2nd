@@ -6,13 +6,14 @@
 #include "Material.h"
 #include "MatrixCalc.h"
 #include "WorldTransform.h"
+#include "ViewProjection.h"
 #include <wrl.h>
 
 class Sprite
 {
 public:
 	void Initialize(const Vector4& LeftTop, const Vector4& LeftBottom, const Vector4& RightTop, const Vector4& RightBottom);
-	void DrawSprite(const WorldTransform& transform, const uint32_t TextureHandle);
+	void Draw(const WorldTransform& transform, const uint32_t TextureHandle);
 	void ImGui(const char* Title);
 private:
 	DirectXCommon* directX_ = nullptr;
@@ -36,6 +37,8 @@ private:
 		{0.0f,0.0f,0.0f},
 		{0.0f,0.0f,0.0f}
 	};
+
+	ViewProjection viewProjection_;
 
 	void MakeVertexBufferView();
 	void MakeIndexBufferView();
