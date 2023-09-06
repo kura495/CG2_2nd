@@ -48,6 +48,7 @@ public:
 	void PostProsessDraw();
 	//
 	//スプライト
+	///スプライト用パイプライン
 	void SetSpritePipeLine();
 	void SpriteRootSignature();
 	void SpritePipelineStateObject();

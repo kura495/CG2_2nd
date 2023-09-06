@@ -60,11 +60,10 @@ void DirectXCommon::Initialize(WinApp*winApp)
 
 	MakeRootSignature();
 
-	PostProsessRootSignature();
+	
 
 	MakeInputLayOut();
 
-	PostProsessInPutLayout();
 
 	MakeBlendState();
 
@@ -74,7 +73,13 @@ void DirectXCommon::Initialize(WinApp*winApp)
 
 	MakePipelineStateObject();
 
+	PostProsessRootSignature();
+	PostProsessInPutLayout();
 	PostProsessPipelineStateObject();
+
+	SpriteRootSignature();
+	SpritePipelineStateObject();
+	SpriteInPutLayout();
 
 	MakeViewport();
 
@@ -530,8 +535,8 @@ void DirectXCommon::MakeShaderCompile()
 	assert(vertexShaderBlob != nullptr);
 	pixelShaderBlob = CompileShader(L"Object3D.PS.hlsl", L"ps_6_0");
 	PostProsessBlob = CompileShader(L"PostProsess.hlsl", L"ps_6_0");
-	SpriteVertexBlob = CompileShader();
-	SpritePixelBlob = CompileShader();
+	SpriteVertexBlob = CompileShader(L"Sprite.VS.hlsl",L"vs_6_0");
+	SpritePixelBlob = CompileShader(L"Sprite.PS.hlsl",L"ps_6_0");
 }
 
 void DirectXCommon::MakePipelineStateObject()
@@ -766,8 +771,8 @@ void DirectXCommon::SpritePipelineStateObject()
 		D3D12_GRAPHICS_PIPELINE_STATE_DESC graphicsPipelineStateDesc{};
 		graphicsPipelineStateDesc.pRootSignature = SpriterootSignature.Get();
 		graphicsPipelineStateDesc.InputLayout = SpriteinputLayoutDesc;
-		graphicsPipelineStateDesc.VS = { vertexShaderBlob->GetBufferPointer(),vertexShaderBlob->GetBufferSize() };
-		graphicsPipelineStateDesc.PS = { PostProsessBlob->GetBufferPointer(),PostProsessBlob->GetBufferSize() };
+		graphicsPipelineStateDesc.VS = { SpriteVertexBlob->GetBufferPointer(),SpriteVertexBlob->GetBufferSize() };
+		graphicsPipelineStateDesc.PS = { SpritePixelBlob->GetBufferPointer(),SpritePixelBlob->GetBufferSize() };
 		graphicsPipelineStateDesc.BlendState = blendDesc;
 		graphicsPipelineStateDesc.RasterizerState = rasterizerDesc;
 		//書き込むRTV

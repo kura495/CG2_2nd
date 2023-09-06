@@ -340,8 +340,8 @@
     <FxCompile Include="Object3d.VS.hlsl" />
     <FxCompile Include="Object3d.PS.hlsl" />
     <FxCompile Include="PostProsess.hlsl" />
-    <FxCompile Include="Sprite.VS.hlsl" />
     <FxCompile Include="Sprite.PS.hlsl" />
+    <FxCompile Include="Sprite.VS.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="externals\imgui\LICENSE.txt">
