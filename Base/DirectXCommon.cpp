@@ -59,11 +59,12 @@ void DirectXCommon::Initialize(WinApp*winApp)
 	MakeDXC();
 
 	MakeRootSignature();
-
-	
+	PostProsessRootSignature();
+	SpriteRootSignature();
 
 	MakeInputLayOut();
-
+	PostProsessInPutLayout();
+	SpriteInPutLayout();
 
 	MakeBlendState();
 
@@ -72,14 +73,8 @@ void DirectXCommon::Initialize(WinApp*winApp)
 	MakeShaderCompile();
 
 	MakePipelineStateObject();
-
-	PostProsessRootSignature();
-	PostProsessInPutLayout();
 	PostProsessPipelineStateObject();
-
-	SpriteRootSignature();
 	SpritePipelineStateObject();
-	SpriteInPutLayout();
 
 	MakeViewport();
 
@@ -715,7 +710,7 @@ void DirectXCommon::SpriteRootSignature()
 {
 		D3D12_ROOT_SIGNATURE_DESC descriptionRootSignature{};
 		descriptionRootSignature.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
-		D3D12_ROOT_PARAMETER rootParameters[5] = {};
+		D3D12_ROOT_PARAMETER rootParameters[4] = {};
 		//色に関するルートパラメーター
 		rootParameters[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;//CSVで使う
 		rootParameters[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;//PIXELShaderで使う
