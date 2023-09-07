@@ -17,6 +17,7 @@ public:
 
 	void Initialize();
 	void Draw(const WorldTransform& transform, const ViewProjection& viewProjection, const uint32_t& TextureHandle);
+
 private:
 	DirectXCommon* directX_ = nullptr;
 	TextureManager* textureManager_ = nullptr;

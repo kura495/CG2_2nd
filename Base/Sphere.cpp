@@ -107,6 +107,7 @@ void Sphere::Draw(const WorldTransform& transform, const ViewProjection& viewPro
 
 	directX_->GetcommandList()->DrawIndexedInstanced(kSubdivision * kSubdivision * 6, 1, 0, 0, 0);
 }
+
 void Sphere::MakeVertexBufferView()
 {
 	//リソースの先頭のアドレス

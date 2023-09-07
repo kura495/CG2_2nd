@@ -49,6 +49,11 @@ else {
 	ImGui::SliderFloat("Volume",&Volume,0.0f,1.0f);
 	audio->Play(mokugyo, Volume, Pan);
 	ImGui::End();
+	ImGui::Begin("Camera");
+	ImGui::SliderFloat3("transform", &viewProjection_.translation_.x, 10.0f, -10.0f);
+	audio->Play(mokugyo, Volume, Pan);
+	ImGui::End();
+	viewProjection_.UpdateMatrix();
 	camera_->Update();
 	player->Update();
 }

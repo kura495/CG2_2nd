@@ -57,7 +57,7 @@ private:
 	uint32_t mokugyo;
 	//
 	int Pan = 0;
-	float Volume = 0.1f;
+	float Volume = 0.0f;
 	//Sprite用の位置
 	Vector4 LeftTop[2] = {
 		{ 0.0f,0.0f,0.0f,1.0f },
