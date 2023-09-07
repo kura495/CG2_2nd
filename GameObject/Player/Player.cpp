@@ -16,6 +16,22 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	if (Input::GetInstance()->GetJoystickState(0, joyState)) {
+		if (joyState.Gamepad.sThumbLX != 0 || joyState.Gamepad.sThumbLY != 0) {
+			// 速さ
+			const float moveSpeed = 0.3f;
+			// 移動量
+			Vector3 move = {
+				(float)joyState.Gamepad.sThumbLX / SHRT_MAX, 0.0f,
+				(float)joyState.Gamepad.sThumbLY / SHRT_MAX };
+			move.x = Normalize(move).x * moveSpeed;
+			move.y = Normalize(move).y * moveSpeed;
+			move.z = Normalize(move).z * moveSpeed;
+			worldTransform_.translation_.x = worldTransform_.translation_.x + move.x;
+			worldTransform_.translation_.y = worldTransform_.translation_.y + move.y;
+			worldTransform_.translation_.z = worldTransform_.translation_.z + move.z;
+		}
+	}
 	if (input->IspushKey(DIK_W)) {
 		worldTransform_.translation_.y += 0.5f * speed;
 	}

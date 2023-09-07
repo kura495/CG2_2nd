@@ -3,9 +3,12 @@
 #include <dinput.h>
 #pragma comment(lib,"dinput8.lib")
 #pragma comment(lib,"dxguid.lib")
+
 #include <wrl.h>
 #include "WinApp.h"
 #include <array>
+
+#include <XInput.h>
 
 class Input
 {
@@ -38,6 +41,8 @@ public:
 	/// <returns></returns>
 	bool IsTreggerKey(uint8_t keyNumber);
 
+	bool GetJoystickState(int32_t stickNo, XINPUT_STATE& out);
+
 private:
 	Input() = default;
 	~Input() = default;
@@ -49,5 +54,7 @@ private:
 	Microsoft::WRL::ComPtr<IDirectInputDevice8> keyboard = nullptr;
 	std::array<BYTE, 256> key;
 	std::array<BYTE, 256> preKey;
+	
+	//XINPUT_STATE joyState;
 };
 

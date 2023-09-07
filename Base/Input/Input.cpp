@@ -1,5 +1,9 @@
 ﻿#include"Input.h"
 
+#define XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE  7849
+#define XINPUT_GAMEPAD_RIGHT_THUMB_DEADZONE 8689
+#define XINPUT_GAMEPAD_TRIGGER_THRESHOLD    30
+
 Input* Input::GetInstance()
 {
 	static Input instance;
@@ -20,6 +24,9 @@ void Input::Initialize(WinApp*winApp_){
 	hr = keyboard->SetCooperativeLevel(winApp_->GetHWND(), DISCL_FOREGROUND | DISCL_NONEXCLUSIVE | DISCL_NOWINKEY);
 	key = {};
 	preKey = {};
+
+	//コントローラー
+
 }
 
 void Input::Update()
@@ -61,4 +68,22 @@ bool Input::IsTreggerKey(uint8_t keyNumber)
 		return true;
 	}
 	return false;
+}
+
+bool Input::GetJoystickState(int32_t stickNo, XINPUT_STATE& out)
+{
+	DWORD dwResult = XInputGetState(stickNo, &out);
+	if (out.Gamepad.sThumbLX < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		if (-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE < out.Gamepad.sThumbLX) {
+			out.Gamepad.sThumbLX = 0;
+		}
+		
+	}
+	if (out.Gamepad.sThumbLY < XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE) {
+		if (-XINPUT_GAMEPAD_LEFT_THUMB_DEADZONE < out.Gamepad.sThumbLY) {
+			out.Gamepad.sThumbLY = 0;
+		}
+	}
+	return dwResult == ERROR_SUCCESS;
+
 }

@@ -4,6 +4,7 @@
 #include "ViewProjection.h"
 #include "Transform.h"
 #include "Input.h"
+#include "VectorCalc.h"
 
 class Player
 {
@@ -20,5 +21,6 @@ private:
 	GlobalVariables* globalVariables = nullptr;
 	WorldTransform worldTransform_;
 	float speed = 0.0f;
+	XINPUT_STATE joyState;
 };
 
